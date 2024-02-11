@@ -1,3 +1,6 @@
+status: WIP
+---
+
 # Nix to Nix(OS)
 
 Nix is:
