@@ -120,7 +120,8 @@ in s1 // s2             # update set: orig_values // new_values
 ```
 
 Sets auto-create missing sub-sets when assigning to them; when accessing
-them an error is thrown except which can be handled with keyword `or`:
+them an error is thrown which can be suppressed by providing a fallback
+value with keyword `or`:
 ```nix
 let foo = {};
     foo.a.b = 1;
