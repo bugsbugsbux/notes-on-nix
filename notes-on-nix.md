@@ -168,7 +168,8 @@ last argument and is returned by another function with takes the second
 to last argument, and so on; this is called "currying".
 
 ```nix
-# Each line is a valid nix expression; together they are invalid!
+# You cannot put the following nix-expressions in the same file, as only
+# one expression is allowed per file!
 
 # Functions do not need parentheses to execute:
 with builtins; length                   # returns a function
