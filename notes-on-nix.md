@@ -1,7 +1,7 @@
 status: WIP
 ---
 
-# Nix to Nix(OS)
+# Notes on Nix(OS)
 
 Nix is:
 1. a programming language
