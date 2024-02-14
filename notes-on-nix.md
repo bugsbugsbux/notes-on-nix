@@ -17,6 +17,27 @@ services are enabled, how programs are configured, etc. Declaratively
 means, one states the intended result and the program (nix) figures out
 itself, how to achieve that.
 
+Nix uses a hybrid source- and binary-based approach to package
+management: Installing a package retrieves build instructions, but only
+actually builds it if it cannot find a cached version (either in the
+local- or a **remote-cache**). Locally, nix stores everything in the
+**nix-store**, which is usually at `/nix/store`, and links the contents
+to the necessary locations such as `/bin`.
+
+A **derivation** is the recipe for a package and turned internally into
+a "\*.drv" file in the nix-store. To create it the user calls the
+`derivation` function or a wrapper around it. The build process, called
+**realisation**, runs in an isolated environment ("sandbox") to ensure
+reproducibility on other systems, and uses the instructions from a
+"\*.drv" file to produce the build output(s): the **package**.
+
+**NixOS configuration** is divided into **modules**, which are parts of
+a certain structure, that can modify on each other. This allows to split
+the main config file `/etc/nixos/configuration.nix` into multiple ones
+and to modify parts of the config from other parts instead of having to
+edit them in-place (in other words: they allow the user to write his
+own config file to change other parts of the config).
+
 ## Nix language
 
 Whitespace is generally not significant, thus most nix-expressions
