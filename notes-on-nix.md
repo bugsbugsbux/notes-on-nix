@@ -207,7 +207,7 @@ let inc = {x, y?1, ...}@other: with builtins; length(attrNames(other));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
-For manipulating controlflow there are the keywords `if`, `then` and
+For manipulating **controlflow** there are the keywords `if`, `then` and
 `else` to create conditionals, but none to create loops; use builtins
 like `builtins.map` and `builtins.mapAttrs` instead.
 ```nix
