@@ -9,13 +9,13 @@ Nix is:
 2. a package manager using the nix programming language
 3. a linux distribution using the nix package manager
 
+## Overview:
+
 The idea behind nix is to declaratively manage the state of the
 operating system: From which packages are installed, to which services
 are enabled and even how programs are configured. Declaratively means,
 one states the intended result and the program figures out itself, how
 to achieve that.
-
-First, understand the basics of the nix language:
 
 ## Nix language
 
