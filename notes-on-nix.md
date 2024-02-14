@@ -120,14 +120,16 @@ let s1 = {
 in s1 // s2             # update set: orig_values // new_values
 ```
 
-Sets auto-create missing sub-sets when assigning to them; when accessing
-them an error is thrown which can be suppressed by providing a fallback
+In nix, one cannot reassign a name, thus it is clear that assigning to
+the same set again extends the set's current value. Moreover, missing
+sets are auto-created, when being assigned to, but accessing a missing
+set throws an error which can be be suppressed by providing a fallback
 value with keyword `or`:
 ```nix
-let foo = {};
-    foo.a.b = 1;
-    bar = {a = { b = 1; }; }; # equivalent to foo
-in [ (foo==bar) foo.a.b foo.a.b.c.d or "missing" ]
+let foo.a.b = 1;                    # creates missing sets foo and foo.a
+    foo = { c = 3; };               # extends foo
+    bar = {a = { b = 1;}; c = 3;};  # equivalent to foo
+in [ (foo==bar) foo.a.b (foo.a.b.c.d or "missing") ]
 ```
 
 Instead of assigning named values to the same name in a set, the
