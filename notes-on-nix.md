@@ -49,7 +49,7 @@ all the difference: `let foo=1; bar=foo -1; bar` (returns value of bar:
 `let foo=1; bar=foo-1; bar`.
 
 `#` comments the rest of the line, while `/*` starts a comment which
-ends at the next `*/`.
+ends with the next `*/`.
 
 The nix language requires each file to contain *only a single*
 "nix-expression", which is something that evaluates to a value:
