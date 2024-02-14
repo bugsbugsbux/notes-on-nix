@@ -112,10 +112,10 @@ let s1 = {
         d = c + 1;
         c = 100;
     };
-    "problematic name" = rec {
+    "inconvenient name" = rec {
         "this attr" = "no easy access to this from sibling attributes";
         # x = "this attr"           # a string not value of "this attr"
-        # x = "problematic name"."this attr"    # does not work either!
+        # x = "inconvenient name"."this attr"   # does not work either!
     };
 in s1 // s2             # update set: orig_values // new_values
 ```
