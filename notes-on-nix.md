@@ -11,11 +11,11 @@ Nix is:
 
 ## Overview:
 
-The idea behind nix is to declaratively manage the state of the
-operating system: From which packages are installed, to which services
-are enabled and even how programs are configured. Declaratively means,
-one states the intended result and the program figures out itself, how
-to achieve that.
+The idea behind nix is to *declaratively* manage the state of the
+operating system: not only which packages are installed, but also which
+services are enabled, how programs are configured, etc. Declaratively
+means, one states the intended result and the program (nix) figures out
+itself, how to achieve that.
 
 ## Nix language
 
