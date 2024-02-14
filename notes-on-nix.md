@@ -170,6 +170,11 @@ functions: The body goes into the innermost function, which takes the
 last argument and is returned by another function with takes the second
 to last argument, and so on; this is called "currying".
 
+The term **closure** is also used by nix in reference to all the
+packages a package depends on (as well as the packages they depend on,
+etc). Build-dependencies and runtime-dependencies may differ; if not
+specified "package closure" usually only means the runtime dependencies.
+
 ```nix
 # You cannot put the following nix-expressions in the same file, as only
 # one expression is allowed per file!
