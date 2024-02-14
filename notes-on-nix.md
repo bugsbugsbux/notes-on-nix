@@ -80,8 +80,8 @@ The nix language requires each file to contain *only a single*
   listed in environment variable "NIX_PATH". This should be avoided as
   it is impure (not reproducible).
 - **list**: `[1 "two" 3 4]`
-- (attribute-)set: What other languages call "map" or "dictionary". See
-  below.
+- (attribute-)set: What other languages call "(hash-)map", "dictionary"
+  or "table". See below.
 - function: Indeed, functions may be used as values. See below.
 
 Variable definitions are wrapped in a **"let" statement**, which defines
