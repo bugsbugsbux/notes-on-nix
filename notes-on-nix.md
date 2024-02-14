@@ -133,7 +133,7 @@ in [ (foo==bar) foo.a.b (foo.a.b.c.d or "missing") ]
 ```
 
 Instead of assigning named values to the same name in a set, the
-**"inherit" statement** may be used.
+**"inherit(from)" statement** may be used.
 ```nix
 let foo = 1;
     bar = 2;
