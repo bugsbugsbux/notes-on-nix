@@ -45,8 +45,8 @@ own config file to change other parts of the config).
 `#` **comments** the rest of the line, while `/*` starts a comment which
 ends with the next `*/`.
 
-**Whitespace** is generally not significant, thus most nix-expressions
-may be written in a single line. An example where a single space makes a
+**Whitespace** is generally not significant, thus most code may be
+written in a single line. An example where a single space makes a
 difference is: `let foo=1; bar=foo -1; bar` (returns the value of bar:
 `0`) while the following throws the error "undefined variable 'foo-1'":
 `let foo=1; bar=foo-1; bar`.
