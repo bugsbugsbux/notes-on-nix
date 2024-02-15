@@ -30,6 +30,13 @@ versions of the same program can be installed without conflict and
 programs (/specific versions) can be composed to create arbitrary,
 custom environments.
 
+Between profiles and environments there is actually another layer of
+linking which is called **generations**: When an environment "changes",
+actually, a new environment is created, based on the old one, and the
+profile link is updated to point to the new generation. This allows to
+simply switch to a different state by changing the link to the relevant
+generation, which is just a link to a certain environment.
+
 A **derivation** is the recipe for a package and turned internally into
 a "\*.drv" file in the nix-store. To create it the user calls the
 `derivation` function or a wrapper around it. The build process, called
