@@ -88,8 +88,9 @@ The nix language requires each file to contain *only a single*
   ```
 - **path**: Careful: Using paths copies it to the nix-store location!
 
-  Paths are unquoted, do not contain :// which would make it a URI, that
-  is a string, and have at least one "/" which is not the last char:
+  Paths are unquoted, do not contain "://" which would make it a URI,
+  that is a string, and have at least one "/" which is not the last
+  char:
   ```nix
   ./relative-path               # relative to the file it is used in
   ../path-in-parent/folder      # may not end in /
