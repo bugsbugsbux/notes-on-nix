@@ -51,8 +51,9 @@ difference is: `let foo=1; bar=foo -1; bar` (returns the value of bar:
 `0`) while the following throws the error "undefined variable 'foo-1'":
 `let foo=1; bar=foo-1; bar`.
 
-The nix language requires each file to contain *only a single*
-"**nix-expression**", which is something that evaluates to a value:
+The nix language requires each file (nix files use the extension ".nix")
+to contain *only a single* "**nix-expression**", which is something that
+evaluates to a value:
 
 - **integer**: `1`
 - **float**: `3.14`
