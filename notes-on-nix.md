@@ -22,6 +22,11 @@ management: Installing a package retrieves build instructions, but only
 actually builds it if it cannot find a cached version (either in the
 local- or a remote-**cache**).
 
+*TLDR for the next 2 paragraphs: a profile is a link to a generation
+which is a link to an environment which is a folder with the links to
+executables which are stored in the nix-store location and made
+available for use by including the profile-link in the PATH.*
+
 Locally, nix puts everything into the **nix-store**, which is usually at
 `/nix/store`, and makes sure the correct executables are found by
 linking them to a folder called an **environment** and putting a link to
