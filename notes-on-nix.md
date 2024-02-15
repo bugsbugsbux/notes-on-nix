@@ -20,13 +20,15 @@ itself, how to achieve that.
 Nix uses a hybrid source- and binary-based approach to package
 management: Installing a package retrieves build instructions, but only
 actually builds it if it cannot find a cached version (either in the
-local- or a remote-**cache**). Locally, nix puts everything into the
-**nix-store**, which is usually at `/nix/store`, and makes sure the
-correct executables are found by linking them to a folder called an
-**environment** and putting a link to it (called a **profile**) in the
-PATH. Ultimately this means multiple versions of the same program can
-be installed without conflict and programs (/specific versions) can be
-composed to create arbitrary, custom environments.
+local- or a remote-**cache**).
+
+Locally, nix puts everything into the **nix-store**, which is usually at
+`/nix/store`, and makes sure the correct executables are found by
+linking them to a folder called an **environment** and putting a link to
+it (called a **profile**) in the PATH. Ultimately this means multiple
+versions of the same program can be installed without conflict and
+programs (/specific versions) can be composed to create arbitrary,
+custom environments.
 
 A **derivation** is the recipe for a package and turned internally into
 a "\*.drv" file in the nix-store. To create it the user calls the
