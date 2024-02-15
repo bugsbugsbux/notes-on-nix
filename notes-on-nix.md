@@ -52,7 +52,7 @@ difference is: `let foo=1; bar=foo -1; bar` (returns the value of bar:
 `let foo=1; bar=foo-1; bar`.
 
 The nix language requires each file to contain *only a single*
-"nix-expression", which is something that evaluates to a value:
+"**nix-expression**", which is something that evaluates to a value:
 
 - **integer**: `1`
 - **float**: `3.14`
