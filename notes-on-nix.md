@@ -42,7 +42,7 @@ own config file to change other parts of the config).
 
 `builtins.langVersion == 6`
 
-`#` comments the rest of the line, while `/*` starts a comment which
+`#` **comments** the rest of the line, while `/*` starts a comment which
 ends with the next `*/`.
 
 Whitespace is generally not significant, thus most nix-expressions may
