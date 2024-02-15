@@ -37,6 +37,12 @@ profile link is updated to point to the new generation. This allows to
 simply switch to a different state by changing the link to the relevant
 generation, which is just a link to a certain environment.
 
+Therefore, removing a package only creates a new environment without it
+and a new generation pointing to this environment. To actually delete
+the package, **garbage-collection** needs to be run when there is no
+reference to it, meaning all generations which included it need to be
+removed first and thus cannot be restored anymore.
+
 A **derivation** is the recipe for a package and turned internally into
 a "\*.drv" file in the nix-store. To create it the user calls the
 `derivation` function or a wrapper around it. The build process, called
