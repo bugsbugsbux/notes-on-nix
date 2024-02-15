@@ -58,7 +58,7 @@ evaluates to a value:
 - **integer**: `1`
 - **float**: `3.14`
 - **boolean**: `true` and `false`
-- **null**: `null` (called "nil" in some languages)
+- **null**: `null` (called "nil" nor "none" in some languages)
 - **string**:
   ```nix
 
