@@ -74,6 +74,15 @@ which there are:
 - the channels called "\*-small" simply have less binary caches and thus
   receive updates faster.
 
+Since channels change over time there is no guarantee that building the
+same configuration always produces the same result. Moreover, it is
+unknown what this result will be (package, module, etc). To fix these
+problems nix introduced **flakes** which are officially still
+experimental but already used by most of the community. A flake is a
+repo with a `./flake.nix` file which has a certain structure and defines
+build outputs, dependencies, etc; a `./flake.lock` file pins the
+dependencies to a specific version.
+
 ## Nix language
 
 `builtins.langVersion == 6`
