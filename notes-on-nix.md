@@ -62,6 +62,18 @@ and to modify parts of the config from other parts instead of having to
 edit them in-place (in other words: they allow the user to write his
 own config file to change other parts of the config).
 
+The default source for nix code is called **nixpkgs** and hosted on
+github. It is organized into **channels** (implemented as branches) of
+which there are:
+- "nixpkgs-unstable" and "nixos-unstable" (for nix and nixos users
+  respectively) are updated continuously but only use basic tests
+  and failing tests can block the entire channel from time to time
+- the stable channels are called "nixos-YY.MM" use more rigorous
+  testing, can be used by everyone and their packages only receive
+  bugfix- and security-updates after the initial release
+- the channels called "\*-small" simply have less binary caches and thus
+  receive updates faster.
+
 ## Nix language
 
 `builtins.langVersion == 6`
