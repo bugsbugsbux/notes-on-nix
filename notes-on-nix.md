@@ -83,6 +83,14 @@ repo with a `./flake.nix` file which has a certain structure and defines
 build outputs, dependencies, etc; a `./flake.lock` file pins the
 dependencies to a specific version.
 
+As mentioned, the idea behind nix is not only to install packages in a
+declarative way, but also to configure them; this works well for global
+programs, but not so much for user-environments, which are configured in
+the home directory. The program "**home-manager**" allows to
+declaratively manage user-environments like one would manage the system
+environment with nix. Keep in mind that one must not edit the managed
+configurations manually, as home-manager overwrites these files!
+
 ## Nix language
 
 `builtins.langVersion == 6`
