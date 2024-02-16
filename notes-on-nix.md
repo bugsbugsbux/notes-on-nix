@@ -68,9 +68,9 @@ which there are:
 - "nixpkgs-unstable" and "nixos-unstable" (for nix and nixos users
   respectively) are updated continuously but only use basic tests;
   failing tests can block the entire channel from time to time.
-- the stable channels are called "nixos-YY.MM" use more rigorous
-  testing, can be used by everyone and their packages only receive
-  bugfix- and security-updates after the initial release
+- The stable channels are called "nixos-YY.MM", use more rigorous
+  testing, can be used by both, nix and nixos users, and their packages
+  only receive bugfix- and security-updates after the initial release.
 - the channels called "\*-small" simply have less binary caches and thus
   receive updates faster.
 
