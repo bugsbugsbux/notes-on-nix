@@ -242,14 +242,15 @@ in
         }                   # no semicolon here
 ```
 
-Nix **function**s are anonymous closures which only take a single
-argument. Anonymous means they do not have a name, but as they are
-values, they may be bound to a name in the usual way. Closure means a
-function knows about variables in its parent scopes from the time it was
-defined. This lets one implement multi-argument functions by nesting
-functions: The body goes into the innermost function, which takes the
-last argument and is returned by another function with takes the second
-to last argument, and so on; this is called "currying".
+Nix **function**s are anonymous (so called "lambdas") closures which
+only take a single argument. Anonymous means they do not have a name,
+but as they are values, they may be bound to a name in the usual way.
+Closure means a function knows about variables in its parent scopes from
+the time it was defined. This lets one implement multi-argument
+functions by nesting functions: The body goes into the innermost
+function, which takes the last argument and is returned by another
+function with takes the second to last argument, and so on; this is
+called "currying".
 
 The term **closure** is also used by nix in reference to all the
 packages a package depends on (as well as the packages they depend on,
