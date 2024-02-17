@@ -134,7 +134,7 @@ string:
       ...do not contribute to the calculation of the common whitespace
       ...get shorter by the number of common whitespace characters
       a whitespace-only final line always becomes a single newline
-  ''
+        ''
 
   "\\ \"toggles\" special character meaning: \n\\\" \n\\n \n\\r \n\\t"
 
