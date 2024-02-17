@@ -107,13 +107,14 @@ difference is: `let foo=1; bar=foo -1; bar` (returns the value of bar:
 
 The nix language requires each file (nix files use the extension ".nix")
 to contain *only a single* "**nix-expression**", which is something that
-evaluates to a value:
+evaluates to a value. `builtins.typeOf` returns the type of a value as a
+string:
 
-- **integer**: `1`
-- **float**: `3.14`
-- **boolean**: `true` and `false`
-- **null**: `null` (called "nil" nor "none" in some languages)
-- **string**:
+- **"int"** (integer number): `1`
+- **"float"** (floating point number): `3.14`
+- **"bool"** (boolean/truth value): `true` and `false`
+- **"null"**: `null` (called "nil" nor "none" in some languages)
+- **"string"**:
   ```nix
 
   asdf://example.com    # URI recognized as string: "asdf://example.com"
@@ -141,7 +142,7 @@ evaluates to a value:
   "use \${} for string-interpolation 10+1=${"1"+"1"}"
   # "10+1=${builtins.toString(10+1)}"
   ```
-- **path**: Careful: Using paths copies it to the nix-store location!
+- **"path"**: Careful: Using paths copies it to the nix-store location!
 
   Paths are unquoted, do not contain "://" which would make it a URI,
   that is a string, and have at least one "/" which is not the last
@@ -158,10 +159,11 @@ evaluates to a value:
   Names in angles (`<name>`) are matched against files and folders
   listed in environment variable "NIX_PATH". This should be avoided as
   it is impure (not reproducible).
-- **list**: `[1 "two" 3 4]`
-- (attribute-)set: What other languages call "(hash-)map", "dictionary"
-  or "table". See below.
-- function: Indeed, functions may be used as values. See below.
+- **"list"**: `[1 "two" 3 4]`
+- (attribute-)"set": What other languages call "(hash-)map",
+  "dictionary" or "table". See below.
+- "lambda" (function): Indeed, functions may be used as values.
+  See below.
 
 Variable definitions are wrapped in a **"let" statement**, which defines
 the local scope for the subsequent expression. As nix is lazy, meaning
