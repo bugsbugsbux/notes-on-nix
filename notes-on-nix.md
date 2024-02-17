@@ -56,7 +56,7 @@ reproducibility on other systems, and uses the instructions from a
 "\*.drv" file to produce the build output(s): the **package**.
 
 **NixOS configuration** is divided into **modules**, which are parts of
-a certain structure, that can modify on each other. This allows to split
+a certain structure, that can modify each other. This allows to split
 the main config file `/etc/nixos/configuration.nix` into multiple ones
 and to modify parts of the config from other parts instead of having to
 edit them in-place (in other words: they allow the user to write his
