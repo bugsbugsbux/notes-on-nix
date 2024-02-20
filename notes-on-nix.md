@@ -403,8 +403,8 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
 
 - **Temporarily convert some running linux distro into NixOS**: Create
   the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
-  `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'` and
-  copy them to target computer and run `./kexec-boot` there.
+  `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'`,
+  copy them to the target computer and run `./kexec-boot` there.
 
 - **Converting an existing linux installation** (other distro) into a
   NixOS system: There is an installation variant called "NIXOS_LUSTRATE"
