@@ -308,11 +308,15 @@ like `builtins.map` and `builtins.mapAttrs` instead.
         else
             "equal"
     ;
+
     # using string-interpolation in attribute name (must return string)
     ${"a"+"b"} = "ab";
+
     # conditionally add attribute using string interpolation
     ${if false then "add key" else null} = "not added";
-}.${if true then "foo" else "bar"} # str-interpolation in attribute-path
+
+# string-interpolation in attribute paths:
+}.${if true then "foo" else "bar"}
 ```
 
 For more info about the language see:
