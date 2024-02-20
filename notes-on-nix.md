@@ -324,14 +324,14 @@ For more info about the language see:
 
 ## Installation
 
-There are many ways to install nixos; this does not describe the
+There are many ways to install NixOS; this does not describe the
 details:
 
 1. Like most other systems, nix may be installed from an iso image:
   - There are ones with a **graphical installer**: one just has to
     follow its instructions.
   - The "minimal" iso file is for **manual installations**:
-    Manually installing nixos starts like any other manual install:
+    Manually installing NixOS starts like any other manual install:
     setup the keyboard (with "loadkeys") and networking (with
     "wpa_supplicant"); then create partitions (with "cfdisk") with
     appropriate labels (which depends on BIOS or UEFI setup and
@@ -386,15 +386,15 @@ details:
     Now, install with `nixos-install`, then `reboot` if it worked. If it
     failed, fix the config and rerun `nixos-install`. It will prompt for
     a root password.
-2. Nixos can be **booted over the internet** with PXE or iPXE. See:
+2. NixOS can be **booted over the internet** with PXE or iPXE. See:
    <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
-3. **Temporarily convert some running linux distro into nixos**: Create
+3. **Temporarily convert some running linux distro into NixOS**: Create
    the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
    `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'` and
    copy them to target computer and run `./kexec-boot` there.
 4. **Converting an existing linux installation** (other distro) into a
-   nixos system: There is an installation variant called
+   NixOS system: There is an installation variant called
    "NIXOS_LUSTRATE" which permanently converts a running linux system
-   into a nixos system. There, are scripts like "nixos-infect" or
+   into a NixOS system. There, are scripts like "nixos-infect" or
    "nix-in-place" which automate this. Note: This might, in some scripts
    *by design* destroy all data on the machine -- back it up beforehand!
