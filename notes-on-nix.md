@@ -324,6 +324,9 @@ For more info about the language see:
 
 ## Installation
 
+*This is an overview of NixOS install methods and a summary of the
+manual; I have not yet tried all of them...*
+
 ### Installing from an .iso
 
 Like most other systems, nix may be installed from an iso image:
