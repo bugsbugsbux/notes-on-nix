@@ -321,3 +321,79 @@ like `builtins.map` and `builtins.mapAttrs` instead.
 
 For more info about the language see:
 <https://nix.dev/manual/nix/2.18/language/>
+
+## Installation
+
+There are many ways to install nixos; this does not describe the
+details:
+
+1. Like most other systems, nix may be installed from an iso image:
+  - There are ones with a **graphical installer**: one just has to
+    follow its instructions.
+  - The "minimal" iso file is for **manual installations**:
+    Manually installing nixos starts like any other manual install:
+    setup the keyboard (with "loadkeys") and networking (with
+    "wpa_supplicant"); then create partitions (with "cfdisk") with
+    appropriate labels (which depends on BIOS or UEFI setup and
+    preference) and format them accordingly (with "mkfs.\*" and
+    "mkswap"). Mount root partition on `/mnt`, mount boot partition on
+    `/mnt/boot`, (activate swap partition,) and generate a config file
+    in `/mnt/etc/nixos/` (`nixos-generate-config --root /mnt`).
+    Configure it (with "nano"); important points:
+      * Mounting should have been configured by "nixos-generate-config"
+        and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
+        sure it is included by `/mnt/etc/nixos/configuration.nix`:
+        ```nix
+        imports = [ ./hardware-configuration.nix ];
+        ```
+        Also make sure the appropriate kernel modules are enabled in
+        the `boot.initrd.kernelModules` option to be able to mount
+        certain special file systems!
+      * Configure boot loader:
+        ```nix
+        # BIOS -> grub
+        boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
+        boot.loader.grub.useOSProber = true;
+
+        # OR: UEFI
+            boot.loader.efi.efiSysMountPoint = "/YOUR_BOOT_PARTITION";
+
+            # systemd-boot:
+            boot.loader.systemd-boot.enable = true;
+            # more boot.loader.systemd-boot.* options are listed here:
+            # <https://nixos.org/manual/nixos/stable/options>
+
+            # OR: grub (cannot be used to dual-boot *linux* distros)
+            boot.loader.grub.device = "nodev"; # this is a special value
+            boot.loader.grub.efiSupport = true;
+            boot.loader.grub.useOSProber = true;
+        ```
+      * Configure network:
+        ```nix
+        networking.hostName = "YOUR_MACHINE";
+        networking.networkmanager.enable = true;
+        user.users.YOURUSER.extraGroups = [ "networkmanager" ];
+        networking.firewall.enable = true;
+        # networking.firewall.allowedTCPPorts = [];
+        # networking.firewall.allowedUDPPorts = [];
+        networking.wireless.enable = true;
+        # the following runs the provided shell script after network setup
+        networking.localCommands = ''
+            get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
+            systemctl restart wpa_supplicant.service
+        '';
+        ```
+    Install with `nixos-install`! If it fails, fix the config and rerun.
+    It will prompt for a root password. Then: `reboot`.
+2. Nixos can be **booted over the internet** with PXE or iPXE. See:
+   <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
+3. **Temporarily convert some running linux distro into nixos**: Create
+   the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
+   `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'` and
+   copy them to target computer and run `./kexec-boot` there.
+4. **Converting an existing linux installation** (other distro) into a
+   nixos system: There is an installation variant called
+   "NIXOS_LUSTRATE" which permanently converts a running linux system
+   into a nixos system. There, are scripts like "nixos-infect" or
+   "nix-in-place" which automate this. Note: This might, in some scripts
+   *by design* destroy all data on the machine -- back it up beforehand!
