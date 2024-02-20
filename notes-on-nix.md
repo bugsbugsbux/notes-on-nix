@@ -383,8 +383,9 @@ details:
             systemctl restart wpa_supplicant.service
         '';
         ```
-    Install with `nixos-install`! If it fails, fix the config and rerun.
-    It will prompt for a root password. Then: `reboot`.
+    Now, install with `nixos-install` and `reboot` if it worked. If it
+    failed, fix the config and rerun `nixos-install`. It will prompt for
+    a root password.
 2. Nixos can be **booted over the internet** with PXE or iPXE. See:
    <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
 3. **Temporarily convert some running linux distro into nixos**: Create
