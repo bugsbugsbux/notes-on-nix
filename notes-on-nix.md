@@ -413,3 +413,58 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   There, are scripts like "nixos-infect" or "nix-in-place" which
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
+
+## Nix management
+
+NixOS is managed via a configuration file, in which one can define,
+among other things, which packages shall be installed. The nix package
+manager may also be invoked like a traditional package manager, but one
+should keep in mind that it still acts differently (see: generations,
+garbage-collection, profile)!
+
+```sh
+# create new generation including the specified packages
+nix-env --install   regex1 regex2-version regex3
+nix-env -i          regex1 regex2-version regex3
+# create new generation without the specified packages
+nix-env --uninstall regex1 regex2
+nix-env -e          regex1 regex2
+# create new generation with updated versions of all or given packages
+nix-env --upgrade   regex1 regex2
+nix-env --upgrade
+nix-env -u
+# modify current generation to only contain the specified derivation
+nix-env --set regex1 # --profile profilename
+
+# modify metadata
+# for example pin package to current version by setting "keep" to "true"
+nix-env --set-flag "keep" "true" regex1
+
+# listing packages
+nix-env --query --installed         # list all or specified if installed
+nix-env --query                     # same as with --installed
+nix-env --query --available regex1  # include non-installed packages
+# Adding --status puts a 3 letter string next to a package indicating
+# whether or not (-) it is:
+# available in the current generation (I),
+# available elsewhere on the system (P),
+# available as substitute for building it locally (S).
+nix-env --query -a --status regex1      # -a is --available
+nix-env --query    --compare-versions   # compare installed to available
+nix-env --query -a --compare-versions   # compare available to installed
+
+# activate a specific profile (link to a generation)
+nix-env --switch-profile profilepath
+nix-env -S               profilepath
+
+# list generations of current profile (current marked with "(current)")
+nix-env --list-generations
+# activate previous (highest number lower than current) generation
+nix-env --rollback
+# activate specified generation
+nix-env --switch-generation 123 # or any other generation
+nix-env -G                  123
+# delete specified generations
+nix-env --delete-generations 1 2 3 # or any other generations
+nix-env --delete-generations "old" # ALL except current generation
+```
