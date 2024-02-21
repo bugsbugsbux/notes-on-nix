@@ -468,3 +468,33 @@ nix-env -G                  123
 nix-env --delete-generations 1 2 3 # or any other generations
 nix-env --delete-generations "old" # ALL except current generation
 ```
+
+## Configuration
+
+The main configuration file (itself a module, see below) is
+`/etc/nixos/configuration.nix` and usually (for example when generating
+a new configuration with `nixos-generate-config`) hardware-specific
+options are put into their own module
+`/etc/nixos/hardware-configuration.nix`, which allows to use the same
+main configuration file on different machines.
+
+NixOS comes with lots of configuration options, most of which are
+defined in a module in the modules directory `<nixpkgs/nixos/modules>`.
+
+If a file `/etc/nixos/flake.nix` exists, it takes precedence over
+`/etc/nixos/configuration.nix`, which allows to turn the configuration
+into a flake (see below).
+
+After changing the config, the system needs to be rebuilt with the
+command `sudo nixos-rebuild`. It takes an *argument* to specify *when*
+to activate the new system:
+- "switch": immediately
+- "boot": on next reboot
+- "test": immediately but only temporarily (until next reboot)
+- "build": only build, don't activate
+The following *options* are useful:
+- "--rollback": Instead of building a new generation of the system,
+  activate the previous one at the specified time (see above: argument).
+- "--upgrade": This is used to update the system. It may rebuild the
+  system even when the configuration did not change, because it first
+  updates the channel, and thus package definitions might have changed.
