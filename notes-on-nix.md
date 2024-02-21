@@ -396,6 +396,7 @@ Like most other systems, nix may be installed from an iso image:
   a root password.
 
 ### Installing over the internet
+
 NixOS can be **booted over the internet** with PXE or iPXE. See:
 <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
 
