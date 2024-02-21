@@ -492,6 +492,7 @@ to activate the new system:
 - "boot": on next reboot
 - "test": immediately but only temporarily (until next reboot)
 - "build": only build, don't activate
+
 The following *options* are useful:
 - "--rollback": Instead of building a new generation of the system,
   activate the previous one at the specified time (see above: argument).
