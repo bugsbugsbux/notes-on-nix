@@ -426,6 +426,20 @@ garbage-collection, profile)!
 # create new generation including the specified packages
 nix-env --install   regex1 regex2-version regex3
 nix-env -i          regex1 regex2-version regex3
+
+# Using --install as shown above matches the regex against all nixpkgs
+# and installs the latest matching one. This is slow and might not
+# install the intended package. Instead add the --attr or -A option to
+# interpret the arguments as attribute paths selecting from the default
+# nix-expression (see:
+# nixos.org/manual/nix/stable/command-ref/files/default-nix-expression)
+# or the result of the expression in the file given with -f or --file .
+# This is faster due to nix's lazy evaluation ignoring all parts of the
+# set which were not indexed. That this also applies to --upgrade .
+nix-env --install --attr    nixos.pkgname1     # on NixOS
+nix-env -iA                 nixpkgs.pkgname1   # on other systems
+nix-env -iA -f '<nixpkgs>'  pkgname1    # instead of default nix-expr
+
 # create new generation without the specified packages
 nix-env --uninstall regex1 regex2
 nix-env -e          regex1 regex2
@@ -433,6 +447,7 @@ nix-env -e          regex1 regex2
 nix-env --upgrade   regex1 regex2
 nix-env --upgrade
 nix-env -u
+nix-env -uA nixos.pkgname1  # or nixpkgs.pkgname1 on other systems
 # modify current generation to only contain the specified derivation
 nix-env --set regex1 # --profile profilename
 
