@@ -502,8 +502,8 @@ options are put into their own module
 main configuration file on different machines.
 
 NixOS comes with lots of configuration options, most of which are
-defined in a module in the **modules directory**
-`<nixpkgs/nixos/modules>`. The modules listed in
+defined (in the classic sense of the word) in a module in the **modules
+directory** `<nixpkgs/nixos/modules>`. The modules listed in
 `<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
 thus do not need to be specified in the "imports" field of modules which
 use options declared by them.
