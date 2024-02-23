@@ -319,8 +319,16 @@ like `builtins.map` and `builtins.mapAttrs` instead.
 }.${if true then "foo" else "bar"}
 ```
 
-For more info about the language see:
-<https://nix.dev/manual/nix/2.18/language/>
+For more detailed info about the nix language, for example various
+operators, see: <https://nix.dev/manual/nix/2.18/language/>
+
+As the examples already indicated, most builtins are not available in
+the global namespace and have to be accessed via the set `builtins`.
+Documentation at: <https://nix.dev/manual/nix/2.18/language/builtins>
+
+Another common set of functions is the standard library from nixpkgs.
+See: modules. Documentation at:
+<https://nixos.org/manual/nixpkgs/stable/#sec-functions-library>
 
 ## Installation
 
