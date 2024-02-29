@@ -599,3 +599,68 @@ The following *options* are useful:
 - "--upgrade": This is used to update the system. It may rebuild the
   system even when the configuration did not change, because it first
   updates the channel, and thus package definitions might have changed.
+
+### Modules
+
+The module system is not a feature of the nix language but NixOS and
+allows to split the configuration into multiple files called modules,
+which return a set with certain attributes or a function which returns
+such a set.
+
+The NixOS configuration exposes **options** to the user to define the
+system. These options are "declared" (meaning created) in modules, and
+can be "defined" (meaning modified) by other modules.
+
+The set a module (or its function) returns looks like this:
+```nix
+{
+    options = { /* option declarations */ };
+    config =  { /* option definitions */ };
+    # optional:
+    imports = [ /* paths to other modules */ ];
+}
+```
+
+If the module does not declare any options (aka has no "options" field),
+the returned set may be structured like this instead:
+```nix
+{
+    # options = { /* option declarations */ };    # missing
+    imports =   [ /* paths to other modules */ ]; # optional
+
+    /* The "config" field, for example this one ...
+    config = {
+        networking.hostName = "MY_HOST_NAME";
+    };
+
+    ... is replaced by its contents like so: */
+    networking.hostName = "MY_HOST_NAME";
+}
+```
+
+The module system handles loading the modules specified in the "import"
+field. When a module is a function, it is called by the module system
+with a set containing the following items:
+
+- `pkgs`: This provides access to nixpkgs.
+- `lib`: This provides access to the **nixpkgs standard library** in a
+  safe way; contrary to using `pkgs.lib` (essentially
+  `import <nixpkgs/lib>`), which might result in an infinite recursion.
+- `modulesPath`: The location of the modules directory (see above).
+- `config`: All option-definitions; including the options set by the
+  module itself, which works (as long as no option references itself)
+  because nix is lazily evaluated. (see: options)
+- `options`: All option-declarations. (see: options)
+
+```nix
+{ pkgs, ... }: # specify which arguments you intend to use
+
+# Let's use the simplified module structure (no "options" and not
+# putting option definitions into a "config" field) in this example:
+{
+    imports = [ ./hardware-configuration.nix ];
+    environment.systemPackages = with pkgs; [ git ];
+    networking.hostName = "MY_HOST_NAME";
+    #...
+}
+```
