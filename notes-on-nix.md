@@ -514,6 +514,28 @@ available anymore, however, they are still in the store until the next
 time garbage-collection runs, so running the same `nix-shell` command a
 second time should be much faster, than the first time!
 
+#### Nix scripts
+
+Instead of shell scripts where the user needs to install the needed
+programs in the required versions himself, there are nix scripts:
+
+Replace shebang lines like `#!/bin/bash` with `#!/usr/bin/env
+nix-shell`. The following lines starting with `#! nix-shell` are merged
+into a single call to `nix-shell` and define the environment; `--pure`
+isolates it from the system; the interpreter to use is specified with
+`-i`; `--packages` installs the given dependencies. For even more
+reproducibility use `-I nixpkgs=` to specify a certain release of
+nixpkgs.
+
+```bash
+#!/usr/bin/env nix-shell
+#! nix-shell --pure -i bash
+#! nix-shell --packages bash cowsay
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/0672315759b3e15e2121365f067c1c8c56bb4722.tar.gz
+
+echo hello world | cowsay
+```
+
 ## Declarative configuration
 
 ### Temporary shell environments
