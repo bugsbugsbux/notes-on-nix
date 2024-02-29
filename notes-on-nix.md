@@ -422,7 +422,9 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
 
-## Nix management
+## Imperative configuration
+
+### Profile management
 
 NixOS is managed via a configuration file, in which one can define,
 among other things, which packages shall be installed. The nix package
@@ -492,7 +494,9 @@ nix-env --delete-generations 1 2 3 # or any other generations
 nix-env --delete-generations "old" # ALL except current generation
 ```
 
-## Configuration
+## Declarative configuration
+
+### Profile management
 
 The main configuration file (itself a module, see below) is
 `/etc/nixos/configuration.nix` and usually (for example when generating
