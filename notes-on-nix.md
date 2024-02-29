@@ -615,8 +615,14 @@ The set a module (or its function) returns looks like this:
 {
     options = { /* option declarations */ };
     config =  { /* option definitions */ };
+
     # optional:
     imports = [ /* paths to other modules */ ];
+    meta = {
+        maintainers = [];
+        doc = ./path.md;
+        buildDocsInSandbox = true;
+    };
 }
 ```
 
@@ -626,6 +632,7 @@ the returned set may be structured like this instead:
 {
     # options = { /* option declarations */ };    # missing
     imports =   [ /* paths to other modules */ ]; # optional
+    # meta = {};                                  # optional
 
     /* The "config" field, for example this one ...
     config = {
