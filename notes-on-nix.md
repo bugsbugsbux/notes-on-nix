@@ -664,3 +664,62 @@ with a set containing the following items:
     #...
 }
 ```
+
+#### Creating options
+
+An option is called by the name used when it was declared in a module's
+"options" field. Usually this is an attribute path consisting of
+option-category (just a convention), name (as used in in
+"(nixpkgs/)pkgs/top-level/all-packages.nix") of the package it comes
+from, and specific name.
+
+Defining an option is done by assigning a new value to its attribute
+path (in the "config" field, except when using the simplified module
+structure). To use an option from a module not in the modules
+directory, the module's path needs to be mentioned in the "imports"
+list; this is not to be confused with loading a file with the `import`
+keyword!
+
+Depending on the type, defining an option multiple times may be an error
+or merged in some way.
+
+The following example module declares some options and should be
+added to "all-packages.nix" as "my-package". Moreover, it configures
+some options of "other-package":
+```nix
+# The nixpkgs standard library is needed; do not access it via pkgs.lib
+# but instead via lib (avoids infinite loops)!
+{ lib, ... }: {
+
+    options = {
+
+        # Use camelCase, except for the package-name which should match
+        # the name used in (nixpkgs/)pkgs/top-level/all-packages.nix
+        category.my-package.myOptionName = lib.mkOption {
+    #   ^^^^^^^^^ choose an existing one: <https://mynixos.com/options>
+
+            # Without a default, the user has to set the option or an
+            # error is thrown.
+            default = "default value";
+
+            # Not necessarily a nix-type. See:
+            # <https://nixos.org/manual/nixos/stable/#sec-option-types>
+            type = lib.types.str;
+
+            description = "Markdown description of the example option";
+
+        };
+
+        # Wrappers around mkOption simplify creating certain options:
+        category.my-package.enable = lib.mkEnableOption "my-package";
+        #                                   the name:    ^^^^^^^^^^
+    };
+
+    # define (=set) options from other-package:
+    imports = [ ~/other-package.nix ];          # import if necessary
+    config = {
+        category.other-package.enable = true;   # enable if required
+        category.other-package.someOption = "new value"; # set option
+    };
+}
+```
