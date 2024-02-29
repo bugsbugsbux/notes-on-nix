@@ -681,7 +681,8 @@ list; this is not to be confused with loading a file with the `import`
 keyword!
 
 Depending on the type, defining an option multiple times may be an error
-or merged in some way.
+or merged in some way. Depending on whether an option has a default
+value, not defining it may be an error nor not.
 
 The following example module declares some options and should be
 added to "all-packages.nix" as "my-package". Moreover, it configures
@@ -698,8 +699,6 @@ some options of "other-package":
         category.my-package.myOptionName = lib.mkOption {
     #   ^^^^^^^^^ choose an existing one: <https://mynixos.com/options>
 
-            # Without a default, the user has to set the option or an
-            # error is thrown.
             default = "default value";
 
             # Not necessarily a nix-type. See:
