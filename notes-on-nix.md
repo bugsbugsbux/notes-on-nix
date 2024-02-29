@@ -494,7 +494,54 @@ nix-env --delete-generations 1 2 3 # or any other generations
 nix-env --delete-generations "old" # ALL except current generation
 ```
 
+### Temporary shell environments
+
+Nix also allows to install packages into a temporary environment with
+`nix-shell`:
+```sh
+# interactive shell
+cowsay                          # error: command not found
+nix-shell --packages cowsay     # interpreted as attributes of nixpkgs
+> echo hello world | cowsay     # ok
+> exit
+cowsay                          # error: command not found
+# only run given command and exit
+nix-shell -p cowsay --run "echo hello world | cowsay"
+```
+
+After exiting the temporary environment the installed packages are not
+available anymore, however, they are still in the store until the next
+time garbage-collection runs, so running the same `nix-shell` command a
+second time should be much faster, than the first time!
+
 ## Declarative configuration
+
+### Temporary shell environments
+
+Creating temporary shell environment as described in above is tedious,
+instead one may want to configure such environments declaratively, on a
+per directory basis: This is what `./shell.nix` is for. Simply run
+`nix-shell` without any arguments in the same directory to activate the
+environment.
+
+```nix
+let
+  nixpkgs =             # get a specific release
+    fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-23.11";
+  pkgs = import nixpkgs {};
+in pkgs.mkShellNoCC {   # creates a shell without c compiler toolchain
+    # packages to install, no need to specify bash:
+    packages = with pkgs; [ cowsay ];
+    # commands to execute on startup:
+    shellHook = ''
+        echo "$MYVAR" | cowsay
+        # set variables which cannot be set as nix set-attributes:
+        export PS1="> "
+    '';
+    # set environment variables (if not possible set them in shellHook)
+    MYVAR = "Welcome in your temporary bash environment!";
+}
+```
 
 ### Profile management
 
