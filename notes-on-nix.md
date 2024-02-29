@@ -719,7 +719,12 @@ some options of "other-package":
     };
 
     # define (=set) options from other-package:
-    imports = [ ~/other-package.nix ];          # import if necessary
+    imports = [ # might not be necessary (see: modules directory):
+        ./other-package.nix
+        # or rename to ./other-package/default.nix and import
+        # ./other-package/default.nix   # which can also be written:
+        # ./other-package
+    ];
     config = {
         category.other-package.enable = true;   # enable if required
         category.other-package.someOption = "new value"; # set option
