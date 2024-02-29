@@ -574,13 +574,6 @@ options are put into their own module
 `/etc/nixos/hardware-configuration.nix`, which allows to use the same
 main configuration file on different machines.
 
-NixOS comes with lots of configuration options, most of which are
-defined (in the classic sense of the word) in a module in the **modules
-directory** `<nixpkgs/nixos/modules>`. The modules listed in
-`<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
-thus do not need to be specified in the "imports" field of modules which
-use options declared by them.
-
 If a file `/etc/nixos/flake.nix` exists, it takes precedence over
 `/etc/nixos/configuration.nix`, which allows to turn the configuration
 into a flake (see below).
@@ -610,6 +603,12 @@ such a set.
 The NixOS configuration exposes **options** to the user to define the
 system. These options are "declared" (meaning created) in modules, and
 can be "defined" (meaning modified) by other modules.
+
+Most options are declared in a module in the **modules directory**
+`<nixpkgs/nixos/modules>`. The modules listed in
+`<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
+thus do not need to be specified in the "imports" field of modules which
+use options declared by them.
 
 The set a module (or its function) returns looks like this:
 ```nix
