@@ -681,8 +681,10 @@ list; this is not to be confused with loading a file with the `import`
 keyword!
 
 Depending on the type, defining an option multiple times may be an error
-or merged in some way. Depending on whether an option has a default
-value, not defining it may be an error nor not.
+or merged in some way. (For available types and how to customize them
+see: <https://nixos.org/manual/nixos/stable/#sec-option-types>)
+Depending on whether an option has a default value, not defining it may
+be an error nor not.
 
 The following example module declares some options and should be
 added to "all-packages.nix" as "my-package". Moreover, it configures
@@ -700,11 +702,7 @@ some options of "other-package":
     #   ^^^^^^^^^ choose an existing one: <https://mynixos.com/options>
 
             default = "default value";
-
-            # The available types are not always simply nix-types! See:
-            # <https://nixos.org/manual/nixos/stable/#sec-option-types>
             type = lib.types.str;
-
             description = "Markdown description of the example option";
 
         };
