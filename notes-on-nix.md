@@ -708,59 +708,51 @@ namespace of each module; see: options,
 
 #### Options
 
-The NixOS configuration exposes **options** to the user to define the
-system. These options are "declared" (meaning created) in modules, and
-can be "defined" (meaning modified) by other modules.
+NixOS exposes **options** via the module system for the user to define
+the intended system state. These options are "declared" (meaning
+created) in some module, and may be "defined" (meaning modified) in some
+other module.
 
-Most options are declared in a module in the **modules directory**
-`<nixpkgs/nixos/modules>`. The modules listed in
-`<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
-thus do not need to be specified in the "imports" field of modules which
-use options declared by them.
+Most options come from a module in the **modules directory**
+`<nixpkgs/nixos/modules>`. To be able to use an option, the path of the
+module which declared it needs to be specified in the "imports" field,
+except when it is listed in `<nixpkgs/nixos/modules/module-list.nix>`
+(which most non-user-created modules are). This is not to be confused
+with using the `import` keyword to load a file!
 
 An option is called by the name used when it was declared in a module's
 "options" field. Usually this is an attribute path consisting of
 option-category (just a convention), name (as used in in
-"(nixpkgs/)pkgs/top-level/all-packages.nix") of the package it comes
-from, and specific name.
-
-Defining an option is done by assigning a new value to its attribute
-path (in the "config" field, except when using the simplified module
-structure). To use an option from a module not in the modules
-directory, the module's path needs to be mentioned in the "imports"
-list; this is not to be confused with loading a file with the `import`
-keyword!
+`<nixpkgs/pkgs/top-level/all-packages.nix>`) of the package it comes
+from, and specific name. When accessing an option's final definition or
+its declaration, this attribute path is used to index the module's
+`config` or `options` argument.
 
 Depending on whether an option has a default value, **not defining it**
 may be an error nor not.
 
 Depending on the type, **defining an option multiple times** may be an
-error or merged in some way. (For available types, how to customize
+error or merged in some way. For available types, how to customize
 them, and how to create new ones, see:
-<https://nixos.org/manual/nixos/stable/#sec-option-types>)
+<https://nixos.org/manual/nixos/stable/#sec-option-types>
 
-Giving an option-definition **priority** is as if definitions of the
-same option with weaker priority (weaker=*higher* priority value) never
-happened; this allows to override another definition of an option which
-may only be set once. The default value of an option has priority
-`1500`, a regular definition has priority `100`. To give an option
-definition priority use function `mkOverride` (which is injected into a
-module's namespace by the module system) like so: `optionName =
-mkOverride 90 "option value";`
+Even options which only allow a single definition, may be defined
+multiple times when instructing the module system to *ignore* other
+definitions with weaker **priority** (weaker=*higher* priority value).
+This is done with the injected function `mkOverride`:
+`optionName = mkOverride 90 "prioritized definition";`. The priority for
+regular option-definitions is `100` and for default values is `1500`.
 
 When an option allows multiple definitions, it merges them into a single
-value (How? Depends on the option type.) while considering each
-definition's **order** value (`1000` by default; lower comes before
-higher order value). Use function `mkOrder` or one of its wrapper
-functions (all injected into a module's namespace by the module system)
-`mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder 1500`) like so:
-`optionName = mkOrder 500 "first";`
+value sorted by each definition's **order** value (*lower* comes first).
+How they are merged depends on the option type (for example collected
+into a list or joined with newlines). The order value for regular
+option-definitions is `1000`. Use the injected function `mkOrder` or one
+of its wrappers `mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder
+1500`) like so: `optionName = mkOrder 500 "first";`.
 
-Note the difference between order and priority: A definition which wins
-against another definition of the same option in terms of order, has no
-effect if it looses in terms of priority, because the priority value
-determines which definitions are even considered, while the order value
-only effects the sorting of those definitions which are not ignored.
+To clarify the difference between order and priority: A definition which
+looses in priority is ignored, thus its order value is irrelevant.
 
 The following example module declares some options and should be
 added to "all-packages.nix" as "my-package". Moreover, it configures
