@@ -339,6 +339,18 @@ See the `inherit` statements at:
 
 ## Installation
 
+### Only installing the nix package manager
+
+The nix package manager can be installed
+
+1. for a **single user**, meaning (only) the user owning `/nix` can
+   manage nix. This might be convenient if one does not want to use root
+   privileges, but a malicious build could access a user's home.
+2. for **multiple users**, meaning root owns `/nix`. Global builds,
+   require special privileges, cannot access users' homes, and are
+   available to all users. Unprivileged users may install packages for
+   themselves, but not pre-built binaries.
+
 ### Installing from an .iso
 
 Like most other systems, nix may be installed from an iso image:
