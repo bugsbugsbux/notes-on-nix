@@ -690,11 +690,36 @@ directory, the module's path needs to be mentioned in the "imports"
 list; this is not to be confused with loading a file with the `import`
 keyword!
 
-Depending on the type, defining an option multiple times may be an error
-or merged in some way. (For available types and how to customize them
-see: <https://nixos.org/manual/nixos/stable/#sec-option-types>)
-Depending on whether an option has a default value, not defining it may
-be an error nor not.
+Depending on whether an option has a default value, **not defining it**
+may be an error nor not.
+
+Depending on the type, **defining an option multiple times** may be an
+error or merged in some way. (For available types, how to customize
+them, and how to create new ones, see:
+<https://nixos.org/manual/nixos/stable/#sec-option-types>)
+
+Giving an option definition **priority** is as if definitions of the
+same option with weaker priority (weaker=*higher* priority value) never
+happened; this allows to override another definition of an option which
+may only be set once. The default value of an option has priority
+`1500`, a regular definition has priority `100`. To give an option
+definition priority use function `mkOverride` (which is injected into a
+module's namespace by the module system) like so: `optionName =
+mkOverride 90 "option value";`
+
+When an option allows multiple definitions, it merges them into a single
+value (How? Depends on the option type.) while considering each
+definition's **order** value (`1000` by default; lower comes before
+higher order value). Use function `mkOrder` or one of its wrapper
+functions (all injected into a module's namespace by the module system)
+`mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder 1500`) like so:
+`optionName = mkOrder 500 "first";`
+
+Note the difference between order and priority: A definition which wins
+against another definition of the same option in terms of order, has no
+effect if it looses in terms of priority, because the priority value
+determines which definitions are even considered, while the order value
+only effects the sorting of those definitions which are not ignored.
 
 The following example module declares some options and should be
 added to "all-packages.nix" as "my-package". Moreover, it configures
