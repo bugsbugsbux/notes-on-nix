@@ -702,8 +702,8 @@ put the option-definitions into a "config" field):
 }
 ```
 
-Moreover, the module system injects some utility functions into the
-namespace of each module; see: creating options,
+Moreover, the module system injects some **utility functions** into the
+namespace of each module; see: options,
 <https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
 
 #### Options
