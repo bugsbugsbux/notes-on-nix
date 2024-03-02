@@ -705,7 +705,7 @@ with a set containing the following items:
 
 Moreover, the module system injects some utility functions into the
 namespace of each module; see: creating options,
-<https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
+<https://github.com/NixOS/nixpkgs/blob/master/lib/modules.nix#L1396>.
 
 #### Creating options
 
