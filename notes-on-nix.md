@@ -1,7 +1,7 @@
 status: WIP
 
 *These are my notes while learning Nix; they might therefore be
-incorrect.*
+incorrect. I did not try everything described here yet.*
 
 ---
 
@@ -338,9 +338,6 @@ See the `inherit` statements at:
 <https://github.com/NixOS/nixpkgs/blob/master/lib/default.nix>
 
 ## Installation
-
-*This is an overview of NixOS install methods and a summary of the
-manual; I have not yet tried all of them...*
 
 ### Installing from an .iso
 
