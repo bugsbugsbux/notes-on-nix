@@ -659,6 +659,30 @@ with a set containing the following items:
 - `config`: All option-definitions; including the options set by the
   module itself, which works (as long as no option references itself)
   because nix is lazily evaluated. (see: options)
+
+  Note: This means option definitions may depend on each other, however,
+  this dependency must not be used to create the "config" value itself,
+  only the create its attributes:
+  ```nix
+  {config, ...}:
+  {
+      # this is allowed:
+      config = {
+          some-pkg.enable = if config.other-pkg.enable
+              then true
+              else false;
+      };
+
+      /* however, the following is not allowed:
+
+      config = if config.other-pkg.enable then {
+          some-pkg.enable = true;
+      } else {
+          some-pkg.enable = false;
+      };
+      */
+  }
+  ```
 - `options`: All option-declarations. (see: options)
 
 ```nix
