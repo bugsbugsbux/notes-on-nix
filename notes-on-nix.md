@@ -1,7 +1,7 @@
 status: WIP
 
-These are my notes while learning Nix; they might therefore be
-incorrect.
+*These are my notes while learning Nix; they might therefore be
+incorrect.*
 
 ---
 
