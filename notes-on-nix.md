@@ -616,16 +616,6 @@ allows to split the configuration into multiple files called modules,
 which return a set with certain attributes or a function which returns
 such a set.
 
-The NixOS configuration exposes **options** to the user to define the
-system. These options are "declared" (meaning created) in modules, and
-can be "defined" (meaning modified) by other modules.
-
-Most options are declared in a module in the **modules directory**
-`<nixpkgs/nixos/modules>`. The modules listed in
-`<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
-thus do not need to be specified in the "imports" field of modules which
-use options declared by them.
-
 The set a module (or its function) returns looks like this:
 ```nix
 {
@@ -716,7 +706,17 @@ Moreover, the module system injects some utility functions into the
 namespace of each module; see: creating options,
 <https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
 
-#### Creating options
+#### Options
+
+The NixOS configuration exposes **options** to the user to define the
+system. These options are "declared" (meaning created) in modules, and
+can be "defined" (meaning modified) by other modules.
+
+Most options are declared in a module in the **modules directory**
+`<nixpkgs/nixos/modules>`. The modules listed in
+`<nixpkgs/nixos/modules/module-list.nix>` are imported automatically and
+thus do not need to be specified in the "imports" field of modules which
+use options declared by them.
 
 An option is called by the name used when it was declared in a module's
 "options" field. Usually this is an attribute path consisting of
