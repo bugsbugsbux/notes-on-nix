@@ -689,11 +689,11 @@ with a set containing the following items:
 - `options`: Similar to the `config` argument but for
   option-declarations.
 
+Here is an example module which is a function and returns a set using
+the simplified module structure (meaning no "options" field and does not
+put the option-definitions into a "config" field):
 ```nix
 { pkgs, ... }: # specify which arguments you intend to use
-
-# Let's use the simplified module structure (no "options" and not
-# putting option-definitions into a "config" field) in this example:
 {
     imports = [ ./hardware-configuration.nix ];
     environment.systemPackages = with pkgs; [ git ];
