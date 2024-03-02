@@ -1,5 +1,8 @@
 status: WIP
 
+These are my notes while learning Nix; they might therefore be
+incorrect.
+
 ---
 
 # Notes on Nix(OS)
