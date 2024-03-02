@@ -629,8 +629,8 @@ use options declared by them.
 The set a module (or its function) returns looks like this:
 ```nix
 {
-    options = { /* option declarations */ };
-    config =  { /* option definitions */ };
+    options = { /* option-declarations */ };
+    config =  { /* option-definitions */ };
 
     # optional:
     imports = [ /* paths to other modules */ ];
@@ -646,7 +646,7 @@ If the module does not declare any options (aka has no "options" field),
 the returned set may be structured like this instead:
 ```nix
 {
-    # options = { /* option declarations */ };    # missing
+    # options = { /* option-declarations */ };    # missing
     imports =   [ /* paths to other modules */ ]; # optional
     # meta = {};                                  # optional
 
@@ -673,7 +673,7 @@ with a set containing the following items:
   module itself, which works (as long as no option references itself)
   because nix is lazily evaluated. (see: options)
 
-  Note: This means option definitions may depend on each other, however,
+  Note: This means option-definitions may depend on each other, however,
   this dependency must not be used to create the "config" value itself,
   only the create its attributes:
   ```nix
@@ -703,7 +703,7 @@ with a set containing the following items:
 { pkgs, ... }: # specify which arguments you intend to use
 
 # Let's use the simplified module structure (no "options" and not
-# putting option definitions into a "config" field) in this example:
+# putting option-definitions into a "config" field) in this example:
 {
     imports = [ ./hardware-configuration.nix ];
     environment.systemPackages = with pkgs; [ git ];
@@ -739,7 +739,7 @@ error or merged in some way. (For available types, how to customize
 them, and how to create new ones, see:
 <https://nixos.org/manual/nixos/stable/#sec-option-types>)
 
-Giving an option definition **priority** is as if definitions of the
+Giving an option-definition **priority** is as if definitions of the
 same option with weaker priority (weaker=*higher* priority value) never
 happened; this allows to override another definition of an option which
 may only be set once. The default value of an option has priority
