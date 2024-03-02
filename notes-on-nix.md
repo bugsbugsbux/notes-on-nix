@@ -683,7 +683,8 @@ with a set containing the following items:
       */
   }
   ```
-- `options`: All option-declarations. (see: options)
+- `options`: Similar to the `config` argument but for
+  option-declarations.
 
 ```nix
 { pkgs, ... }: # specify which arguments you intend to use
