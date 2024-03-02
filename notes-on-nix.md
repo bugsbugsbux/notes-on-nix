@@ -671,6 +671,10 @@ with a set containing the following items:
 }
 ```
 
+Moreover, the module system injects some utility functions into the
+namespace of each module; see: creating options,
+<https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
+
 #### Creating options
 
 An option is called by the name used when it was declared in a module's
