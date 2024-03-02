@@ -332,6 +332,10 @@ Documentation at: <https://nix.dev/manual/nix/2.18/language/builtins>
 Another common set of functions is the standard library from nixpkgs.
 See: modules. Documentation at:
 <https://nixos.org/manual/nixpkgs/stable/#sec-functions-library>
+The documentation makes it look like the standard library only exposes
+other libraries, however, actually it also exposes functions *directly*!
+See the `inherit` statements at:
+<https://github.com/NixOS/nixpkgs/blob/master/lib/default.nix>
 
 ## Installation
 
