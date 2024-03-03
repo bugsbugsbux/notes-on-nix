@@ -650,8 +650,13 @@ the returned set may be structured like this instead:
 }
 ```
 
-The module system handles loading the modules specified in the "import"
-field. When a module is a function, it is called by the module system
+The module system handles loading the modules whose path is specified in
+the "import" field. If a module is called "directory/default.nix" it is
+also possible to use the path to the directory instead.
+(`imports = [ ./directory ];` instead of
+`imports = [ ./directory/default.nix ];`)
+
+When a module is a function, it is called by the module system
 with a set containing the following items:
 
 - `pkgs`: This provides access to nixpkgs.
