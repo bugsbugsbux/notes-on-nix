@@ -759,42 +759,52 @@ of its wrappers `mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder
 To clarify the difference between order and priority: A definition which
 looses in priority is ignored, thus its order value is irrelevant.
 
-The following example module declares some options and should be
-added to "all-packages.nix" as "my-package". Moreover, it configures
-some options of "other-package":
 ```nix
-# The nixpkgs standard library is needed; do not access it via pkgs.lib
-# but instead via lib (avoids infinite loops)!
-{ lib, ... }: {
+# This is ./some-module.nix
 
+# the nixpkgs-stdlib is needed; don't access it via pkgs.lib but via lib
+{ lib, ... }:
+{
     options = {
 
-        # Use camelCase, except for the package-name which should match
-        # the name used in (nixpkgs/)pkgs/top-level/all-packages.nix
-        category.my-package.myOptionName = lib.mkOption {
-    #   ^^^^^^^^^ choose an existing one: <https://mynixos.com/options>
-
-            default = "default value";
-            type = lib.types.str;
-            description = "Markdown description of the example option";
-
+        # Use lib.mkOption ...
+        category.some-package.optionName = lib.mkOption {
+            default = [];
+            type = lib.types.listOf lib.types.singleLineStr;
+            description = "Markdown description of *this* option";
         };
 
-        # Wrappers around mkOption simplify creating certain options:
-        category.my-package.enable = lib.mkEnableOption "my-package";
-        #                                   the name:    ^^^^^^^^^^
-    };
+        # ... or a wrapper simplifying creating certain option types:
+        category.some-package.enable =
+            # Create a boolean option defaulting to false, with a
+            # description "Whether to enable ${argument}":
+            lib.mkEnableOption "some-package";
 
-    # define (=set) options from other-package:
-    imports = [ # might not be necessary (see: modules directory):
-        ./other-package.nix
-        # or rename to ./other-package/default.nix and import
-        # ./other-package/default.nix   # which can also be written:
-        # ./other-package
-    ];
-    config = {
-        category.other-package.enable = true;   # enable if required
-        category.other-package.someOption = "new value"; # set option
     };
+}
+```
+```nix
+# A module which does not use the simplified structure:
+{ ... }:
+{
+    imports = [ ./some-module.nix ];
+    config = {
+        category.some-package.enable = false;           # priority: 100
+        category.some-package.optionName = [ "c" "b" ]; # sort: 1000
+    };
+}
+```
+```nix
+# A module which uses the simplified structure:
+{ lib, ... }:
+{
+    imports = [ ./some-module.nix ];
+
+    # Ignore the other definition of this option (has priority 100):
+    category.some-package.enable = lib.mkOverride 90 true;
+
+    # Put this before the values from the other option-definition:
+    category.some-package.optionName = lib.mkOrder 500 [ "a" ];
+    # Thus the final option value is: [ "a" "c" "b" ]
 }
 ```
