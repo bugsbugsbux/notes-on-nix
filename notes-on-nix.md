@@ -757,7 +757,7 @@ of its wrappers `mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder
 1500`) like so: `optionName = mkOrder 500 "first";`.
 
 To clarify the difference between order and priority: A definition which
-looses in priority is ignored, thus its order value is irrelevant.
+loses in priority is ignored, thus its order value is irrelevant.
 
 ```nix
 # This is ./some-module.nix
