@@ -726,12 +726,12 @@ except when it is listed in `<nixpkgs/nixos/modules/module-list.nix>`
 with using the `import` keyword to load a file!
 
 An option is called by the name used when it was declared in a module's
-"options" field. Usually this is an attribute path consisting of
-option-category (just a convention), name (as used in in
-`<nixpkgs/pkgs/top-level/all-packages.nix>`) of the package it comes
-from, and specific name. When accessing an option's final definition or
-its declaration, this attribute path is used to index the module's
-`config` or `options` argument.
+"options" field. Often this is an attribute path consisting of
+option-category (just a convention, see: <https://mynixos.com/options>),
+name (as used in in `<nixpkgs/pkgs/top-level/all-packages.nix>`) of the
+package it comes from, and specific name. When accessing an option's
+final definition or its declaration, this attribute path is used to
+index the module's `config` or `options` argument.
 
 Depending on whether an option has a default value, **not defining it**
 may be an error nor not.
