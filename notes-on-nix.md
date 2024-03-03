@@ -297,29 +297,35 @@ let inc = {x, y?1, ...}@other: with builtins; length(attrNames(other));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
-For manipulating **controlflow** there are the keywords `if`, `then` and
-`else` to create conditionals, but none to create loops; use builtins
-like `builtins.map` and `builtins.mapAttrs` instead.
+Nix **does not have loops**, instead, use one of the builtin functions,
+for example `builtins.map` and `builtins.mapAttrs`, which iterate over
+list and set elements respectively.
+
+**Conditionals** (`if`, `then`, `else`) must have an else-block! String
+interpolation works in attribute names which can be used to
+conditionally add items by returning `null` if it should be omitted. It
+also works in paths, but only for individual segments: `s.${"foo.bar"}`
+is `s."foo.bar"`, not `s.foo.bar`.
 ```nix
 {
     # conditional value
     foo =
         if 3 > 3 then
             "greater"
-        else if 3 < 3 then
+        else if 3 < 3 then  # combine 2 conditionals to get else-if
             "smaller"
-        else
+        else                # every conditional MUST have an else clause
             "equal"
     ;
 
-    # using string-interpolation in attribute name (must return string)
+    # string-interpolation in attribute name must return string ...
     ${"a"+"b"} = "ab";
 
-    # conditionally add attribute using string interpolation
+    # ... or null which omits the item:
     ${if false then "add key" else null} = "not added";
 
 # string-interpolation in attribute paths:
-}.${if true then "foo" else "bar"}
+}.${if true then "foo" else "ab"}
 ```
 
 For more detailed info about the nix language, for example various
