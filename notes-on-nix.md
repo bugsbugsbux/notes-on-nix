@@ -661,7 +661,7 @@ with a set containing the following items:
 
 - `pkgs`: This provides access to nixpkgs.
 - `lib`: This provides access to the **nixpkgs standard library** in a
-  safe way; contrary to using `pkgs.lib` (essentially
+  *safe* way; contrary to using `pkgs.lib` (essentially
   `import <nixpkgs/lib>`), which might result in an infinite recursion.
 - `modulesPath`: The location of the modules directory (see above).
 - `config`: All option-definitions; including the options set by the
