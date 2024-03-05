@@ -496,9 +496,9 @@ nix-env --query --available regex1  # include non-installed packages
 # available in the current generation (I),
 # available elsewhere on the system (P),
 # available as substitute for building it locally (S).
-nix-env --query -a --status regex1      # -a is --available
-nix-env --query    --compare-versions   # compare installed to available
-nix-env --query -a --compare-versions   # compare available to installed
+nix-env -q -a --status regex1       # -q is --query, -a is --available
+nix-env -q    --compare-versions    # compare installed to available
+nix-env -q -a --compare-versions    # compare available to installed
 
 # activate a specific profile (link to a generation)
 nix-env --switch-profile profilepath
