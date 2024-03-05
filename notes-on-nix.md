@@ -619,6 +619,11 @@ The following *options* are useful:
   system even when the configuration did not change, because it first
   updates the channel, and thus package definitions might have changed.
 
+Global packages are to be added to the configuration option (see below)
+`environment.systemPackages` (a list value), while user specific
+packages shall be added to `users.user.USERNAME.packages` except when
+using home-manager.
+
 ### Modules
 
 The module system is not a feature of the nix language but NixOS and
@@ -711,8 +716,15 @@ put the option-definitions into a "config" field):
 { pkgs, ... }: # specify which arguments you intend to use
 {
     imports = [ ./hardware-configuration.nix ];
-    environment.systemPackages = with pkgs; [ git ];
     networking.hostName = "MY_HOST_NAME";
+    environment.systemPackages = with pkgs; [
+        git
+        #...
+    ];
+    users.users.USERNAME.packages = with pkgs; [
+        chromium
+        #...
+    ];
     #...
 }
 ```
