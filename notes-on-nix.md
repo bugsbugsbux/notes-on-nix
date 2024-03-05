@@ -615,7 +615,7 @@ to activate the new system:
 The following *options* are useful:
 - "--rollback": Instead of building a new generation of the system,
   activate the previous one at the specified time (see above: argument).
-- "--upgrade": This is used to update the system. It may rebuild the
+- "--upgrade": This is used to **update the system**. It may rebuild the
   system even when the configuration did not change, because it first
   updates the channel, and thus package definitions might have changed.
 
