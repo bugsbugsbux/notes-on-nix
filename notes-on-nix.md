@@ -95,6 +95,11 @@ declaratively manage user-environments like one would manage the system
 environment with nix. Keep in mind that one must not edit the managed
 configurations manually, as home-manager overwrites these files!
 
+Nix comes with a simple but not very secure way of running virtual NixOS
+instances: **NixOS containers**. They share the host's nix store, which
+makes creating such containers efficient, but has the downside that the
+container's root can modify the host.
+
 ## Nix language
 
 `builtins.langVersion == 6`
