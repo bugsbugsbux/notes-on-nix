@@ -112,9 +112,9 @@ ends with the next `*/`.
 
 **Whitespace** is generally not significant, thus most code may be
 written in a single line. An example where a single space makes a
-difference is: `let foo=1; bar=foo -1; bar` (returns the value of bar:
-`0`) while the following throws the error "undefined variable 'foo-1'":
-`let foo=1; bar=foo-1; bar`.
+difference is: `let foo=1; bar=foo -1; in bar` (returns the value of
+bar: `0`) while the following throws the error "undefined variable
+'foo-1'": `let foo=1; bar=foo-1; in bar`.
 
 The nix language requires each file (nix files use the extension ".nix")
 to contain *only a single* "**nix-expression**", which is something that
