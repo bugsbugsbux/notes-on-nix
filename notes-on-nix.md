@@ -456,6 +456,8 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
 
 ### Profile management
 
+*See also: unfree packages.*
+
 NixOS is managed via a configuration file, in which one can define,
 among other things, which packages shall be installed. The nix package
 manager may also be invoked like a traditional package manager, but one
@@ -631,6 +633,11 @@ Global packages are to be added to the configuration option (see below)
 `environment.systemPackages` (a list value), while user specific
 packages shall be added to `users.user.USERNAME.packages` except when
 using home-manager.
+
+Note: Installation of **unfree packages** needs to be enabled on a per
+user basis: For global packages this can be done with the option
+`nixpkgs.config.allowUnfree = true;` and others need to have attribute
+`allowUnfree = true;` in their `~/.config/nixpkgs/config.nix`.
 
 ### Modules
 
