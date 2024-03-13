@@ -967,3 +967,28 @@ useful to understand what arguments it works with:
   to disable scanning the respective output for runtime dependencies.
 - `requiredSystemFeatures`: List of strings such as "kvm" which name
   features which have to be available for this to build.
+
+#### How a builder runs
+
+A builder will *not run* if neither the derivation nor its dependencies
+changed; instead it simply returns the old result. Avoid creating
+derivations like
+`pkgs.runCommand "DRV_NAME" {} "${pkgs.coreutils}/bin/date > $out"`
+where nix cannot determine with these rules whether to rebuild.
+
+When evaluating an expression which reads from the filesystem, the
+evaluation stops, the respective store object is realised (built), and
+only then evaluation continues. This is called **Import from Derivation
+(IFD)**. Setting `allow-import-from-derivation = false;` allows to
+finish evaluation and creating a build plan before starting to realise
+store objects; thus more store objects may be realised in parallel.
+
+The `builder` runs with `args` in an isolated build-directory in TMPDIR,
+with environment variables cleared and set according to the given
+derivation arguments, invalidating the HOME and PATH variables, and the
+nix environment set according to the derivation arguments. The network
+cannot be accessed during the build (there are exceptions). The combined
+stdout and stderr are written to `/nix/var/log/nix`. The build is
+considered successful, if the builder exits with code 0. If inputs are
+referenced by outputs, they are registered as runtime dependencies. The
+time-stamp of the outputs is always unix-epoch 1.
