@@ -878,3 +878,92 @@ If a package is not available in nixpkgs, it can be added in two ways:
        };
    }
    ```
+
+### Derivations
+
+Derivations are created ("instantiated") with the builtin function
+`derivation` or a wrapper around it. It creates the "\*.drv" file in the
+nix store, which contains the actual build instructions used when
+building ("realising") the derivation with `nix-build`.
+
+Despite the `derivation` function rarely being used directly it is
+useful to understand what arguments it works with:
+
+`derivation` *requires* the following arguments:
+- `name`: A string which will be used in the names of files created in
+  the nix store.
+- `system`: A string such as "x86_64-linux" which specifies for which
+  system to build the derivation. Building locally only works if
+  `builtins.currentSystem` matches this string.
+- `builder`: A path (or its string representation) to the executable to
+  use to build the derivation. Examples: `./builder.sh`,
+  `"${pkgs.python}/bin/python"`
+
+`derivation` takes the following *optional* arguments:
+- Any argument whose name is **not in this list** (or the list of
+  required arguments) is exported as an environment variable with an
+  appropriately converted value.
+- `args`: List of strings to be passed as arguments to `builder`.
+- `outputs`: List of strings that defaults to `["out"]`. Each string is
+  the name of an environment variable available to the builder script
+  containing the path to a nix store object which shall contain the
+  respective output. For example `["doc" "out"]` exports the environment
+  variables `$doc` and `$out` with the values
+  `/nix/store/${hash}-${name}-doc` and `/nix/store/${hash}-${name}`
+  ("-out" is always omitted). Note that the order of the list is
+  important, as the first element determines the **default output** of
+  the derivation, meaning what a simple package name refers to. For
+  example, if there is
+  `myPkg = derivation { name="mine"; outputs=["doc" "out"]; /*...*/}`
+  then `myPkg` is equivalent to `myPkg.doc`.
+- `allowedReferences`: List of runtime dependencies, meaning what the
+  `outputs` may refer to.
+- `disallowedReferences`: List of forbidden runtime dependencies.
+- `allowedRequisites`: List of *all* allowed dependencies, including
+  build-time dependencies and dependencies of dependencies.
+- `disallowedRequisites`: List of forbidden dependencies, including
+  build-time dependencies and dependencies of dependencies.
+- `exportReferencesGraph`: List of name, store-object pairs. Each name
+  (odd elements in list) becomes a file in the build directory and
+  contains the reference graph of the store-object which is the
+  following (therefore even) element in this list.
+- `impureEnvVars`: List of names of environment variables which should
+  *not* be cleared when calling the `builder`. This only works for
+  fixed-output derivations (FODs).
+- `outputHash`, `outputHashAlgo`, `outputHashMode`: These are used to
+  create so called **fixed-output derivations (FODs)**, which are
+  derivations whose output hash is known in advance and who are
+  therefore allowed some impure operations like fetching from the
+  network`. outputHashAlgo` may currently be "sha1", "sha256" or
+  "sha512". `outputHashMode` specifies from what to compute the hash:
+  "flat" (which is the default) means from the output, which must be a
+  regular, non-executable file; "recursive" means from the **nix-archive
+  (NAR)** dump of the output.
+- `__contentAddressed`: Boolean, whether to put the outputs in
+  content-addressed, instead of input-addressed, store location. *Only
+  allowed when using the experimental "ca-derivations" feature.*
+- `passAsFile`: List of those attribute names whose values would usually
+  be exported in an environment variable of the same name, but should
+  instead be passed to `builder` by putting them into a temporary file
+  and exporting the path as variable "${name}Path".
+- `preferLocalBuild`: Boolean. Requires distributed building to be
+  enabled.
+- `allowSubstitutes`: Boolean; if false, no binary caches are used. This
+  is ignored if nix is configured with `always-allow-substitutes =
+  true;`.
+- `__structuredAttrs`: Boolean; if true all arguments (except this) of
+  `derivation` are written to a json file and the path is exported in
+  environment variable "NIX_ATTRS_JSON_FILE". Moreover, puts path to
+  bash script which exports all bash-representable values as environment
+  variables into variable "NIX_ATTRS_SH_FILE".
+- `outputChecks`: Set of output names to sets which specify how to check
+  the respective output. Available attributes are: `allowedReferences`,
+  `allowedRequisites`, `disallowedReferences`, `disallowedRequisites`,
+  `maxSize` (in bytes, example: `SIZE_IN_KB * 1024` or `SIZE_IN_MB *
+  1024 * 1024`), `maxClosureSize` (see: closure, maxSize),
+  `ignoreSelfRefs` (boolean; whether to ignore self references in
+  dis/allowed references/requisites).
+- `unsafeDiscardReferences`: Set of output names to booleans, whether
+  to disable scanning the respective output for runtime dependencies.
+- `requiredSystemFeatures`: List of strings such as "kvm" which name
+  features which have to be available for this to build.
