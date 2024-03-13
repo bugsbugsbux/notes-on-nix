@@ -56,8 +56,9 @@ a "\*.drv" file in the nix-store (this step is called
 **instantiation**). To create it the user calls the `derivation`
 function or a wrapper around it. The build process, called
 **realisation**, runs in an isolated environment ("sandbox") to ensure
-reproducibility on other systems, and uses the instructions from a
-"\*.drv" file to produce the build output(s): the **package**.
+reproducibility on other systems, and uses the instructions (or rather
+the standardized build specification) from a "\*.drv" file to produce
+the build output(s): the **package**.
 
 **NixOS configuration** is divided into **modules**, which are parts of
 a certain structure, that can modify each other. This allows to split
