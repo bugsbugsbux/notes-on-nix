@@ -636,9 +636,11 @@ packages shall be added to `users.user.USERNAME.packages` except when
 using home-manager.
 
 Note: Installation of **unfree packages** needs to be enabled on a per
-user basis: For global packages this can be done with the option
-`nixpkgs.config.allowUnfree = true;` and others need to have attribute
-`allowUnfree = true;` in their `~/.config/nixpkgs/config.nix`.
+user basis: For the global user this is done with option
+`nixpkgs.config.allowUnfree = true;`. However, other users' access to
+unfree packages cannot be enabled from the NixOS config; instead they
+need to set attribute `allowUnfree = true;` in their
+`~/.config/nixpkgs/config.nix`.
 
 ### Modules
 
