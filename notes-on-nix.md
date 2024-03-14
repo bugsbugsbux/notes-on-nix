@@ -846,3 +846,35 @@ loses in priority is ignored, thus its order value is irrelevant.
     # Thus the final option value is: [ "a" "c" "b" ]
 }
 ```
+
+## Packages
+
+If a package is not available in nixpkgs, it can be added in two ways:
+1. **In-tree**: This means to create a local copy of nixpkgs, add the
+   package and use this local version to rebuild the system:
+   `nixos-rebuild switch -I nixpkgs=./nixpkgs`
+2. **Out-of-tree**: Instead of modifying a local copy of nixpkgs, the
+   new package is created as part of the configuration; it is only
+   available during the evaluation of the config.
+
+   Here is an example template for installing a custom/new package:
+   ```nix
+   # /etc/nixos/configuration.nix
+   { pkgs, ... }: {
+       environment.systemPackages = let
+           new-package = pkgs.stdenv.mkDerivation { /*...*/ };
+       in [ new-package ];
+   }
+   ```
+
+   This is an example of modifying a user's nixpkgs, such that `nix-env
+   -i some-package` installs the modified package instead of the
+   original:
+   ```nix
+   # ~/.config/nixpkgs/config.nix
+   {
+       packageOverrides = pkgs: rec {
+           some-package = pkgs.some-package.override { /* ... */ };
+       };
+   }
+   ```
