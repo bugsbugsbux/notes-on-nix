@@ -187,6 +187,13 @@ let b = a + 1 ;     # the order in this block is not significant
 in a + b            # no semicolon here (would be error)
 ```
 
+Recursive definitions are allowed. This means an expression has access
+to its own name. See also: fixpoint
+```nix
+let a = a + 1;      # "infinite recursion"- not "unknown variable"-error
+in a
+```
+
 **Set**s are wrapped in braces (`{}`) and define their attributes like a
 "let" statement defines its variables, but they can only refer to each
 other by the name of the set itself or if the set is preceded by the
