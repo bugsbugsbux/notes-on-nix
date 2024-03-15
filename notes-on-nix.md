@@ -313,6 +313,22 @@ let inc = {x, y?1, ...}@other: with builtins; length(attrNames(other));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
+A **fixed point, aka fixpoint**, is a value which a function maps to
+itself, or in other words, a value which refers to itself. A fixpoint
+combinator is a higher order function (meaning it takes a function as
+argument) which returns a fixpoint. This concept can be implemented in
+nix, due to its lazy evaluation, which prevents the infinite recursion
+error, and is used to create recursive sets. See: overlays
+```nix
+let fix = fn:
+        let result = fn(result);
+        in result
+    ;
+in fix(self: { a=1; b=2; c=self.a+self.b; })
+# Evaluating this, `self` becomes `result` inside of `fix` and thus
+# refers to the set itself.
+```
+
 Nix **does not have loops**, instead, use one of the builtin functions,
 for example `builtins.map` and `builtins.mapAttrs`, which iterate over
 list and set elements respectively.
