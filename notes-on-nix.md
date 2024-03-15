@@ -196,8 +196,8 @@ in a
 
 **Set**s are wrapped in braces (`{}`) and define their attributes like a
 "let" statement defines its variables, but they can only refer to each
-other by the name of the set itself or if the set is preceded by the
-keyword `rec`.
+other if the set is preceded by the keyword `rec` or by indexing the set
+itself.
 
 Attribute-names must be strings and are accessed with
 `setName.attributeName`. If necessary *attributes* may be quoted
