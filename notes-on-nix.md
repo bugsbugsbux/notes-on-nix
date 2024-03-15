@@ -982,6 +982,17 @@ useful to understand what arguments it works with:
 
 #### Building
 
+Building, also called realising, is the execution of the standardized
+form (a "\*.drv" file in the store) of a derivation, the recipe for a
+package. Calling `nixos-rebuild switch` builds the necessary packages as
+specified in the NixOS config; `nix-env --install some-package` builds
+the specified package and its dependencies. A single file containing a
+derivation can be built with `nix-build ./myderivation.nix`, however, it
+is also possible to just instantiate it (create the store derivation)
+with `nix-instantiate ./myderivation.nix` or even just evaluate it (no
+instantiation) with `nix-instantiate --eval ./myderivation.nix`. The
+filename may be omitted if it is `./default.nix`.
+
 A builder will *not run* if neither the derivation nor its dependencies
 changed; instead it simply returns the old result. Avoid creating
 derivations like
