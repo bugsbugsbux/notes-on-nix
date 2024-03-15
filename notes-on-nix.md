@@ -988,6 +988,16 @@ derivations like
 `pkgs.runCommand "DRV_NAME" {} "${pkgs.coreutils}/bin/date > $out"`
 where nix cannot determine with these rules whether to rebuild.
 
+Moreover, a package won't build if, for example, it is marked as broken,
+having security issues, not targeting the current platform, or not
+having a free license (see: unfree packages). This is already checked
+when evaluating the config and can be overruled temporarily by setting
+environment variables
+NIXPKGS_ALLOW_{BROKEN,INSECURE,UNSUPPORTED_SYSTEM,UNFREE} to 1. There
+are also options to make this permanent, which also allow more granular
+control over which insecure, or unfree packages or licenses may be
+installed.
+
 When evaluating an expression which reads from the filesystem, the
 evaluation stops, the respective store object is realised (built), and
 only then evaluation continues. This is called **Import from Derivation
