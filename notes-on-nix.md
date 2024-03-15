@@ -856,26 +856,36 @@ If a package is not available in nixpkgs, it can be added in two ways:
    package and use this local version to rebuild the system:
    `nixos-rebuild switch -I nixpkgs=./nixpkgs`
 2. **Out-of-tree**: Instead of modifying a local copy of nixpkgs, the
-   new package is created as part of the configuration; it is only
-   available during the evaluation of the config.
+   new package is created as part of the configuration.
 
-   Here is an example template for installing a custom/new package:
    ```nix
    # /etc/nixos/configuration.nix
    { pkgs, ... }: {
+
+       # this only effects this expression
        environment.systemPackages = let
+           # create new package
            new-package = pkgs.stdenv.mkDerivation { /*...*/ };
-       in [ new-package ];
+           # modify some package
+           some-package = pkgs.some-package.override { /*...*/ };
+       in [ new-package some-package ];
+
+       # This effects these packages from nixpkgs, config-wide.
+       # The argument prev is just pkgs before applying these overrides.
+       nixpkgs.config.packageOverrides = prev: {
+           some-package = prev.some-package.override { /*...*/ };
+       };
    }
    ```
 
-   This is an example of modifying a user's nixpkgs, such that `nix-env
-   -i some-package` installs the modified package instead of the
-   original:
+   The nixpkgs version as defined in the NixOS configuration is not
+   available outside of the config. Instead, users may specify their own
+   modifications to nixpkgs in `~/.config/nixpkgs/config.nix`; *these*
+   are available for use in commands such as `nix-env -i some-package`:
    ```nix
    # ~/.config/nixpkgs/config.nix
    {
-       packageOverrides = pkgs: rec {
+       packageOverrides = pkgs: {
            some-package = pkgs.some-package.override { /* ... */ };
        };
    }
