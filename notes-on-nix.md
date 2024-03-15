@@ -980,7 +980,7 @@ useful to understand what arguments it works with:
 - `requiredSystemFeatures`: List of strings such as "kvm" which name
   features which have to be available for this to build.
 
-#### How a builder runs
+#### Building
 
 A builder will *not run* if neither the derivation nor its dependencies
 changed; instead it simply returns the old result. Avoid creating
