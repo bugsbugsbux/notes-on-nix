@@ -52,9 +52,9 @@ reference to it, meaning all generations which included it need to be
 removed first and thus cannot be restored anymore.
 
 A **derivation** is the recipe for a package and turned internally into
-a "\*.drv" file in the nix-store (this step is called
-**instantiation**). To create it the user calls the `derivation`
-function or a wrapper around it. The build process, called
+a "\*.drv" file (called **store derivation**) in the nix-store (this
+step is called **instantiation**). To create it the user calls the
+`derivation` function or a wrapper around it. The build process, called
 **realisation**, runs in an isolated environment ("sandbox") to ensure
 reproducibility on other systems, and uses the instructions (or rather
 the standardized build specification) from a "\*.drv" file to produce
