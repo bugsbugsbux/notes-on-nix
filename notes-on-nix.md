@@ -1048,3 +1048,65 @@ stdout and stderr are written to `/nix/var/log/nix`. The build is
 considered successful, if the builder exits with code 0. If inputs are
 referenced by outputs, they are registered as runtime dependencies. The
 time-stamp of the outputs is always unix-epoch 1.
+
+### Modifying packages
+
+#### Overrides
+
+#### Overlays
+
+*A technical explanation of overlays: They allow to add package
+collections to the fixpoint (see: fixpoint) created by nixpkgs. I do not
+understand why this implementation detail is even mentioned in the
+documentation, despite not being properly explained; just ignore it.*
+
+They are sets of new or modified packages, which are merged into the
+original package set. Due to this merging process the order in which
+multiple overlays are applied is significant.
+
+Specifying overlays when importing nixpkgs (`import <nixpkgs> {overlays
+= [/*...*/]};`, or equivalently setting option `nixpkgs.overlays =
+[/*...*/];` in NixOS which only effects the system packages) prevents
+looking for overlays at `<nixpkgs-overlays>` or subsequently in
+`~/.config/nixpkgs/overlays.nix`/`~/.config/nixpkgs/overlays/\*.nix`
+`pkgs.appendOverlays`. If multiple files are found they are imported in
+alphabetical order.
+
+Overlays are (curried) functions with 2 arguments, typically named
+`final` and `prev` (or in older code `self` and `super`). The first
+argument always contains the package set with all overlays merged in.
+The second argument holds the current state of the package set during
+the overlay merge process; in other words, without the changes of the
+current and later merged overlays.
+
+Therefore, given 3 overlays, all three receive as *first argument* the
+package set with all 3 changes applied. However, the *second argument*
+is the unchanged package set for the first overlay, the package set with
+the first overlay applied for the second overlay, and the package set
+with the first and then second overlays applied for the third overlay.
+
+The above mentioned function `packageOverrides` is an overlay which only
+takes the second argument (the package set without the overlay applied).
+
+Overlays can be used to make a decision between multiple **alternative**
+packages (implement the same interface). There are for example multiple
+implementations of the Message Passing Interface MPI. Packages using it
+depend on the generic package `mpi` and one specifies which provider to
+use by using an overlay to replace it:
+```nix
+# ./mpi_overlay.nix
+final: prev: { mpi = final.mpich; }
+```
+
+BLAS and LAPACK are linear algebra interfaces; packages which use them
+shall depend on the generic packages `blas` and `lapack`. Instead of
+completely replacing them as in the MPI example above, one needs to
+override an attribute of these packages:
+```nix
+# ./blas_lapack_overlay.nix
+# Use Intel's MKL (package mkl) as provider for both blas and lapack:
+final: prev: {
+    blas = prev.blas.override { blasProvider = final.mkl; };
+    lapack = prev.lapack.override { lapackProvider = final.mkl; };
+}
+```
