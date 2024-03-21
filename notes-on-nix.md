@@ -975,7 +975,8 @@ useful to understand what arguments it works with:
   "sha512". `outputHashMode` specifies from what to compute the hash:
   "flat" (which is the default) means from the output, which must be a
   regular, non-executable file; "recursive" means from the **nix-archive
-  (NAR)** dump of the output.
+  (NAR**; they only preserve the information relevant to nix) dump of
+  the output.
 - `__contentAddressed`: Boolean, whether to put the outputs in
   content-addressed, instead of input-addressed, store location. *Only
   allowed when using the experimental "ca-derivations" feature.*
