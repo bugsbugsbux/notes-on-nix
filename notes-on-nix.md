@@ -971,7 +971,7 @@ useful to understand what arguments it works with:
   create so called **fixed-output derivations (FODs)**, which are
   derivations whose output hash is known in advance and who are
   therefore allowed some impure operations like fetching from the
-  network`. outputHashAlgo` may currently be "sha1", "sha256" or
+  network. `outputHashAlgo` may currently be "sha1", "sha256" or
   "sha512". `outputHashMode` specifies from what to compute the hash:
   "flat" (which is the default) means from the output, which must be a
   regular, non-executable file; "recursive" means from the **nix-archive
