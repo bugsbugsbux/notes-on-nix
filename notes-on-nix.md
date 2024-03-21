@@ -919,7 +919,9 @@ If a package is not available in nixpkgs, it can be added in two ways:
 Derivations are created ("instantiated") with the builtin function
 `derivation` or a wrapper around it. It creates the "\*.drv" file in the
 nix store, which contains the actual build instructions used when
-building ("realising") the derivation with `nix-build`.
+building ("realising") the derivation with `nix-build`. (Moreover, it
+returns a derivation object, which is a set with the attribute
+`type="derivation";`.)
 
 Despite the `derivation` function rarely being used directly it is
 useful to understand what arguments it works with:
