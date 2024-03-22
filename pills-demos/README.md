@@ -1,4 +1,4 @@
-The folders contain the different versions of the continually improved
+The folders contain the different versions of the continually refactored
 example used in <https://nixos.org/guides/nix-pills>.
 
 The numbers do not correspond to the number of the nix-pills article;
