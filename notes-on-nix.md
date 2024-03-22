@@ -275,6 +275,7 @@ The term **closure** is also used by nix in reference to all the
 packages a package depends on (as well as the packages they depend on,
 etc). Build-dependencies and runtime-dependencies may differ; if not
 specified "package closure" usually only means the runtime dependencies.
+See also: dependencies
 
 ```nix
 # You cannot put the following nix-expressions in the same file, as only
@@ -1112,4 +1113,31 @@ final: prev: {
     blas = prev.blas.override { blasProvider = final.mkl; };
     lapack = prev.lapack.override { lapackProvider = final.mkl; };
 }
+```
+
+## Appendix
+
+### Dependencies
+
+The list of runtime-dependencies is determined by checking which
+build-dependencies are referenced in the build output. (Sometimes this
+includes unnecessary dependencies, which were put into the binary's
+runtime path to ensure their correct versions are found, should they be
+used. These can be removed with `pathelf` and `strip`.)
+```sh
+# creates the store-derivation and returns its path
+nix-instantiate myderivation.nix
+
+# list *all* dependencies of given store-derivation
+nix-store --query --references /nix/store/path/to/file.drv
+
+# builds the given store-derivation and returns its output path
+nix-store --realise /nix/store/path/to/file.drv
+
+# lists *runtime* dependencies of given build output from store
+nix-store --query --references /nix/store/path/to/build-output
+
+# remove unnecessary runtime-dependencies of a given binary; (this
+# should happen after the install phase in a build script, not manually)
+patchelf --shrink-rpath '{}' mybinary ; strip '{}' mybinary
 ```
