@@ -1057,7 +1057,8 @@ in the current directory and points to the build output in the store. As
 long as this link is unchanged (not removed, renamed or modified) the
 build result is considered a **garbage-collector root**, meaning the GC
 won't remove it. A new build in the same directory overwrites an
-existing `./result`!
+existing `./result`! The links for multiple outputs are named
+`./result-${n}` (except the first which is still named `./result`).
 
 ### Modifying packages
 
