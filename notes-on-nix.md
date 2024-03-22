@@ -1052,6 +1052,13 @@ considered successful, if the builder exits with code 0. If inputs are
 referenced by outputs, they are registered as runtime dependencies. The
 time-stamp of the outputs is always unix-epoch 1.
 
+When manually building a derivation, a symlink `./result` is then placed
+in the current directory and points to the build output in the store. As
+long as this link is unchanged (not removed, renamed or modified) the
+build result is considered a **garbage-collector root**, meaning the GC
+won't remove it. A new build in the same directory overwrites an
+existing `./result`!
+
 ### Modifying packages
 
 #### Overrides
