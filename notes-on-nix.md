@@ -874,13 +874,24 @@ loses in priority is ignored, thus its order value is irrelevant.
 
 ## Packages
 
-If a package is not available in nixpkgs, it can be added in two ways:
-1. **In-tree**: This means to create a local copy of nixpkgs, add the
-   package and use this local version to rebuild the system:
-   `nixos-rebuild switch -I nixpkgs=./nixpkgs`
-2. **Out-of-tree**: Instead of modifying a local copy of nixpkgs, the
-   new package is created as part of the configuration.
+The above definitions differentiated between "package" and "derivation",
+not because the documentation does so (in fact, it uses the terms almost
+interchangeably), but because the target audience, new nix users, likely
+has the presumption, that packages are binaries which the package
+manager downloads and puts in the right places on the system. This is
+not how nix works, but in some cases effectively what it does, if the
+term package is understood as build output. Actually, nix downloads
+build instructions (derivations) and checks whether it can find a cache
+of their result: if it does, it simply downloads the cached binary and
+installs it (to the nix store); if it does not, it builds locally.
 
+If nixpkgs does not have a package (because there is no derivation
+describing it), it can be added in two ways:
+1. **In-tree**: This means to create a local copy of the nixpkgs repo,
+   add the derivation to it and use this local version. (`nixos-rebuild
+   switch -I nixpkgs=./nixpkgs`)
+2. **Out-of-tree**: Instead of adding the derivation to a local copy of
+   nixpkgs, it is specified in a nix configuration file.
    ```nix
    # /etc/nixos/configuration.nix
    { pkgs, ... }: {
