@@ -885,6 +885,58 @@ build instructions (derivations) and checks whether it can find a cache
 of their result: if it does, it simply downloads the cached binary and
 installs it (to the nix store); if it does not, it builds locally.
 
+However, while packages and derivations are essentially equivalent,
+there are some semantic differences in how they are used: To describe
+how something is built, one writes a derivation with the `derivation`
+function or one of its wrappers. When talking about packages instead of
+derivations, the focus is more on their buildability, for which the
+needed dependences have to be available. It is not sufficient for a
+powerful package manager to make all packages use the same globally
+available version of a dependency, thus the nix convention is to wrap
+the derivation describing a package in a function, called
+**package-function**, whose arguments are the needed dependencies.
+```nix
+# ./my-package.nix
+{ mydependency }:
+    derivation { # see: Derivations
+        name = "my-package";
+        system = builtins.currentSystem;
+        builder = "${mydependency}/bin/mydependency";
+    }
+```
+
+A package is therefore built by executing its package-function with the
+dependencies as arguments. For convenience, nix has the
+**"callPackage"-convention**: Create a function `callPackage` to
+auto-supply the required arguments of a package-function from some
+default set of packages:
+```nix
+let defaultPkgs = import <nixpkgs> {};
+    callPackage = callPackageWith defaultPkgs;
+    callPackageWith = pkgs: pkgfn_file: args:
+        let pkgfn = import pkgfn_file;
+        in with builtins;
+            pkgfn ((intersectAttrs (functionArgs pkgfn) pkgs) // args)
+    ;
+    # someOtherVersion = (import (fetchTarball
+    #     "https://github.com/NixOS/nixpkgs/archive/0672315759b3e15e2121365f067c1c8c56bb4722.tar.gz"
+    # ) {}).mydependency;
+
+/* instead of passing the dependencies manually: ...
+in import ./my-package.nix { mydependency = defaultPkgs.mydependency; }
+
+... use callPackage to auto-supply them: */
+in callPackage ./my-package.nix {}
+
+/* ... while preserving the ability to specify any argument explicitly:
+in callPackage ./my-package.nix { mydependency = someOtherVersion; }
+*/
+```
+
+Nixpkgs comes with a more robust `lib.callPackageWith`, whose result is
+overridable (see: below), and a top level `callPackage` which uses
+nixpkgs as the default package set.
+
 If nixpkgs does not have a package (because there is no derivation
 describing it), it can be added in two ways:
 1. **In-tree**: This means to create a local copy of the nixpkgs repo,
@@ -898,11 +950,12 @@ describing it), it can be added in two ways:
 
        # this only effects this expression
        environment.systemPackages = let
-           # create new package
+           # create new packages
            new-package = pkgs.stdenv.mkDerivation { /*...*/ };
+           another-new-pkg = pkgs.callPackage ./another-new-pkg.nix {};
            # modify some package
            some-package = pkgs.some-package.override { /*...*/ };
-       in [ new-package some-package ];
+       in [ new-package another-new-pkg some-package ];
 
        # This effects these packages from nixpkgs, config-wide.
        # The argument prev is just pkgs before applying these overrides.
