@@ -18,7 +18,7 @@ let nixpkgs = import <nixpkgs> {};
         in f ((builtins.intersectAttrs (builtins.functionArgs f) allPkgs) // overrides)
     ;
 
-    pkgs = with nixpkgs; {
+    pkgs = {
 
         # The packages below may depend on mkDerivation because they are called
         # with the above defined callPackage which uses allPkgs, which uses pkgs,

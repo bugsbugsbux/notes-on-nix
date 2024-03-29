@@ -17,7 +17,7 @@ let nixpkgs = import <nixpkgs> {};
         in lib.makeOverridable f ((builtins.intersectAttrs (builtins.functionArgs f) allPkgs) // overrides)
     ;
 
-    pkgs = with nixpkgs; {
+    pkgs = {
         hello = callPackage ./hello.nix {};
         graphviz = callPackage ./graphviz.nix {};
         graphvizCore = callPackage ./graphviz.nix { gdSupport = false; };
