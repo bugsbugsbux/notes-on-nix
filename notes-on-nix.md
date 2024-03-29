@@ -12,6 +12,36 @@ Nix is:
 2. a package manager using the nix programming language
 3. a linux distribution using the nix package manager
 
+## FAQ
+
+### How to read the official documentation?
+
+0. You might want to start by reading these notes. It's an attempt to
+   distill the information from all the different documentation sources
+   into one coherent document.
+1. Read the official "Nix Pills" article/blog series at
+   <https://nixos.org/guides/nix-pills/>. It explains the nix package
+   manager and the ideas it is based upon. Check out the `./pills-demos`
+   folder of this repo, which contains the code example from the series
+   in its different versions.
+2. Read the NixOS manual, to understand how NixOS does things and learn
+   about the module system.
+   <https://nixos.org/manual/nixos/stable/>
+3. Read the nixpkgs manual to understand how to create your own packages
+   using stdenv and trivial builders, and how to modify packages.
+   <https://nixos.org/manual/nixpkgs/stable/>
+
+### How to print a value?
+
+A value can be printed with the function `builtins.trace`, which takes
+two arguments, one to print and a second one to return. Make sure this
+part of the code evaluates (nix is lazy!), otherwise nothing happens...
+
+The *repl* provides the command `:print` to *recursively* evaluate and
+output the value of an expression. As all repl commands it cannot be
+used *within* an expression: It would throw a `syntax error,
+unexpected ':'`.
+
 ## Overview
 
 The idea behind nix is to *declaratively* manage the state of the
