@@ -336,11 +336,11 @@ let inc = {x, by ? 1} : x + by;
 # Allow other named arguments:
 let inc = {x, y?1, ...}: x + y;
     in [ ( inc{x=1;} ) ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ]
-# Make other arguments accessible as variable "other":
-let inc = other@{x, y?1, ...}: with builtins; length(attrNames(other));
+# Make supplied arguments accessible as variable "given":
+let inc = given@{x, y?1, ...}: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 # equivalent:
-let inc = {x, y?1, ...}@other: with builtins; length(attrNames(other));
+let inc = {x, y?1, ...}@given: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
