@@ -6,6 +6,8 @@
 
 let nixpkgs = import <nixpkgs> {};
 
+    # allPkgs uses pkgs, which uses callPackage, which uses allPkgs -> dependency loop
+    # but it works because nix is lazily evaluated!
     allPkgs = nixpkgs // pkgs;
 
     # Expects path to contain a function, takes its arguments, gets the packages
@@ -17,7 +19,12 @@ let nixpkgs = import <nixpkgs> {};
     ;
 
     pkgs = with nixpkgs; {
+
+        # The packages below may depend on mkDerivation because they are called
+        # with the above defined callPackage which uses allPkgs, which uses pkgs,
+        # which has this:
         mkDerivation = import ./autotools.nix nixpkgs;
+
         hello = callPackage ./hello.nix {};
         graphviz = callPackage ./graphviz.nix {};
         graphvizCore = callPackage ./graphviz.nix { gdSupport = false; };
