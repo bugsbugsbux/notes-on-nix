@@ -344,22 +344,6 @@ let inc = {x, y?1, ...}@given: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
-A **fixed point, aka fixpoint**, is a value which a function maps to
-itself, or in other words, a value which refers to itself. A fixpoint
-combinator is a higher order function (meaning it takes a function as
-argument) which returns a fixpoint. This concept can be implemented in
-nix, due to its lazy evaluation, which prevents the infinite recursion
-error, and is used to create recursive sets. See: overlays
-```nix
-let fix = fn:
-        let result = fn(result);
-        in result
-    ;
-in fix(self: { a=1; b=2; c=self.a+self.b; })
-# Evaluating this, `self` becomes `result` inside of `fix` and thus
-# refers to the set itself.
-```
-
 Nix **does not have loops**, instead, use one of the builtin functions,
 for example `builtins.map` and `builtins.mapAttrs`, which iterate over
 list and set elements respectively.
@@ -1156,48 +1140,197 @@ existing `./result`! The links for multiple outputs are named
 
 ### Modifying packages
 
-#### Overrides
+A **fixed point, or "fixpoint"**, is a value, which is mapped to itself
+by a function. Therefore, it is defined in terms of a specific function,
+of which it is input and output no matter how many times the function is
+applied. The mathematical equation `f(x)=x` is an example of this. In
+programming languages which are lazily evaluated, and thus prevent the
+infinite recursion error, this can be used to create self-referential
+values! In nix a commonly used fixpoint is nixpkgs.
+```nix
+# this function comes with nixpkgs as: lib.fix
+let getFixpoint = f:    # a function which takes a function
+    let x=f(x);         # the input is the result -> recursive
+    in x                # return it
+;
+in getFixpoint(self: {
+    a=1;
+    b=2;
+
+    # Since "self" is the result, an attribute obviously cannot depend
+    # on itself, as this would change the final state:
+    # c = self.c + 1;   # error
+
+    # But it can depend on other attributes; that's the whole point!
+    c = self.a + self.b;
+})
+```
 
 #### Overlays
 
-*A technical explanation of overlays: They allow to add package
-collections to the fixpoint (see: fixpoint) created by nixpkgs. I do not
-understand why this implementation detail is even mentioned in the
-documentation, despite not being properly explained; just ignore it.*
+One can also think of fixpoint-functions as describing a change to a
+value, which they receive as argument. To apply the change, a helper
+function is needed. The following builds up the helper in incremental
+steps until it can be replaced by `lib.extends`, which applies overlays,
+changes which are able to refer to the final and the previous state of
+the fixpoint:
+```nix
+# This is the input for a repl session; it cannot be in the same file!
 
-They are sets of new or modified packages, which are merged into the
-original package set. Due to this merging process the order in which
-multiple overlays are applied is significant.
+setup = {
+    mystate = { a=1; b=10; };
+    mychange = self: { a=5; c = self.a + self.b; };
+}
 
-Specifying overlays when importing nixpkgs (`import <nixpkgs> {overlays
-= [/*...*/]};`, or equivalently setting option `nixpkgs.overlays =
-[/*...*/];` in NixOS which only effects the system packages) prevents
-looking for overlays at `<nixpkgs-overlays>` or subsequently in
-`~/.config/nixpkgs/overlays.nix`/`~/.config/nixpkgs/overlays/\*.nix`
-`pkgs.appendOverlays`. If multiple files are found they are imported in
-alphabetical order.
+# The following approach has problems:
+# - it only returns the attributes used by the change
+# - it uses the previous state (a=1) instead of the final state
+let apply = change: prevState:
+    change prevState;
+in with setup; apply mychange mystate
 
-Overlays are (curried) functions with 2 arguments, typically named
-`final` and `prev` (or in older code `self` and `super`). The first
-argument always contains the package set with all overlays merged in.
-The second argument holds the current state of the package set during
-the overlay merge process; in other words, without the changes of the
-current and later merged overlays.
+# Fix the missing attributes in the return value by merging prevState
+# state with the result of the change.
+#
+# There is still the problem that it should use the final state instead!
+let apply = change: prevState:
+    prevState // change prevState;
+in with setup; apply mychange mystate
 
-Therefore, given 3 overlays, all three receive as *first argument* the
-package set with all 3 changes applied. However, the *second argument*
-is the unchanged package set for the first overlay, the package set with
-the first overlay applied for the second overlay, and the package set
-with the first and then second overlays applied for the third overlay.
+# To use the final state instead of prevState, the trick from evaluating
+# fixpoint-functions is used: mention the result in the argument!
+#
+# The problem is that the plain result does mention all attributes of
+# the final state.
+let apply = change: prevState:
+    let x = change (x);
+    in prevState // x
+;
+in with setup; apply mychange mystate
 
-The above mentioned function `packageOverrides` is an overlay which only
-takes the second argument (the package set without the overlay applied).
+# Combine the above solutions to pass an argument with all final
+# attributes:
+let apply = change: prevState:
+    let x = change (prevState // x);
+    in prevState // x
+;
+in with setup; apply mychange mystate
 
-Overlays can be used to make a decision between multiple **alternative**
-packages (implement the same interface). There are for example multiple
-implementations of the Message Passing Interface MPI. Packages using it
-depend on the generic package `mpi` and one specifies which provider to
-use by using an overlay to replace it:
+# It would be nice to be able to modify a recursive set, such that its
+# recursive attributes reflect the changes:
+setup = {
+    mystate = self: { a=1; b=10; c = self.a + self.b; };
+    mychange = self: { a=5; d = self.a + self.b; };
+}
+
+# This approach fails: Recursive attributes from the original fixpoint
+# do not reflect the changes:
+let apply = change: fixpointFn:
+    let
+        prevState = fixpointFn prevState;
+        x = change (prevState // x);
+    in prevState // x
+;
+in with setup; apply mychange mystate
+
+# Instead, return a fixpoint-function and use its self-reference as
+# substitute for the final state:
+let apply = change: fixpointFn:
+    self: let
+        prevState = fixpointFn self;
+        x = change (prevState // x);
+    in prevState // x ;
+    lib = import <nixpkgs/lib>;
+in with setup; lib.fix (apply mychange mystate)
+
+# Now, apply multiple changes in sequence:
+setup = {
+    initial = self: { a=1; b=10; c = self.a + self.b; };
+    change1 = self: { a=5; d = self.a + self.b; };
+    change2 = self: { b=100; };
+}
+
+# Problem: The result of applying the change does not use the final
+# state!
+let apply = change: fixpointFn:
+    self: let
+        prevState = fixpointFn self;
+        x = change (prevState // x);
+    in prevState // x ;
+    lib = import <nixpkgs/lib>;
+in with setup;
+    lib.fix (apply change2 (apply change1 initial))
+
+# Fix it by using the final state as argument to applying the change!
+let apply = change: fixpointFn:
+    self: let
+        prevState = fixpointFn self;
+        x = change self;
+    in prevState // x ;
+    lib = import <nixpkgs/lib>;
+in with setup;
+    lib.fix (apply change2 (apply change1 initial))
+
+# Since prevState cannot be removed, it might as well be used to give
+# changes more power: Changes which take two arguments representing
+# their final and previous states, are called overlays; attributes may
+# refer to their previous state!
+setup = {
+    initial = self: { a=1; b=10; c = self.a + self.b; };
+    change1 = final: prev: {a=5; d = final.a + final.b; prevA1=prev.a;};
+    change2 = final: prev: {a = prev.a * 10; b=100; prevA2=prev.a;};
+                        #   ^^^^^^^^^^^^^^^
+}
+
+# Simply pass the prevState as second argument to the change function:
+let apply = change: fixpointFn:
+    self: let
+        prevState = fixpointFn self;
+        x = change self prevState;
+    in prevState // x ;
+    lib = import <nixpkgs/lib>;
+in with setup;
+    lib.fix (apply change2 (apply change1 initial))
+
+# The apply function comes with nixpkgs as: lib.extends
+let lib = import <nixpkgs/lib>;
+    fix = lib.fix;
+    extends = lib.extends;
+in with setup;
+    fix (extends change2 (extends change1 initial))
+```
+
+In summary: Overlays are functions with two arguments, that describe a
+change to a fixpoint, whose final and old state can be accessed via the
+two arguments usually called `final` and `prev`, or `self` and `super`
+(in older code).
+
+Nixpkgs can be modified with overlays. When doing so, everything which
+is not a derivation, for example the script `callPackage`, should
+definitely be accessed through `prev` and not `final`!
+
+Overlays are applied as follows:
+1. During the evaluation of the NixOS configuration (and only for the
+   system packages), the overlays from `nixpkgs.overlays = [/*...*/];`
+   are applied.
+2. Overlays may be passed explicitly when importing nixpkgs: `import
+   <nixpkgs> {overlays = [/*...*/]};`. No other overlays are applied.
+3. If `<nixpkgs-overlays>` is set and is a file, it has to contain a
+   list of overlays; if it is a directory, its contents are imported in
+   *lexicographical order*: A single overlay per import is expected.
+4. If `<nixpkgs-overlays>` is not set it tries to fall back to
+   `~/.config/nixpkgs/overlays.nix` or a folder
+   `~/.config/nixpkgs/overlays`. They may not exist both.
+
+The (above mentioned) option (`nixpkgs.config.`)`packageOverrides` is
+like an overlay which only takes the `prev`/`super` argument.
+
+Overlays are sometimes used to make a decision between multiple
+**alternative** packages (which implement the same interface):
+
+There are for example multiple implementations of the Message Passing
+Interface MPI. Packages using it depend on the generic package `mpi` and
+one specifies which provider to use by using an overlay to replace it:
 ```nix
 # ./mpi_overlay.nix
 final: prev: { mpi = final.mpich; }
