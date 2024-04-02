@@ -1336,7 +1336,10 @@ Overlays are applied as follows:
    `~/.config/nixpkgs/overlays`. They may not exist both.
 
 The (above mentioned) option (`nixpkgs.config.`)`packageOverrides` is
-like an overlay which only takes the `prev`/`super` argument.
+like an overlay which only takes the `prev`/`super` argument. It is
+mainly useful to "declaratively" manage non-NixOS systems by adding a
+shell environment with all wanted packages to be installable as a single
+package.
 
 Overlays are sometimes used to make a decision between multiple
 **alternative** packages (which implement the same interface):
