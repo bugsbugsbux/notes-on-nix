@@ -1305,6 +1305,19 @@ change to a fixpoint, whose final and old state can be accessed via the
 two arguments usually called `final` and `prev`, or `self` and `super`
 (in older code).
 
+`lib.makeExtensible` takes a fixpoint-function which returns a set and
+returns its fixpoint with an attribute `extend`, which is a function
+taking an overlay and returning the modified fixpoint (also with an
+`extend` attribute). Do not confuse it with `lib.makeOverridable`!
+```nix
+let
+    fixpointfn = self: { a=1; b=10; c = self.a + self.b; };
+    overlay1 = final: prev: {a=5; d = final.a+final.b; prevA1=prev.a;};
+    overlay2 = final: prev: {a = prev.a * 10; b=100; prevA2=prev.a;};
+    lib = import <nixpkgs/lib>;
+in ((lib.makeExtensible fixpointfn).extend overlay1).extend overlay2
+```
+
 Nixpkgs can be modified with overlays. When doing so, everything which
 is not a derivation, for example the script `callPackage`, should
 definitely be accessed through `prev` and not `final`!
