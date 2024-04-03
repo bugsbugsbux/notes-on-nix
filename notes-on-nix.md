@@ -351,8 +351,8 @@ list and set elements respectively.
 **Conditionals** (`if`, `then`, `else`) must have an else-block! String
 interpolation works in attribute names which can be used to
 conditionally add items by returning `null` if it should be omitted. It
-also works in paths, but only for individual segments: `s.${"foo.bar"}`
-is `s."foo.bar"`, not `s.foo.bar`.
+also works in attribute paths for individual segments: `s.${"foo.bar"}`
+is `s."foo.bar"`, not `s.foo.bar`!
 ```nix
 {
     # conditional value
