@@ -344,20 +344,6 @@ let inc = {x, y?1, ...}@given: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
-**Callable sets** are sets which can be invoked like functions. They
-have an attribute `__functor` which has to be callable and take at least
-two arguments of which the auto-supplied first one is the set itself:
-```nix
-let
-    state = {
-        __functor = self: action: {
-            inc = self // { state = (self.state or 0) + 1; };
-            dec = self // { state = (self.state or 0) - 1; };
-        }.${action};
-    };
-in ((state "inc") "inc") "dec"
-```
-
 Nix **does not have loops**, instead, use one of the builtin functions,
 for example `builtins.map` and `builtins.mapAttrs`, which iterate over
 list and set elements respectively.
@@ -387,6 +373,24 @@ is `s."foo.bar"`, not `s.foo.bar`.
 
 # string-interpolation in attribute paths:
 }.${if true then "foo" else "ab"}
+```
+
+**Callable sets** are sets which can be invoked like functions. They
+have an attribute `__functor` which has to be callable and take at least
+two arguments of which the auto-supplied first one is the set itself.
+The example also shows how to use string-interpolation in attribute
+paths as **switch expression**:
+```nix
+let
+    state = {
+        __functor = self: action:
+            {
+                inc = self // { state = (self.state or 0) + 1; };
+                dec = self // { state = (self.state or 0) - 1; };
+            }.${action} or (throw "invalid action")
+        ;
+    };
+in ((state "inc") "inc") "dec"
 ```
 
 See also: operators
