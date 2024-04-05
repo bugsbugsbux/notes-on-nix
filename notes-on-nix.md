@@ -1337,7 +1337,7 @@ the final state of the value as first argument (usually called `final`
 or, in older code, `self`) and the old state as second argument (usually
 called `prev`, or, in older code, `super`). Sometimes overlay-like
 functions take the old state as only argument; this is not called
-"overlay" but conceptionally is the same.
+"overlay" but, conceptionally, does the same.
 
 In nix overlays are mainly used to modify the nixpkgs package
 collection. When doing so, everything which is not a derivation, for
