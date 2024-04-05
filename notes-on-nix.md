@@ -1015,9 +1015,10 @@ describing it), it can be added in two ways:
 Derivations are created ("instantiated") with the builtin function
 `derivation` or a wrapper around it. It creates the "\*.drv" file in the
 nix store, which contains the actual build instructions used when
-building ("realising") the derivation with `nix-build`. (Moreover, it
+building ("realising") the derivation with `nix-build`. Moreover, it
 returns a derivation object, which is a set with the attribute
-`type="derivation";`.)
+`type="derivation";` that can be used to reference the derivation and
+sometimes has certain properties to modify it (see: modifying packages).
 
 Despite the `derivation` function rarely being used directly it is
 useful to understand what arguments it works with:
