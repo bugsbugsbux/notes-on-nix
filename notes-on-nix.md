@@ -1323,7 +1323,7 @@ change to a fixpoint, whose final and old state can be accessed via the
 two arguments usually called `final` and `prev`, or `self` and `super`
 (in older code).
 
-`lib.makeExtensible` takes a fixpoint-function which returns a set and
+`lib.makeExtensible` takes a fixpoint-function, which returns a set, and
 returns its fixpoint with an attribute `extend`, which is a function
 taking an overlay and returning the modified fixpoint (also with an
 `extend` attribute). Do not confuse it with `lib.makeOverridable`!
