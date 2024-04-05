@@ -1322,10 +1322,10 @@ change to a fixpoint, whose final and old state can be accessed via the
 two arguments usually called `final` and `prev`, or `self` and `super`
 (in older code).
 
-`lib.makeExtensible` takes a fixpoint-function, which returns a set, and
-returns its fixpoint with an attribute `extend`, which is a function
-taking an overlay and returning the modified fixpoint (also with an
-`extend` attribute). Do not confuse it with `lib.makeOverridable`!
+For convenience, sets can be made extensible with `lib.makeExtensible`.
+This means instead of having to call `lib.fix lib.extends myoverlay
+myset`, an overlay can be applied by passing it as argument to a value's
+attribute `extend`. Do not confuse this with `lib.makeOverridable`!
 ```nix
 let
     fixpointfn = self: { a=1; b=10; c = self.a + self.b; };
