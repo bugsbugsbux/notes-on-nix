@@ -1157,7 +1157,7 @@ won't remove it. A new build in the same directory overwrites an
 existing `./result`! The links for multiple outputs are named
 `./result-${n}` (except the first which is still named `./result`).
 
-### Modifying packages
+### Overlays
 
 A **fixed point, or "fixpoint"**, is a value, which is mapped to itself
 by a function. Therefore, it is defined in terms of a specific function,
@@ -1184,8 +1184,6 @@ in getFixpoint(self: {
     c = self.a + self.b;
 })
 ```
-
-#### Overlays
 
 One can also think of fixpoint-functions as describing a change to a
 value, which they receive as argument. To apply the change, a helper
