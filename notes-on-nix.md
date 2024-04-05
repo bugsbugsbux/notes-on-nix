@@ -1387,6 +1387,74 @@ final: prev: {
 }
 ```
 
+### Modifying packages
+
+This section introduces convenient ways to create variants of packages
+without having to literally copy their code just to make some small
+changes. They are often used in overlays to modify nixpkgs.
+
+The pattern here is to get a derivation object, which has a callable
+attribute, pass the changes to it and receive a variant of the
+derivation back. These attributes are **usually injected when using the
+standard build environment**, however, some could also be injected
+manually when the derivation is created in some other way. Regardless, a
+simple call to `derivation` does not produce a result which has them.
+
+The function `lib.makeOverridable` makes it is possible to change the
+arguments with which a function was called by passing the differing
+arguments to the injected attribute `override` of the result:
+```nix
+let lib = import <nixpkgs/lib>;
+    fn = { arg }: { foo = "I was called with ${arg} argument."; };
+
+    result = lib.makeOverridable fn { arg = "the original"; };
+
+    changed1 = result.override { arg = "a changed"; };
+    # to access the original arguments supply a function:
+    changed2 = result.override (orig: { arg = "++NOT++" + orig.arg; });
+
+in [ result.foo changed1.foo changed2.foo ]
+```
+
+The **`override` attribute of packages** allows to change the arguments
+the package-function receives. In other words, it allows to changes the
+dependencies of a package.
+
+`lib.makeOverridable` also always injects `overrideDerivation`, which is
+a function taking an overlay-like function as argument, that expects
+the derivation itself as argument (usually called "oldAttrs"). Thus
+this is only useful for derivation objects (in particular, a sibling
+attribute `drvArgs` is required). It creates a new derivation from the
+original arguments merged with the overrides.
+
+In other words, the **`overrideDerivation` attribute of packages**
+allows to change the arguments with which the `derivation` function, to
+which all packages essentially boil down to, is called.
+
+`stdenv.mkDerivation` injects an **attribute `overrideAttrs`** into the
+result, that allows to change with which arguments `mkDerivation` (not
+the `derivation` function!) was called. It can take the differing
+attributes directly as a set, or as an overlay or overlay-like function,
+which only receives the old state as argument. Note, that the final
+state passed to the overlay also includes an attribute `finalPackage`,
+which holds the result of the final call to `stdenv.mkDerivation`:
+```nix
+let nixpkgs = import <nixpkgs> {};
+    git = nixpkgs.git;
+in (
+    (
+        git.overrideAttrs { pname = "git-custom1"; }
+    ).overrideAttrs (prev: { pname = prev.pname + "-custom2"; })
+).overrideAttrs (final: prev: { pname = prev.pname + "-custom3"; }) //
+{ type = null; } # override the type attribute to pretty print it
+```
+
+When a derivation object has both attributes, `overrideAttrs` and
+`overrideDerivation`, `overrideAttrs` should be preferred. (It can, for
+example, be called multiple times and only produces a derivation from
+the final spec, while every invocation of `overrideDerivation` produces
+a new derivation.)
+
 ## Appendix
 
 ### Operators
