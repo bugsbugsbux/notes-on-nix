@@ -1317,11 +1317,6 @@ in with setup;
     fix (extends change2 (extends change1 initial))
 ```
 
-In summary: Overlays are functions with two arguments, that describe a
-change to a fixpoint, whose final and old state can be accessed via the
-two arguments usually called `final` and `prev`, or `self` and `super`
-(in older code).
-
 For convenience, sets can be made extensible with `lib.makeExtensible`.
 This means instead of having to call `lib.fix lib.extends myoverlay
 myset`, an overlay can be applied by passing it as argument to a value's
@@ -1335,11 +1330,21 @@ let
 in ((lib.makeExtensible fixpointfn).extend overlay1).extend overlay2
 ```
 
-Nixpkgs can be modified with overlays. When doing so, everything which
-is not a derivation, for example the script `callPackage`, should
-definitely be accessed through `prev` and not `final`!
+In summary: **Overlays** are functions describing changes to a value,
+which is available in specific states within the function because these
+states are passed as arguments to it. A classic overlay function takes
+the final state of the value as first argument (usually called `final`
+or, in older code, `self`) and the old state as second argument (usually
+called `prev`, or, in older code, `super`). Sometimes overlay-like
+functions take the old state as only argument; this is not called
+"overlay" but conceptionally is the same.
 
-Overlays are applied as follows:
+In nix overlays are mainly used to modify the nixpkgs package
+collection. When doing so, everything which is not a derivation, for
+example the script `callPackage`, should definitely be accessed through
+`prev` and not `final` because this avoids recomputing the fixpoint!
+
+Overlays are applied to nixpkgs as follows:
 1. During the evaluation of the NixOS configuration (and only for the
    system packages), the overlays from `nixpkgs.overlays = [/*...*/];`
    are applied.
