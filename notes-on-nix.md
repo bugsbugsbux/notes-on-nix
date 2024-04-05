@@ -1432,8 +1432,8 @@ allows to change the arguments with which the `derivation` function, to
 which all packages essentially boil down to, is called.
 
 `stdenv.mkDerivation` injects an **attribute `overrideAttrs`** into the
-result, that allows to change with which arguments `mkDerivation` (not
-the `derivation` function!) was called. It can take the differing
+result, that allows to change with which arguments `stdenv.mkDerivation`
+(not the `derivation` function!) was called. It can take the differing
 attributes directly as a set, or as an overlay or overlay-like function,
 which only receives the old state as argument. Note, that the final
 state passed to the overlay also includes an attribute `finalPackage`,
