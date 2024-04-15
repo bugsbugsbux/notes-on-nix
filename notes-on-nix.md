@@ -951,7 +951,12 @@ let defaultPkgs = import <nixpkgs> {};
     callPackageWith = pkgs: pkgfn_file: args:
         let pkgfn = import pkgfn_file;
         in with builtins;
-            pkgfn ((intersectAttrs (functionArgs pkgfn) pkgs) // args)
+            pkgfn (
+                # Take those items from second arg which have same name
+                # as an item from first arg (functionArgs returns set):
+                (intersectAttrs (functionArgs pkgfn) pkgs)
+                // args # update with user supplied args
+            )
     ;
     # someOtherVersion = (import (fetchTarball
     #     "https://github.com/NixOS/nixpkgs/archive/0672315759b3e15e2121365f067c1c8c56bb4722.tar.gz"
