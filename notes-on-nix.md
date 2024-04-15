@@ -167,8 +167,17 @@ string:
     double quoted strings keep their starting line
     double quoted strings keep all leading whitespace"
 
+  "\\ \"toggles\" special character meaning: \n\\\" \n\\n \n\\r \n\\t"
+
+  # concatenating strings; embedding expressions (string-interpolation)
+  "use \${} for string-interpolation 10+1=${"1"+"1"}"
+  # "10+1=${builtins.toString(10+1)}"
+
   ''
       strings wrapped in *double* single quotes:
+      escape every \ thus:
+        - tabs and newlines must be written literally	
+        - string-interpolation cannot be disabled: \${"foo" + "bar"}
       ignore the starting line if it only consists of whitespace
         remove (only) the *common* *leading* whitespace from each line  
       whitespace-only lines like the following line of 2 spaces...
@@ -177,12 +186,6 @@ string:
       ...get shorter by the number of common whitespace characters
       a whitespace-only final line always becomes a single newline
         ''
-
-  "\\ \"toggles\" special character meaning: \n\\\" \n\\n \n\\r \n\\t"
-
-  # concatenating strings; embedding expressions
-  "use \${} for string-interpolation 10+1=${"1"+"1"}"
-  # "10+1=${builtins.toString(10+1)}"
   ```
 - **"path"**: Careful: Using paths copies it to the nix-store location!
 
