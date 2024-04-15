@@ -351,8 +351,8 @@ Nix **does not have loops**, instead, use one of the builtin functions,
 for example `builtins.map` and `builtins.mapAttrs`, which iterate over
 list and set elements respectively.
 
-**Conditionals** (`if`, `then`, `else`) must have an else-block! String
-interpolation works in attribute names which can be used to
+**Conditionals** (`if`, `then`, `else`) must have an else-block!
+String-interpolation works in attribute names which can be used to
 conditionally add items by returning `null` if it should be omitted. It
 also works in attribute paths for individual segments: `s.${"foo.bar"}`
 is `s."foo.bar"`, not `s.foo.bar`!
