@@ -507,7 +507,7 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
 - **Converting an existing linux installation** (other distro) into a
   NixOS system: There is an installation variant called "NIXOS_LUSTRATE"
   which permanently converts a running linux system into a NixOS system.
-  There, are scripts like "nixos-infect" or "nix-in-place" which
+  There are scripts like "nixos-infect" or "nix-in-place" which
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
 
