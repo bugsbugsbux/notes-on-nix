@@ -1224,7 +1224,7 @@ The **default phases** are:
    before or after this phase by passing it as `preBuild` or
    `postBuild`. See:
    <https://nixos.org/manual/nixpkgs/stable/#build-phase>
-5. **checkPhase**: Shall check the build result if `doCheck=true;`;
+5. **checkPhase**: Shall check the build result **if `doCheck=true;`**;
    never runs when cross-compiling. Inject code before or after this
    phase by passing it as `preCheck` or `postCheck`. Dependencies for
    this phase are passed as `checkInputs` and `nativeCheckInputs`. See:
@@ -1242,7 +1242,7 @@ The **default phases** are:
    `dontFixup=true;`; inject code before or after this phase by passing
    it as `preFixup` or `postFixup`. See:
    <https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase>
-8. **installCheckPhase**: If `doInstallCheck=true;` (and not
+8. **installCheckPhase**: **If `doInstallCheck=true;`** (and not
    cross-compiling) runs a program's test suite (default: `make
    installcheck`), to verify its correct installation. If tests are not
    part of the sources, they should be passed as `passthrough.tests` and
@@ -1254,8 +1254,8 @@ The **default phases** are:
 9. **distPhase**: The "distribution phase" shall create a source
    distribution of a package (meaning an archive containing a top-level
    directory with the source files of the package) in `$out/tarballs/`,
-   if `doDist=true;`. Inject code before or after this phase by passing
-   it as `preDist` or `postDist`. See:
+   **if `doDist=true;`**. Inject code before or after this phase by
+   passing it as `preDist` or `postDist`. See:
    <https://nixos.org/manual/nixpkgs/stable/#ssec-distribution-phase>
 
 Additional **custom phases** can be created by defining a variable with
