@@ -1225,9 +1225,10 @@ The **default phases** are:
    `postBuild`. See:
    <https://nixos.org/manual/nixpkgs/stable/#build-phase>
 5. **checkPhase**: Shall check the build result **if `doCheck=true;`**;
-   never runs when cross-compiling. Inject code before or after this
-   phase by passing it as `preCheck` or `postCheck`. Dependencies for
-   this phase are passed as `checkInputs` and `nativeCheckInputs`. See:
+   never runs when cross-compiling (which is building on one
+   architecture for another). Inject code before or after this phase by
+   passing it as `preCheck` or `postCheck`. Dependencies for this phase
+   are passed as `checkInputs` and `nativeCheckInputs`. See:
    <https://nixos.org/manual/nixpkgs/stable/#ssec-check-phase>
 6. **installPhase**: Shall create `out` in the nix-store and put the
    build output there. The default implementation creates a folder `out`
