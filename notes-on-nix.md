@@ -918,7 +918,7 @@ not how nix works, but in some cases effectively what it does, if the
 term package is understood as build output. Actually, nix downloads
 build instructions (derivations) and checks whether it can find a cache
 of their result: if it does, it simply downloads the cached binary and
-installs it (to the nix store); if it does not, it builds locally.
+installs it (to the nix-store); if it does not, it builds locally.
 
 However, while packages and derivations are essentially equivalent,
 there are some semantic differences in how they are used: To describe
@@ -1022,7 +1022,7 @@ describing it), it can be added in two ways:
 
 Derivations are created ("instantiated") with the builtin function
 `derivation` or a wrapper around it. It creates the "\*.drv" file in the
-nix store, which contains the actual build instructions used when
+nix-store, which contains the actual build instructions used when
 building ("realising") the derivation with `nix-build`. Moreover, it
 returns a derivation object, which is a set with the attribute
 `type="derivation";` that can be used to reference the derivation and
@@ -1033,7 +1033,7 @@ useful to understand what arguments it works with:
 
 `derivation` *requires* the following arguments:
 - `name`: A string which will be used in the names of files created in
-  the nix store.
+  the nix-store.
 - `system`: A string such as "x86_64-linux" which specifies for which
   system to build the derivation. Building locally only works if
   `builtins.currentSystem` matches this string.
@@ -1048,7 +1048,7 @@ useful to understand what arguments it works with:
 - `args`: List of strings to be passed as arguments to `builder`.
 - `outputs`: List of strings that defaults to `["out"]`. Each string is
   the name of an environment variable available to the builder script
-  containing the path to a nix store object which shall contain the
+  containing the path to a nix-store object which shall contain the
   respective output. For example `["doc" "out"]` exports the environment
   variables `$doc` and `$out` with the values
   `/nix/store/${hash}-${name}-doc` and `/nix/store/${hash}-${name}`
