@@ -1165,6 +1165,116 @@ won't remove it. A new build in the same directory overwrites an
 existing `./result`! The links for multiple outputs are named
 `./result-${n}` (except the first which is still named `./result`).
 
+### Standard (Build) Environment
+
+*Due to its customizability, there are many wrappers of stdenv
+preconfiguring it for specific languages or frameworks!*
+
+Nixpkgs comes with a **package `stdenv`**, which provides some basic
+dependencies commonly used for compiling c code (gnu c and
+cpp compiler, coreutils, `find`, `diff`, `cmp`, `sed`, `grep`, `awk`,
+`tar`, `gzip`, `bzip2`, `xz`, `make`, `patch`, `patchelf`), as well as a
+bash build script (performing a classic `./configure; make; make
+install`), which uses the bash utility functions (such as
+`genericBuild`) from `"${stdenv}/setup"`.
+
+Packages created with the standard build environment do not call
+`derivation` themselves, but rather its wrapper
+**`stdenv.mkDerivation`**, which takes at least arguments `name` (which,
+like the argument to `derivation`, consists of `"${name}-{version}"`,
+but may be replaced by the separate arguments `pname` and `version` to
+simplify reusing them in other arguments) and `src` (or if several:
+`srcs`).
+
+The power of stdenv comes from how it is implemented: in **customizable
+phases**. All necessary utilities come from the `$stdenv/setup` script,
+whose `genericBuild` function runs the phases; this script should always
+be sourced in custom build scripts as it also handles setting up PATH
+with the dependencies. The phases can be replaced by defining an
+environment variable or bash function with their name. It is also
+possible to inject code before or after it by defining `pre$phasename`
+or `post$phasename`. For this to work the phase needs to start with
+`runHook pre$phasename` and end with `runHook post$phasename` (the
+phasename variable is *not* defined!); follow this pattern when
+replacing phases! Like `derivation`, `stdenv.mkDerivation` passes
+unknown arguments as environment variables to the builder script, which
+makes it easy to define the relevant control variables.
+
+The **default phases** are:
+1. **unpackPhase**: This phase copies/unpacks `src` (or if multiple:
+   `srcs`) to the build directory and changes directory into this
+   folder. The default implementation handles tar archives and, if
+   `unzip` is provided as dependency, zip archives. Pass
+   `dontUnpack=true;` to skip this phase. The `unpackCmd` can be
+   customized and code can be injected before or after this phase with
+   `preUnpack` and `postUnpack`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-unpack-phase>
+2. **patchPhase**: Applies `patches`, whose format has to be accepted by
+   `patch -p1`. Skip this phase by passing `dontPatch=true;`. Inject
+   code before or after this phase by passing `prePatch` and
+   `postPatch`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-patch-phase>
+3. **configurePhase**: This phase prepares the source to be built by
+   running `configureScript`, which defaults to `./configure`. Skip this
+   phase by passing `dontConfigure=true;`. Inject code before or after
+   this phase by passing `preConfigure` and `postConfigure`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-configure-phase>
+4. **buildPhase**: Shall compile the sources. By default this runs
+   `make`. Skip this phase by passing `dontBuild=true;`. Inject code
+   before or after this phase by passing it as `preBuild` or
+   `postBuild`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#build-phase>
+5. **checkPhase**: Shall check the build result if `doCheck=true;`;
+   never runs when cross-compiling. Inject code before or after this
+   phase by passing it as `preCheck` or `postCheck`. Dependencies for
+   this phase are passed as `checkInputs` and `nativeCheckInputs`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-check-phase>
+6. **installPhase**: Shall create `out` in the nix-store and put the
+   build output there. The default implementation creates a folder `out`
+   and runs `make install`. Skip this phase by passing
+   `dontInstall=true;`. Inject code before or after this phase by
+   passing it as `preInstall` or `postInstall`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-install-phase>
+7. **fixupPhase**: Post-process `out`. By default moves
+   `$out/{man,doc,info}/` folders to `$out/share/`, strips debug infos
+   from libraries and executables, removes unused runtime-path entries,
+   and fixes shebangs to point to entries in PATH. Skip this phase with
+   `dontFixup=true;`; inject code before or after this phase by passing
+   it as `preFixup` or `postFixup`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase>
+8. **installCheckPhase**: If `doInstallCheck=true;` (and not
+   cross-compiling) runs a program's test suite (default: `make
+   installcheck`), to verify its correct installation. If tests are not
+   part of the sources, they should be passed as `passthrough.tests` and
+   not run here. Inject code before or after this phase by passing it as
+   `preInstallCheck` or `postInstallCheck`. Dependencies for this phase
+   are passed as `installCheckInputs` and `nativeInstallCheckInputs`.
+   See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-installCheck-phase>
+9. **distPhase**: The "distribution phase" shall create a source
+   distribution of a package (meaning an archive containing a top-level
+   directory with the source files of the package) in `$out/tarballs/`,
+   if `doDist=true;`. Inject code before or after this phase by passing
+   it as `preDist` or `postDist`. See:
+   <https://nixos.org/manual/nixpkgs/stable/#ssec-distribution-phase>
+
+Additional **custom phases** can be created by defining a variable with
+their name (may also be a bash function). Then their name has to be
+mentioned in (at least one of these *space separated strings* listing
+phase names):
+- `phases`: This environment variable defines *all* phases to run and
+  their order. It can be used to inject custom phases, reorder phases,
+  or just run specific ones. Its use is discouraged unless one just
+  wants to run a specific phase for debugging purposes, as one might
+  forget important parts.
+- `prePhases`: Phases to run before any of the default phases.
+- `preConfigurePhases`: Phases to run just before the `configurePhase`.
+- `preBuildPhases`: Phases to run just before the `buildPhase`.
+- `preInstallPhases`: Phases to run just before the `installPhase`.
+- `preFixupPhases`: Phases to run just before the `fixupPhase`.
+- `preDistPhases`: Phases to run just before the `distPhase`.
+- `postPhases`: Phases to run after all the default phases.
+
 ### Overlays
 
 A **fixed point, or "fixpoint"**, is a value, which is mapped to itself
