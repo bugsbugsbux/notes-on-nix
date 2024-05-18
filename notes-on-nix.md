@@ -30,6 +30,8 @@ Nix is:
 3. Read the nixpkgs manual to understand how to create your own packages
    using stdenv and trivial builders, and how to modify packages.
    <https://nixos.org/manual/nixpkgs/stable/>
+4. Read about flakes at:
+   <https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html>
 
 ### How to print a value?
 
