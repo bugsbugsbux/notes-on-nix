@@ -1576,6 +1576,142 @@ example, be called multiple times and only produces a derivation from
 the final spec, while every invocation of `overrideDerivation` produces
 a new derivation.)
 
+## Flakes
+
+To be able to use flakes:
+
+- using NixOS: set `nix.settings.experimental-features =
+  ["nix-command" "flakes"];` in `/etc/nixos/configuration.nix`
+- using other distributions: set `experimental-features = nix-command
+  flakes` in `~/.config/nix/nix.conf` or `/etc/nix/nix.conf`
+
+This enables the `nix flake` commands and support for
+**flake-references ("flakerefs")**, which specify where a flake comes
+from (and which of its outputs to target). Flakerefs can be specified as
+nix attribute-sets (used in `./flake.lock` files), or as strings of the
+form `"${location}#${output}"`. The suffix `#${output}` is not always
+specified; there are multiple location types with different syntax:
+
+- `[flake:]<flake-id>(/<rev-or-ref>(/rev)?)?` is type "indirect",
+  meaning it resolves the given flake-id using *a* local **flake
+  registry** (which can be used to redirect any looked up flake
+  reference, for example to a local fork! The global registry can be
+  shadowed with a system registry `/etc/nix/registry.json` or a user
+  registry `~/.config/nix/registry.json` ). An example would be
+  `nixpkgs`, which resolves to `git://github.com/NixOS/nixpkgs`.
+- `[path:]<path>(\?<params>)?` is type "path". The path must be `.`, or
+  start with `./` or `/`. "path:" may only be omitted if the path is not
+  in a repo! Examples: `path:/home/myuser/repo/myflake`,
+  `path:/home/myuser/NOTrepo/myflake`
+- `[tarball+](http|https|file):(//<server>)?<path>(\?<params>)?` is type
+  "tarball". The "tarball+" prefix may be omitted if the URL ends in
+  `.zip`, `.tar`, `.tgz`, `.tar.gz`, `.tar.xz`, `.tar.bz2` or
+  `.tar.zst`.
+- `[file+](http|https|file):(//<server>)?<path>(\?<params>)?` is type
+  "file". The "file+" prefix can be omitted if the URL does not end in
+  one of the known archives formats (see type "tarball").
+- `git(+http|+https|+ssh|+git|+file):(//<server>)?<path>(\?<params>)?`
+  is type "git". Parameter "ref" defaults to the resolved HEAD, "rev"
+  is a commit reachable from "ref" and defaults to resolved "ref".
+  Examples: `git+https://example.org/repo?ref=unstable&rev=1a2b3c`
+- `github:<owner>/<repo>(/<rev-or-ref>)?(\?<params>)?` is type "github"
+  and more efficient than type "git" because it downloads tarballs
+  instead of the entire repo. Use parameter "host" for github enterprise
+  servers. Example: `github:NixOS/nixpkgs/nixos-23.11`
+- `gitlab:<owner>/<repo>(/<rev-or-ref>)?(\?<params>)?` is type "gitlab"
+  and works like type "github" but using the "host" parameter is more
+  common. In project subgroups these slashes need to be escaped as
+  `%2F`, example: `gitlab:veloren%2Fdev/rfcs`
+- `sourcehut:<owner>/<repo>(/<rev-or-ref>)?(\?<params>)?` is type
+  "sourcehut". Use parameter "host" for servers other than "git.sr.ht"
+  and to specify mercurial repos ("hg.sr.ht"; these require the "rev"
+  and forbid the "ref" parameter).
+- `hg(+http|+https|+ssh|+file):(//<server>)?<path>(\?<params>)?` is type
+  "mercurial".
+
+A flake is a directory containing a `./flake.nix` file, which describes
+it in a standardized form. When the flake is a git repo, it only
+considers files tracked by git, meaning untracked files do not end up in
+the world readable nix-store.
+
+`./flake.nix` returns an attribute set with the following allowed
+fields:
+
+- `description`: A string describing the flake.
+- `nixConfig`: An attribute set with `nix.conf` settings, most of which
+  require confirmation unless the global setting `accept-flake-config`
+  is `true`.
+- `inputs`: An attribute set defining the flake's dependencies.
+  Dependencies may be omitted (meaning only mentioned as arguments of
+  `outputs`), making them flakerefs of type "indirect" (resolved using
+  the registry).
+
+  ```nix
+  inputs = {
+      nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    # ^^^^^^^ passed to outputs with this name
+  };
+  ```
+
+  To modify a dependency of an input, simply modify its `inputs`
+  attribute! To copy a dependency of an input to another input, specify
+  the input to copy as a "/" separated string of input names in the
+  copying input's `follows` attribute:
+
+  ```nix
+  inputs = {
+      aFlake.url = /*...*/;          # depends on nixpkgs
+
+      # use aFlake's nixpkgs dependency as this flake's nixpkgs input:
+      nixpkgs.follows = "aFlake/nixpkgs";
+
+      # override bFlake's nixpkgs dependency (use the one from aFlake):
+      bFlake.inputs.nixpkgs.follows = "aFlake/nixpkgs";
+
+      # reference self as empty string:
+      bFlake.inputs.myflake.follows = "";
+  };
+  ```
+
+  While it is possible to be explicit with the version of an input (see:
+  flakerefs), this is usually not done: Instead, nix automatically
+  generates a (json) lock file `./flake.lock` to pin the exact versions;
+  this can be invoked with `nix flake lock`. The benefit is that it is
+  easy to update the dependencies with `nix flake update` (or only a
+  specific one: `nix flake update someInput anotherInput`).
+
+- `outputs`: Function taking the named arguments `self` (as if the flake
+  were its own dependency) and the names of the `inputs` set. Each
+  argument is extended with these metadata attributes (if applicable)
+  about the input:
+
+  + `outPath` (in the nix-store; allows to use the argument as a path,
+    for example: `with import nixpkgs {}; ...`),
+  + `rev` (commit hash),
+  + `revCount` (number of ancestors of the commit),
+  + `lastModifiedDate` (commit-time as string in format:
+    "%Y%m%d%H%M%S"),
+  + `lastModified` (commit-time as integer unix-epoch),
+  + `narHash` (sha256 of a flake).
+
+  This function returns an attribute set mapping output classes (for
+  example: `packages`) to values of certain types (such as: derivation).
+  Some output classes group their items by system type or hostname, and
+  sometimes there is a special item "default" (which is the target if
+  the relevant command is run without specifying a target in the flake
+  reference).
+
+  ```nix
+  outputs = { self, nixpkgs }: {
+      packages = {
+          x86_64-linux = rec {
+              mypkg = someDerivation;
+              default = mypkg;
+          };
+      };
+  };
+  ```
+
 ## Appendix
 
 ### Operators
