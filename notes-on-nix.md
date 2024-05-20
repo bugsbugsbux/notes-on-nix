@@ -1752,6 +1752,11 @@ Operators and their quirks:
 1 / 2.0             # 0.5;  divide with floating point result
 1.0 / 2             # 0.5;  divide with floating point result
 
+# mathematical precedence
+2 + 3 * 4           # 14
+    3 * 4 + 2       # 14
+(2+ 3)* 4           # 20
+
 # Operators for attribute sets:
 s = {attr.path = 1;}
 # Indexing -> returns the (fallback) value or throws error
