@@ -196,7 +196,7 @@ string:
   char:
   ```nix
   ./relative-path               # relative to the file it is used in
-  ../path-in-parent/folder      # may not end in /
+  ../path-in-parent/folder      # must not end in /
   /absolute-path
   ./.                           # current folder
   /.                            # root folder
@@ -1476,7 +1476,7 @@ Overlays are applied to nixpkgs as follows:
    *lexicographical order*: A single overlay per import is expected.
 4. If `<nixpkgs-overlays>` is not set it tries to fall back to
    `~/.config/nixpkgs/overlays.nix` or a folder
-   `~/.config/nixpkgs/overlays`. They may not exist both.
+   `~/.config/nixpkgs/overlays`. They must not exist both.
 
 The (above mentioned) option (`nixpkgs.config.`)`packageOverrides` is
 like an overlay which only takes the `prev`/`super` argument. It is
@@ -1875,7 +1875,7 @@ changed, and can use cache servers, instead of the actual target site.
   like `nixpkgs.fetchFromGithub`, which may be more performant than the
   fetcher for the relevant type of repo due to services of these sites,
   allowing to avoid downloading the whole repo.
-- get non-distributable files: Some files cannot or may not be
+- get non-distributable files: Some files cannot or must not be
   downloaded automatically. `nixpkgs.requireFile` instructs the user to
   download the file himself and guides him how to put it into the
   nix-store.
