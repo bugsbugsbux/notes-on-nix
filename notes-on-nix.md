@@ -1864,7 +1864,7 @@ changed, and can use cache servers, instead of the actual target site.
   works for other archive types, unpacks the result before storing it.
 - get patches: `nixpkgs.getpatch` takes arguments `url` and `hash`, and
   normalizes the retrieved patch file before storing it. There is a
-  wrapper for patches from <sources.debian.org> called
+  wrapper for patches from <http://sources.debian.org> called
   `nixpkgs.fetchDebianPatch`.
 - get repos: There are many fetchers to retrieve from all kinds of
   repositories, like `with nixpkgs, [fetchgit fetchsvn fetchcvs fetchhg
