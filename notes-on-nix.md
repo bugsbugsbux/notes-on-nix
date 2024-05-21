@@ -1834,3 +1834,98 @@ nix-store --query --references /nix/store/path/to/build-output
 # should happen after the install phase in a build script, not manually)
 patchelf --shrink-rpath '{}' mybinary ; strip '{}' mybinary
 ```
+
+### Build helpers
+
+*The above described `stdenv.mkDerivation` is the most used build helper
+and thus received its own chapter. This section describes other build
+helpers.*
+
+Build helpers are functions *producing derivations*.
+
+#### Fetchers
+
+It is important to differentiate between the builtin fetchers and the
+ones provided by nixpkgs! The builtins ones (such as `with builtins;
+[fetchGit fetchTarball fetchurl]`) are *not* build helpers because they
+do not return a derivation. They run when evaluated, dump the result
+into the nix-store and need network access to determine whether this
+result is up-to-date.
+
+The nixpkgs fetchers, on the other hand, run at build time, during which
+they are granted network access because they return *fixed-output*
+derivations (see above), meaning it is known beforehand what the result
+will be. They only try to download their target if the mentioned hash
+changed, and can use cache servers, instead of the actual target site.
+
+- get files and archives: `with nixpkgs; [fetchurl fetchzip]` take
+  the arguments `url` and `hash`. The difference is that `fetchurl`
+  saves the downloaded file unaltered, while `fetchzip`, which also
+  works for other archive types, unpacks the result before storing it.
+- get patches: `nixpkgs.getpatch` takes arguments `url` and `hash`, and
+  normalizes the retrieved patch file before storing it. There is a
+  wrapper for patches from <sources.debian.org> called
+  `nixpkgs.fetchDebianPatch`.
+- get repos: There are many fetchers to retrieve from all kinds of
+  repositories, like `with nixpkgs, [fetchgit fetchsvn fetchcvs fetchhg
+  fetchfossil]`. Depending on the abilities of the specific version
+  control system, they can do different things, like get submodules,
+  etc.
+- get from site: There are many fetchers for specific hosting sites,
+  like `nixpkgs.fetchFromGithub`, which may be more performant than the
+  fetcher for the relevant type of repo due to services of these sites,
+  allowing to avoid downloading the whole repo.
+- get non-distributable files: Some files cannot or may not be
+  downloaded automatically. `nixpkgs.requireFile` instructs the user to
+  download the file himself and guides him how to put it into the
+  nix-store.
+- etc
+
+#### Writers (Trivial builders)
+
+These help with running shell commands and writing files at build time.
+
+`nixpkgs.runCommand` runs the shell script provided as a string,
+`nixpkgs.runCommandCC` also provides a c compiler, while
+`nixpkgs.runCommandLocal` prevents retrieving a cached version of this
+derivation.
+
+`nixpkgs.writeTextFile` allows to write text into files in the
+nix-store. It takes an attribute set as argument; the following
+functions are wrappers for certain use-cases and take positional
+arguments instead: `nixpkgs.writeText` makes the nix-store path a file
+and writes the given text to it; `nixpkgs.writeTextDir` uses the
+nix-store path as a directory into which to write the file;
+`nixpkgs.writeScript` makes the nix-store path an executable file;
+`nixpkgs.writeScriptBin` makes the nix-store path a directory with the
+subfolder `bin` and puts the contents in an executable file there;
+`nixpkgs.writeShellScript` and `nixpkgs.writeShellScriptBin` are like
+the regular script writers but add a shebang for the bash version in
+nixpkgs. `nixpkgs.writeShellApplication` is like `writeShellScriptBin`
+but takes an argument set allowing to specify runtime dependencies as
+field `runtimeInputs`.
+
+`nixpkgs.concatTextFile` allows to concatenate files into a new file in
+the nix-store; it takes an argument set but its wrappers for specific
+use-cases take multiple positional arguments instead:
+`nixpkgs.concatText` takes a name for the created file and a list of
+files to concatenate; `nixpkgs.concatScript` is the same but makes the
+result executable.
+
+To create a single derivation from multiple ones, use
+`nixpkgs.symlinkJoin`, which puts their outputs into the same directory
+tree.
+
+There are some more... See:
+<https://github.com/NixOS/nixpkgs/blob/master/doc/build-helpers/trivial-build-helpers.chapter.md>
+
+#### Filesystem Hierarchy Standard compatible "sandboxes"
+
+As mentioned, NixOS does not comply with the FHS (Filesystem Hierarchy
+Standard). To still be able to run software which depends on FHS being
+followed, there is `nixpkgs.buildFHSEnv`, which uses linux namespaces to
+create an isolated, unprivileged root filesystem using the host's
+nix-store, which is destroyed again after all child processes exit. Note
+that this provides no security relevant separation from the host!
+
+See: <https://nixos.org/manual/nixpkgs/stable/#sec-fhs-environments>
