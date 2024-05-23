@@ -1194,7 +1194,7 @@ whose `genericBuild` function runs the phases; this script should always
 be sourced in custom build scripts as it also handles setting up PATH
 with the dependencies. The phases can be replaced by defining an
 environment variable or bash function with their name. It is also
-possible to inject code before or after it by defining `pre$phasename`
+possible to inject code before or after them by defining `pre$phasename`
 or `post$phasename`. For this to work the phase needs to start with
 `runHook pre$phasename` and end with `runHook post$phasename` (the
 phasename variable is *not* defined!); follow this pattern when
