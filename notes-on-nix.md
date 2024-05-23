@@ -1278,6 +1278,51 @@ phase names):
 - `preDistPhases`: Phases to run just before the `distPhase`.
 - `postPhases`: Phases to run after all the default phases.
 
+#### Setup-Hooks
+
+*Setup-hooks are a powerful way to inject code into other packages'
+build processes and should be used with care if not entirely avoided!
+They disturb the ideas that dependencies can be added effect-free and
+that of modularity, because setup-hooks might interfere with each
+other.*
+
+Hooks are code to be injected somewhere, for example into phases, as
+described above. Setup-hooks allow dependencies to inject code into the
+build environment of packages that depend on them:
+
+Every package can create a so called setup-hook as the file
+`${pkg}/nix-support/setup-hook`. One of the first things
+`${stdenv}/setup` does is to go through all dependencies and sourcing
+their setup-hooks. This allows setup-hooks to inject other hooks,
+provide utility functions, etc.
+
+Every package sourcing `${stdenv}/setup`, by default, runs the following
+builtin setup-hooks (and the hooks of the bintools and cc wrappers, see:
+<https://nixos.org/manual/nixpkgs/stable/#bintools-wrapper>,
+<https://nixos.org/manual/nixpkgs/stable/#cc-wrapper>):
+
+- **move-docs.sh**: moves documentation to the `./share` subfolder.
+- **compress-man-pages.sh**: using gzip.
+- **strip.sh**: removes debug symbols, etc.
+- **patch-shebangs.sh**: to point to the nix-store. Disable with
+  `dontPatchShebangs=true;`.
+- **audit-tmpdir.sh**: makes sure the build outputs do not refer to the
+  build folder.
+- **multiple-outputs.sh**: adds configure flags to install outputs to
+  one of the locations listed in `outputs`. Disable with
+  `setOutputFlags=false;`.
+- **move-sbin.sh**: moves binaries from `./sbin` to `./bin` and
+  creates a link to it in `./sbin`.
+- **move-lib64**: moves library files from `./lib64` to `./lib` and
+  creates a link to it in `./lib64`.
+- **move-systemd-user-units.sh**: moves systemd-user-units from `./lib`
+  to `./share` and creates a link to it in `./lib`.
+- **set-source-date-epoch-to-latest.sh**: sets SOURCE_DATE_EPOCH to most
+  recently modified file.
+
+Check out this list of packages using setup-hooks:
+<https://nixos.org/manual/nixpkgs/stable/#chap-hooks>
+
 ### Overlays
 
 A **fixed point, or "fixpoint"**, is a value, which is mapped to itself
