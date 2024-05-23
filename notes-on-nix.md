@@ -1970,7 +1970,7 @@ As mentioned, NixOS does not comply with the FHS (Filesystem Hierarchy
 Standard). To still be able to run software which depends on FHS being
 followed, there is `nixpkgs.buildFHSEnv`, which uses linux namespaces to
 create an isolated, unprivileged root filesystem using the host's
-nix-store, which is destroyed again after all child processes exit. Note
+nix-store, that is destroyed again after all child processes exit. Note
 that this provides no security relevant separation from the host!
 
 See: <https://nixos.org/manual/nixpkgs/stable/#sec-fhs-environments>
