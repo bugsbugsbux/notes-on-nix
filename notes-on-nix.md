@@ -426,7 +426,7 @@ The nix package manager can be installed
    available to all users. Unprivileged users may install packages for
    themselves, but not pre-built binaries.
 
-### Installing from an .iso
+### Installing NixOS from an .iso
 
 Like most other systems, nix may be installed from an iso image:
 
@@ -494,12 +494,12 @@ Like most other systems, nix may be installed from an iso image:
   failed, fix the config and rerun `nixos-install`. It will prompt for
   a root password.
 
-### Installing over the internet
+### Installing NixOS over the internet
 
 NixOS can be **booted over the internet** with PXE or iPXE. See:
 <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
 
-### Installing from a running system
+### Installing NixOS on a running system
 
 - **Temporarily convert some running linux distro into NixOS**: Create
   the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
