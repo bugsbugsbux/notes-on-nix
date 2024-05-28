@@ -433,18 +433,55 @@ Like most other systems, nix may be installed from an iso image:
 - There are ones with a **graphical installer**: one just has to
   follow its instructions.
 
-- The "minimal" iso file is for **manual installations**:
-  Manually installing NixOS starts like any other manual install:
-  setup the keyboard (with "loadkeys") and networking (with
-  "wpa_supplicant"); then create partitions (with "cfdisk") with
-  appropriate labels (which depends on BIOS or UEFI setup and
-  preference) and format them accordingly (with "mkfs.\*" and
-  "mkswap"). Mount root partition on `/mnt`, mount boot partition on
-  `/mnt/boot`, (activate swap partition,) and generate a config file
-  in `/mnt/etc/nixos/` (`nixos-generate-config --root /mnt`).
-  Configure it (with "nano"); important points:
+- The "minimal" iso file is for **manual installations**: Manually
+  installing NixOS starts like any other manual install: setup the
+  keyboard (with `loadkeys`) and networking (with `wpa_cli` from
+  wpa_supplicant); then create partitions (available tools: `parted`,
+  `fdisk`, `gdisk`, `cfdisk`, `cgdisk`) with appropriate labels (which
+  depends on BIOS or UEFI setup and preference) and format them
+  accordingly (with "mkfs.\*" and "mkswap"). Mount root partition on
+  `/mnt`, mount boot partition on `/mnt/boot`, (activate swap
+  partition,) and generate a config file in `/mnt/etc/nixos/`
+  (`nixos-generate-config --root /mnt`).
+  ```bash {.summary}
+  sudo su
 
-  * Mounting should have been configured by "nixos-generate-config"
+  loadkeys de-latin1
+
+  # uefi is possible if the file exists; number is for x64 or IA32 UEFI
+  cat /sys/firmware/efi/fw_platform_size
+
+  # setup wifi if necessary
+  systemctl start wpa_supplicant
+  wpa_cli # starts a repl
+
+  # partitioning; create a GPT table
+  lsblk # show partitions; path is name appended to /dev/
+  cfdisk /dev/sdX # tui partitioning tool
+
+  # create appropriate filesystems
+  lsblk # show new paritions
+  mkfs.fat -F 32 -n boot /dev/sdXX
+  mkfs.ext2 -L nixos /dev/sdXX
+  # swapon /dev/sdaXX
+
+  # mount partitions
+  mount /dev/sdXX /mnt
+  mkdir -p /mnt/boot
+  mount /dev/sdXX /mnt/boot
+  ```
+
+  Configure the generated config (using `nano` or `vim`). Important
+  points:
+  ```bash {.summary}
+  mkdir -p /mnt/etc/nixos
+  cd /mnt/etc/nixos
+  nixos-generate-config --root /mnt
+  nano configuration.nix
+  ```
+
+  * Keep the `system.stateVersion` value unchanged.
+  * Mounting should have been configured by `nixos-generate-config`
     and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
     sure it is included by `/mnt/etc/nixos/configuration.nix`:
     ```nix
@@ -456,39 +493,73 @@ Like most other systems, nix may be installed from an iso image:
 
   * Configure boot loader:
     ```nix
-    # BIOS -> grub
-    boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
-    boot.loader.grub.useOSProber = true;
+    # EITHER: BIOS -> grub
+        boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
+        boot.loader.grub.useOSProber = true;
 
     # OR: UEFI
+        # defaults to /boot
         boot.loader.efi.efiSysMountPoint = "/YOUR_BOOT_PARTITION";
 
-        # systemd-boot:
-        boot.loader.systemd-boot.enable = true;
-        # more boot.loader.systemd-boot.* options are listed here:
-        # <https://nixos.org/manual/nixos/stable/options>
+        # EITHER: systemd-boot
+            boot.loader.systemd-boot.enable = true;
 
         # OR: grub (cannot be used to dual-boot *linux* distros)
-        boot.loader.grub.device = "nodev"; # this is a special value
-        boot.loader.grub.efiSupport = true;
-        boot.loader.grub.useOSProber = true;
+            boot.loader.grub.device = "nodev"; # this is a special value
+            boot.loader.grub.efiSupport = true;
+            boot.loader.grub.useOSProber = true;
     ```
 
   * Configure network:
     ```nix
-    networking.hostName = "YOUR_MACHINE";
-    networking.networkmanager.enable = true;
-    user.users.YOURUSER.extraGroups = [ "networkmanager" ];
-    networking.firewall.enable = true;
-    # networking.firewall.allowedTCPPorts = [];
-    # networking.firewall.allowedUDPPorts = [];
-    networking.wireless.enable = true;
-    # the following runs the provided shell script after network setup
-    networking.localCommands = ''
-        get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
-        systemctl restart wpa_supplicant.service
-    '';
+    networking = {
+        hostName = "YOUR_MACHINE";
+        networkmanager.enable = true;
+        # Note: when defining users, make sure to add "networkmanager"
+        # to their extraGroups attribute
+
+        firewall.enable = true;
+        # firewall.allowedTCPPorts = [];
+        # firewall.allowedUDPPorts = [];
+
+        wireless.enable = true;
+        # runs the provided shell script after network setup:
+        #localCommands = ''
+        #    get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
+        #    systemctl restart wpa_supplicant.service
+        #'';
+    };
+
     ```
+
+  * Set the console keymap correctly, otherwise the password is hard (or
+    even impossible) to enter correctly!
+    ```nix
+    console.keyMap = "de-latin1";
+    ```
+
+  * Install some essential packages, like `git` and an editor:
+    ```nix
+    environment.systemPackages = with pkgs; [
+      git
+      neovim
+    ];
+    ```
+
+  * A user may be added like so:
+    ```nix
+    users.users.YOURUSER = {    # yes, twice the plural
+        initialPassword = "change_me_with_passwd"; # world readable!
+        isNormalUser = true;
+        extraGroups = [
+            "wheel"             # allows using sudo
+            "networkmanager"    # allows configuring networkmanager
+        ];
+    };
+    ```
+    To disable root, set `users.users.root.hashedPassword="!";` and make
+    very sure that a user has `sudo` access and an `initialPassword`,
+    and that the `console.keyMap` is set correctly.
 
   Now, install with `nixos-install`, then `reboot` if it worked. If it
   failed, fix the config and rerun `nixos-install`. It will prompt for
