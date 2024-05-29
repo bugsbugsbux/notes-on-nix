@@ -474,9 +474,8 @@ Like most other systems, nix may be installed from an iso image:
   Configure the generated config (using `nano` or `vim`). Important
   points:
   ```bash {.summary}
-  mkdir -p /mnt/etc/nixos
-  cd /mnt/etc/nixos
   nixos-generate-config --root /mnt
+  cd /mnt/etc/nixos
   nano configuration.nix
   ```
 
