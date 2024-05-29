@@ -466,9 +466,9 @@ Like most other systems, nix may be installed from an iso image:
   # swapon /dev/sdaXX
 
   # mount partitions
-  mount /dev/sdXX /mnt
+  mount /dev/disk/by-label/nixos /mnt
   mkdir -p /mnt/boot
-  mount /dev/sdXX /mnt/boot
+  mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
   ```
 
   Configure the generated config (using `nano` or `vim`). Important
