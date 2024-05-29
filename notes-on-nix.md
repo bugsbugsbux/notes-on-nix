@@ -521,7 +521,6 @@ Like most other systems, nix may be installed from an iso image:
         # firewall.allowedTCPPorts = [];
         # firewall.allowedUDPPorts = [];
 
-        wireless.enable = true;
         # runs the provided shell script after network setup:
         #localCommands = ''
         #    get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
