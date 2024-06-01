@@ -1986,7 +1986,7 @@ changed, and can use cache servers, instead of the actual target site.
   control system, they can do different things, like get submodules,
   etc.
 - get from site: There are many fetchers for specific hosting sites,
-  like `nixpkgs.fetchFromGithub`, which may be more performant than the
+  like `nixpkgs.fetchFromGitHub`, which may be more performant than the
   fetcher for the relevant type of repo due to services of these sites,
   allowing to avoid downloading the whole repo.
 - get non-distributable files: Some files cannot or must not be
