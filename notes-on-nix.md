@@ -993,7 +993,7 @@ installs it (to the nix-store); if it does not, it builds locally.
 
 *Note: Indeed, nix packages are installed to the nix-store and not the
 usual locations (like `/bin`). This is usually fine, as in
-nix-expressions, it is easy to refer to nix store locations (see next
+nix-expressions, it is easy to refer to nix-store locations (see next
 example), and when using the standard build environment (see below) PATH
 is set up fittingly and shebangs are patched appropriately. However, for
 the user it can be hard to reliably refer to specific files, since their
@@ -1004,8 +1004,9 @@ __expose files__ which are not by default, specify their path in this
 NixOS option like so: `environment.pathsToLink =
 ["/share/foot/themes"];`; this would make the themes for the foot
 terminal shipped with the package `foot.themes` available under
-`/run/current-system/sw/share/foot/themes` regardless of the actual nix
-store location.*
+`/run/current-system/sw/share/foot/themes` regardless of the actual
+nix-store location.* See also: Filesystem Hierarchy Standard compatible
+"sandboxes"
 
 However, while packages and derivations are essentially equivalent,
 there are some semantic differences in how they are used: To describe
