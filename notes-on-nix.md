@@ -991,6 +991,22 @@ build instructions (derivations) and checks whether it can find a cache
 of their result: if it does, it simply downloads the cached binary and
 installs it (to the nix-store); if it does not, it builds locally.
 
+*Note: Indeed, nix packages are installed to the nix-store and not the
+usual locations (like `/bin`). This is usually fine, as in
+nix-expressions, it is easy to refer to nix store locations (see next
+example), and when using the standard build environment (see below) PATH
+is set up fittingly and shebangs are patched appropriately. However, for
+the user it can be hard to reliably refer to specific files, since their
+location might change with every system update. This is why many files,
+mainly those under `./bin`, from the build results of the currently
+active global profile are linked into `/run/current-system/sw`. To
+__expose files__ which are not by default, specify their path in this
+NixOS option like so: `environment.pathsToLink =
+["/share/foot/themes"];`; this would make the themes for the foot
+terminal shipped with the package `foot.themes` available under
+`/run/current-system/sw/share/foot/themes` regardless of the actual nix
+store location.*
+
 However, while packages and derivations are essentially equivalent,
 there are some semantic differences in how they are used: To describe
 how something is built, one writes a derivation with the `derivation`
