@@ -102,11 +102,11 @@ own config file to change other parts of the config).
 The default source for nix code is called **nixpkgs** and hosted on
 github. It is organized into **channels** (implemented as branches) of
 which there are:
-- "nixpkgs-unstable" and "nixos-unstable" (for nix and nixos users
+- "nixpkgs-unstable" and "nixos-unstable" (for nix and NixOS users
   respectively) are updated continuously but only use basic tests;
   failing tests can block the entire channel from time to time.
 - The stable channels are called "nixos-YY.MM", use more rigorous
-  testing, can be used by both, nix and nixos users, and their packages
+  testing, can be used by both, nix and NixOS users, and their packages
   only receive bugfix- and security-updates after the initial release.
 - The channels called "\*-small" simply have less binary caches and thus
   receive updates faster.
