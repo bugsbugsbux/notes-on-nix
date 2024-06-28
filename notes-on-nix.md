@@ -660,6 +660,23 @@ nix-env --delete-generations 1 2 3 # or any other generations
 nix-env --delete-generations "old" # ALL except current generation
 ```
 
+#### Upgrading channels
+
+As described above, nixpkgs, the default package source, is organized
+into release branches, called channels. **Setting channels must be done
+imperatively; there is no config option to do so declaratively!**
+
+- `nix-channel --list` lists the current user's currently active
+  channels.
+- `nix-channel --remove nixos` removes the current user's channel named
+  "nixos".
+- `nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+  nixpkgs` adds or overrides the current user's channel named "nixpkgs".
+  Thus to upgrade from NixOS 23.11 to 24.05 one would override the
+  global channel "nixos" with `sudo nix-channel --add
+  https://nixos.org/channels/nixos-24.05 nixos` and then rebuild the
+  system with `sudo nixos-rebuild switch --upgrade`.
+
 ### Temporary shell environments
 
 Nix also allows to install packages into a temporary environment with
