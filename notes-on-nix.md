@@ -463,7 +463,7 @@ Like most other systems, nix may be installed from an iso image:
   # create appropriate filesystems
   lsblk # show new paritions
   mkfs.fat -F 32 -n boot /dev/sdXX
-  mkfs.ext2 -L nixos /dev/sdXX
+  mkfs.ext4 -L nixos /dev/sdXX
   # swapon /dev/sdaXX
 
   # mount partitions
