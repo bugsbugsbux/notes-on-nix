@@ -456,8 +456,9 @@ Like most other systems, nix may be installed from an iso image:
   systemctl start wpa_supplicant
   wpa_cli # starts a repl
 
-  # partitioning; create a GPT table
+  # partitioning; create a GPT table (not MBR)
   lsblk # show partitions; path is name appended to /dev/
+  # wipefs -a /dev/sdX # erase disk if necessary to create new GPT table
   cfdisk /dev/sdX # tui partitioning tool
 
   # create appropriate filesystems
