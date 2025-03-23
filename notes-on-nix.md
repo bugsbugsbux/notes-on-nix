@@ -28,7 +28,7 @@ without ever explaining them!
 
 0. You might want to start by reading these notes. It's an attempt to
    distill the information from all the different documentation sources
-   into one coherent document.
+   into one coherent document and explain the missing pieces.
 1. Read the official "Nix Pills" article/blog series at
    <https://nixos.org/guides/nix-pills/>. It explains the nix package
    manager and the ideas it is based upon. Check out the `./pills-demos`
