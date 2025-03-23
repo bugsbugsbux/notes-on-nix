@@ -149,7 +149,8 @@ container's root can modify the host.
 
 `builtins.langVersion == 6`
 
-*To experiment with the nix language use `nix repl`!*
+*To experiment with the nix language use `nix repl` which starts an
+interactive session!*
 
 `#` **comments** the rest of the line, while `/*` starts a comment which
 ends with the next `*/`.
