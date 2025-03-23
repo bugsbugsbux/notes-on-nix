@@ -14,6 +14,16 @@ Nix is:
 
 ## FAQ
 
+### What do I need to know beforehand?
+
+To work with nix, you need a basic understanding how software is usually
+built and how bash works; thus this knowledge is assumed here. However,
+apart from this, the document (with the exception of the FAQ section)
+tries to not refer to concepts it did not at least give an introductory
+overview of before. In this attempt it differs from the official docs,
+which even (at least in 2024) refer to mathematical topics (fixpoints)
+without ever explaining them!
+
 ### How to read the official documentation?
 
 0. You might want to start by reading these notes. It's an attempt to
