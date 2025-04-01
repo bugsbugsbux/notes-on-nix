@@ -1041,12 +1041,12 @@ location might change with every system update. This is why many files,
 mainly those under `./bin`, from the build results of the currently
 active global profile are linked into `/run/current-system/sw`. To
 __expose files__ which are not by default, specify their path in this
-NixOS option like so: `environment.pathsToLink =
-["/share/foot/themes"];`; this would make the themes for the foot
-terminal shipped with the package `foot.themes` available under
-`/run/current-system/sw/share/foot/themes` regardless of the actual
-nix-store location.* See also: Filesystem Hierarchy Standard compatible
-"sandboxes"
+NixOS option like so:
+`environment.pathsToLink = ["/share/foot/themes"];`; this would make the
+themes for the foot terminal shipped with the package `foot.themes`
+available under `/run/current-system/sw/share/foot/themes` regardless of
+the actual nix-store location.* See also: Filesystem Hierarchy Standard
+compatible "sandboxes"
 
 However, while packages and derivations are essentially equivalent,
 there are some semantic differences in how they are used: To describe
