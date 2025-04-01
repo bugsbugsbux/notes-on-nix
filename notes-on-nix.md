@@ -61,8 +61,8 @@ part of the code evaluates (nix is lazy!), otherwise nothing happens...
 
 The *repl* provides the command `:print` to *recursively* evaluate and
 output the value of an expression. As all repl commands it cannot be
-used *within* an expression: It would throw a `syntax error,
-unexpected ':'`.
+used *within* an expression: It would throw a
+`syntax error, unexpected ':'`.
 
 # Overview
 
