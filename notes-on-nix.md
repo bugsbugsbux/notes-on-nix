@@ -43,6 +43,16 @@ without ever explaining them!
 4. Read about flakes at:
    <https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html>
 
+### What are some drawbacks of nix/NixOS?
+
+- It does not comply with the FHS (Filesystem Hierarchy Standard). While
+  this usually is not a problem, should issues arise you have to have a
+  very good understanding of nix to resolve them.
+- It does not automatically delete old stuff. This allows to easily
+  rollback, however, if you are _very_ space constrained it becomes a
+  burden, since I find the options to automatically clean up inadequate.
+- Updating is slower than on most other distros.
+
 ### How to print a value?
 
 A value can be printed with the function `builtins.trace`, which takes
