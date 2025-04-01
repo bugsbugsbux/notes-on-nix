@@ -1987,7 +1987,7 @@ The list of runtime-dependencies is determined by checking which
 dependencies are referenced in the build output. (Sometimes this
 includes unnecessary dependencies, which were put into the binary's
 runtime path to ensure their correct versions are found, should they be
-used. These can be removed with `pathelf` and `strip`.)
+used. These can be removed with `patchelf` and `strip`.)
 ```sh
 # creates the store-derivation and returns its path
 nix-instantiate myderivation.nix
