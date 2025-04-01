@@ -2090,13 +2090,38 @@ tree.
 There are some more... See:
 <https://github.com/NixOS/nixpkgs/blob/master/doc/build-helpers/trivial-build-helpers.chapter.md>
 
-#### Filesystem Hierarchy Standard compatible "sandboxes"
+### FHS (Filesystem Hierarchy Standard)
 
 As mentioned, NixOS does not comply with the FHS (Filesystem Hierarchy
-Standard). To still be able to run software which depends on FHS being
-followed, there is `nixpkgs.buildFHSEnv`, which uses linux namespaces to
-create an isolated, unprivileged root filesystem using the host's
-nix-store, that is destroyed again after all child processes exit. Note
-that this provides no security relevant separation from the host!
+Standard). This is usually not a problem when packaging software with
+nix: for example shebangs are patched by default when using stdenv and
+often a simple fixupPhase is enough.
+
+#### FHS compatible "sandboxes"
+
+To package software which expects an FHS compliant environment while
+running there are `nixpkgs.buildFHSEnv` and `nixpkgs.buildFHSUserEnv`,
+which use linux namespaces to create an isolated, unprivileged, FHS
+compliant root filesystem using the host's nix-store, that is destroyed
+again after all child processes exit. Note that this provides no
+security relevant separation from the host!
 
 See: <https://nixos.org/manual/nixpkgs/stable/#sec-fhs-environments>
+
+#### Running unpatched binaries (no packaging required): `nix-ld`
+
+Unpatched linux binaries which are dynamically linked don't work on
+NixOS since they cannot find the dynamic linker. `nix-ld` allows these
+binaries to find it and necessary libraries by putting a shim in the
+usual places. Where exactly the shim redirects to can be configured
+using various environment variables such as NIX_LD and
+NIX_LD_LIBRARY_PATH. Necessary libraries can be figured out using `ldd`
+on the binary.
+
+```nix
+programs.nix-ld = {
+    enable = true;
+    # make some libraries globally available:
+    #libraries = with pkgs; [];
+};
+```
