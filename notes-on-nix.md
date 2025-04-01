@@ -5,16 +5,16 @@ incorrect. I did not try everything described here yet.*
 
 ---
 
-# Notes on Nix(OS)
+**Notes on Nix(OS)**
 
 Nix is:
 1. a programming language
 2. a package manager using the nix programming language
 3. a linux distribution using the nix package manager
 
-## FAQ
+# FAQ
 
-### What do I need to know beforehand?
+## What do I need to know beforehand?
 
 To work with nix, you need a basic understanding how software is usually
 built and how bash works; thus this knowledge is assumed here. However,
@@ -24,7 +24,7 @@ overview of before. In this attempt it differs from the official docs,
 which even (at least in 2024) refer to mathematical topics (fixpoints)
 without ever explaining them!
 
-### How to read the official documentation?
+## How to read the official documentation?
 
 0. You might want to start by reading these notes. It's an attempt to
    distill the information from all the different documentation sources
@@ -43,7 +43,7 @@ without ever explaining them!
 4. Read about flakes at:
    <https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html>
 
-### What are some drawbacks of nix/NixOS?
+## What are some drawbacks of nix/NixOS?
 
 - It does not comply with the FHS (Filesystem Hierarchy Standard). While
   this usually is not a problem, should issues arise you have to have a
@@ -53,7 +53,7 @@ without ever explaining them!
   burden, since I find the options to automatically clean up inadequate.
 - Updating is slower than on most other distros.
 
-### How to print a value?
+## How to print a value?
 
 A value can be printed with the function `builtins.trace`, which takes
 two arguments, one to print and a second one to return. Make sure this
@@ -64,7 +64,7 @@ output the value of an expression. As all repl commands it cannot be
 used *within* an expression: It would throw a `syntax error,
 unexpected ':'`.
 
-## Overview
+# Overview
 
 The idea behind nix is to *declaratively* manage the state of the
 operating system: not only which packages are installed, but also which
@@ -155,7 +155,7 @@ instances: **NixOS containers**. They share the host's nix store, which
 makes creating such containers efficient, but has the downside that the
 container's root can modify the host.
 
-## Nix language
+# Nix language
 
 `builtins.langVersion == 6`
 
@@ -434,9 +434,9 @@ other libraries, however, actually it also exposes functions *directly*!
 See the `inherit` statements at:
 <https://github.com/NixOS/nixpkgs/blob/master/lib/default.nix>
 
-## Installation
+# Installation
 
-### Only installing the nix package manager
+## Only installing the nix package manager
 
 The nix package manager can be installed
 
@@ -448,7 +448,7 @@ The nix package manager can be installed
    available to all users. Unprivileged users may install packages for
    themselves, but not pre-built binaries.
 
-### Installing NixOS from an .iso
+## Installing NixOS from an .iso
 
 Like most other systems, nix may be installed from an iso image:
 
@@ -586,12 +586,12 @@ Like most other systems, nix may be installed from an iso image:
   failed, fix the config and rerun `nixos-install`. It will prompt for
   a root password.
 
-### Installing NixOS over the internet
+## Installing NixOS over the internet
 
 NixOS can be **booted over the internet** with PXE or iPXE. See:
 <https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
 
-### Installing NixOS on a running system
+## Installing NixOS on a running system
 
 - **Temporarily convert some running linux distro into NixOS**: Create
   the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
@@ -605,9 +605,9 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
 
-## Imperative configuration
+# Imperative configuration
 
-### Profile management
+## Profile management
 
 *See also: unfree packages.*
 
@@ -683,7 +683,7 @@ nix-env --delete-generations 1 2 3 # or any other generations
 nix-env --delete-generations "old" # ALL except current generation
 ```
 
-#### Upgrading channels
+### Upgrading channels
 
 As described above, nixpkgs, the default package source, is organized
 into release branches, called channels. **Setting channels must be done
@@ -700,7 +700,7 @@ imperatively; there is no config option to do so declaratively!**
   https://nixos.org/channels/nixos-24.05 nixos` and then rebuild the
   system with `sudo nixos-rebuild switch --upgrade`.
 
-### Temporary shell environments
+## Temporary shell environments
 
 Nix also allows to install packages into a temporary environment with
 `nix-shell`:
@@ -720,7 +720,7 @@ available anymore, however, they are still in the store until the next
 time garbage-collection runs, so running the same `nix-shell` command a
 second time should be much faster, than the first time!
 
-#### Nix scripts
+### Nix scripts
 
 Instead of shell scripts where the user needs to install the needed
 programs in the required versions himself, there are nix scripts:
@@ -742,9 +742,9 @@ nixpkgs.
 echo hello world | cowsay
 ```
 
-## Declarative configuration
+# Declarative configuration
 
-### Temporary shell environments
+## Temporary shell environments
 
 Creating temporary shell environment as described in above is tedious,
 instead one may want to configure such environments declaratively, on a
@@ -771,7 +771,7 @@ in pkgs.mkShellNoCC {   # creates a shell without c compiler toolchain
 }
 ```
 
-### Profile management
+## Profile management
 
 The main configuration file (itself a module, see below) is
 `/etc/nixos/configuration.nix` and usually (for example when generating
@@ -811,7 +811,7 @@ unfree packages cannot be enabled from the NixOS config; instead they
 need to set attribute `allowUnfree = true;` in their
 `~/.config/nixpkgs/config.nix`.
 
-### Modules
+## Modules
 
 The module system is not a feature of the nix language but NixOS and
 allows to split the configuration into multiple files called modules,
@@ -920,7 +920,7 @@ Moreover, the module system injects some **utility functions** into the
 namespace of each module; see: options,
 <https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
 
-#### Options
+### Options
 
 NixOS exposes **options** via the module system for the user to define
 the intended system state. These options are "declared" (meaning
@@ -1018,7 +1018,7 @@ loses in priority is ignored, thus its order value is irrelevant.
 }
 ```
 
-## Packages
+# Packages
 
 The above definitions differentiated between "package" and "derivation",
 not because the documentation does so (in fact, it uses the terms almost
@@ -1146,7 +1146,7 @@ describing it), it can be added in two ways:
    }
    ```
 
-### Derivations
+## Derivations
 
 Derivations are created ("instantiated") with the builtin function
 `derivation` or a wrapper around it. It creates the "\*.drv" file in the
@@ -1239,7 +1239,7 @@ useful to understand what arguments it works with:
 - `requiredSystemFeatures`: List of strings such as "kvm" which name
   features which have to be available for this to build.
 
-#### Building
+### Building
 
 Building, also called realising, is the execution of the standardized
 form (a "\*.drv" file in the store) of a derivation, the recipe for a
@@ -1293,7 +1293,7 @@ won't remove it. A new build in the same directory overwrites an
 existing `./result`! The links for multiple outputs are named
 `./result-${n}` (except the first which is still named `./result`).
 
-### Standard (Build) Environment
+## Standard (Build) Environment
 
 *Due to its customizability, there are many wrappers of stdenv
 preconfiguring it for specific languages or frameworks!*
@@ -1404,7 +1404,7 @@ phase names):
 - `preDistPhases`: Phases to run just before the `distPhase`.
 - `postPhases`: Phases to run after all the default phases.
 
-#### Setup-Hooks
+### Setup-Hooks
 
 *Setup-hooks are a powerful way to inject code into other packages'
 build processes and should be used with care if not entirely avoided!
@@ -1449,7 +1449,7 @@ builtin setup-hooks (and the hooks of the bintools and cc wrappers, see:
 Check out this list of packages using setup-hooks:
 <https://nixos.org/manual/nixpkgs/stable/#chap-hooks>
 
-### Overlays
+## Overlays
 
 A **fixed point, or "fixpoint"**, is a value, which is mapped to itself
 by a function. Therefore, it is defined in terms of a specific function,
@@ -1679,7 +1679,7 @@ final: prev: {
 }
 ```
 
-### Modifying packages
+## Modifying packages
 
 This section introduces convenient ways to create variants of packages
 without having to literally copy their code just to make some small
@@ -1747,7 +1747,7 @@ example, be called multiple times and only produces a derivation from
 the final spec, while every invocation of `overrideDerivation` produces
 a new derivation.)
 
-## Flakes
+# Flakes
 
 To be able to use flakes:
 
@@ -1883,9 +1883,9 @@ fields:
   };
   ```
 
-## Appendix
+# Appendix
 
-### Operators
+## Operators
 
 <https://nix.dev/manual/nix/2.18/language/operators> lists the operators
 in order of precedence; generally the mathematical precedence is
@@ -1981,7 +1981,7 @@ in isFalse -> elseThis
 false or true           # error
 ```
 
-### Dependencies
+## Dependencies
 
 The list of runtime-dependencies is determined by checking which
 dependencies are referenced in the build output. (Sometimes this
@@ -2006,7 +2006,7 @@ nix-store --query --references /nix/store/path/to/build-output
 patchelf --shrink-rpath '{}' mybinary ; strip '{}' mybinary
 ```
 
-### Build helpers
+## Build helpers
 
 *The above described `stdenv.mkDerivation` is the most used build helper
 and thus received its own chapter. This section describes other build
@@ -2014,7 +2014,7 @@ helpers.*
 
 Build helpers are functions *producing derivations*.
 
-#### Fetchers
+### Fetchers
 
 It is important to differentiate between the builtin fetchers and the
 ones provided by nixpkgs! The builtins ones (such as `with builtins;
@@ -2052,7 +2052,7 @@ changed, and can use cache servers, instead of the actual target site.
   nix-store.
 - etc
 
-#### Writers (Trivial builders)
+### Writers (Trivial builders)
 
 These help with running shell commands and writing files at build time.
 
@@ -2090,14 +2090,14 @@ tree.
 There are some more... See:
 <https://github.com/NixOS/nixpkgs/blob/master/doc/build-helpers/trivial-build-helpers.chapter.md>
 
-### FHS (Filesystem Hierarchy Standard)
+## FHS (Filesystem Hierarchy Standard)
 
 As mentioned, NixOS does not comply with the FHS (Filesystem Hierarchy
 Standard). This is usually not a problem when packaging software with
 nix: for example shebangs are patched by default when using stdenv and
 often a simple fixupPhase is enough.
 
-#### FHS compatible "sandboxes"
+### FHS compatible "sandboxes"
 
 To package software which expects an FHS compliant environment while
 running there are `nixpkgs.buildFHSEnv` and `nixpkgs.buildFHSUserEnv`,
@@ -2108,7 +2108,7 @@ security relevant separation from the host!
 
 See: <https://nixos.org/manual/nixpkgs/stable/#sec-fhs-environments>
 
-#### Running unpatched binaries (no packaging required): `nix-ld`
+### Running unpatched binaries (no packaging required): `nix-ld`
 
 Unpatched linux binaries which are dynamically linked don't work on
 NixOS since they cannot find the dynamic linker. `nix-ld` allows these
