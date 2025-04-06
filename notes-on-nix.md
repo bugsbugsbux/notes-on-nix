@@ -91,6 +91,12 @@ management: Installing a package retrieves build instructions, but only
 actually builds it if it cannot find a cached version (either in the
 local- or a remote-**cache**).
 
+*Note: Given the name of an executable (but not its path), your shell
+looks in every directory named in the PATH environment variable whether
+it contains an executable with the given name and executes the first one
+it finds. This allows to conveniently run programs without having to
+specify their full path.*
+
 *TLDR for the next 2 paragraphs: a profile is a link to a generation,
 which is a link to an environment, which is a folder with the links to
 executables, which are stored in the nix-store location and made
