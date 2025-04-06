@@ -52,6 +52,19 @@ without ever explaining them!
   rollback, however, if you are _very_ space constrained it becomes a
   burden, since I find the options to automatically clean up inadequate.
 - Updating is slower than on most other distros.
+- Build scripts are written in bash, which has very unintuitive syntax;
+  casual bash knowledge is not enough to, for example, understand
+  parameter expansions.
+- The nix programming language is quite unconventional, so using it
+  without studying it first leads to frustration; however it is not hard
+  to learn, especially with prior experience with functional languages!
+- The nix package manager makes heavy use of the mathematical
+  concept of fixpoints, which the documentation does not explain (as of
+  2024; fear not: this document explains them thoroughly!). Not
+  understanding fixpoints makes it very hard to read nix code and thus
+  the nix language gets a bad reputation. However, in reality its lazy
+  evaluation makes the nix language exceptionally suitable for
+  implementing fixpoints!
 
 ## How to print a value?
 
