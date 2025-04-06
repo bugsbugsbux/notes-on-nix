@@ -54,7 +54,8 @@ without ever explaining them!
 - Updating is slower than on most other distros.
 - Build scripts are written in bash, which has very unintuitive syntax;
   casual bash knowledge is not enough to, for example, understand
-  parameter expansions.
+  parameter expansions. (For this document, advanced bash knowledge
+  is not needed.)
 - The nix programming language is quite unconventional, so using it
   without studying it first leads to frustration; however it is not hard
   to learn, especially with prior experience with functional languages!
