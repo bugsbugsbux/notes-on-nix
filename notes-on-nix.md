@@ -149,8 +149,11 @@ which there are:
 - The stable channels are called "nixos-YY.MM", use more rigorous
   testing, can be used by both, nix and NixOS users, and their packages
   only receive bugfix- and security-updates after the initial release.
-- The channels called "\*-small" simply have less binary caches and thus
-  receive updates faster.
+  There are usually two stable releases per year.
+- The channels called "\*-small" simply have less binary caches. This
+  means these channels receive updates faster, however pulling updates
+  from them may take longer since more packages have to be built
+  locally!
 
 Since channels change over time there is no guarantee that building the
 same configuration always produces the same result. Moreover, there is
