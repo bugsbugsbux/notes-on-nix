@@ -548,8 +548,6 @@ let
 in ((state "inc") "inc") "dec"
 ```
 
-See also: operators
-
 As the examples already indicated, most builtins are not available in
 the global namespace and have to be accessed via the set `builtins`.
 Documentation at: <https://nix.dev/manual/nix/2.18/language/builtins>
