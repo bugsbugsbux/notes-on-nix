@@ -249,10 +249,10 @@ string:
   listed in environment variable "NIX_PATH". This should be avoided as
   it is impure (not reproducible).
 - **"list"**: `[1 "two" 3 4]`
-- (attribute-)"set": What other languages call "(hash-)map",
-  "dictionary" or "table". See below.
-- "lambda" (function): Indeed, functions may be used as values.
-  See below.
+- (attribute-)"set": `{ foo = "bar"; }` What other languages call
+  "(hash-)map", "dictionary" or "table". See below.
+- "lambda" (function): `arg : arg + 1` Indeed, functions may be used as
+  values. See below.
 
 <https://nix.dev/manual/nix/2.18/language/operators> lists the operators
 in order of **precedence**; generally the mathematical precedence is
