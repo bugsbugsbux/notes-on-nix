@@ -254,6 +254,99 @@ string:
 - "lambda" (function): Indeed, functions may be used as values.
   See below.
 
+<https://nix.dev/manual/nix/2.18/language/operators> lists the operators
+in order of **precedence**; generally the mathematical precedence is
+followed. Note: While function application is listed with one of the
+strongest precedences, this does not have effect in list literals,
+because they generally disable evaluation of unparenthesized expressions
+(except indexing):
+```nix
+[ builtins.typeOf "a" + "Z" ]   # error: unexpected +
+[ builtins.typeOf "aZ" ]        # [ «primop typeOf» "aZ" ]
+[(builtins.typeOf "a" + "Z")]   # [ "stringZ" ]
+```
+
+**Operators** and their quirks:
+```nix
+1 + 2               # mathematical addition
+"hi" + "!"          # concatenate strings
+[1 2] ++ [3 4]      # concatenate lists
+# literally append the string to the path (never ends in /); return path
+~/dir + "file.nix"  # /home/user/dirfile.nix
+~/dir + "/file.nix" # /home/user/dir/file.nix
+# concatenate paths; return path
+~/dir + ./file.nix  # /home/user/dir/home/user/notes-on-nix/file.nix
+~/dir + /file.nix   # /home/user/dir/file.nix
+# literally prepend to resolved path; path must exist; return string
+"~/dir" + /file.nix # error: path '/file.nix' does not exist
+"~/dir"+ ./file.nix # "~/dir/nix/store/mvnld3aq3siykz1r7r7z7rcynkn5biwl-file.nix"
+
+- 1                 # negate number
+1 - 2               # subtract
+
+2 * 3               # multiply
+
+1 / 2               # 0;    divide two integers -> returns integer!
+1 / 2.0             # 0.5;  divide with floating point result
+1.0 / 2             # 0.5;  divide with floating point result
+
+# mathematical precedence
+2 + 3 * 4           # 14
+    3 * 4 + 2       # 14
+(2+ 3)* 4           # 20
+
+# Operators for attribute sets:
+s = {attr.path = 1;} # equivalent to: s={attr={path=1;};}
+# Indexing -> returns the (fallback) value or throws error
+s.attr.path         # 1
+s . attr . path     # 1; space around operator allowed
+s."attr" . path     # 1; attribute path *elements* may be quoted
+s."attr.path"       # error: missing attribute "attr.path"
+s."attr.path" or 2  # 2; fallback value
+# Membership testing -> returns boolean
+s ? attr            # true
+s ? path            # false
+s ? attr.path       # true
+s ? attr."path"     # true; attribute path *elements* may be quoted
+s ? "attr.path"     # false
+# Update with values from right set; does not change original!
+:print s
+:print s // { new = 2; }
+:print s // { new = 2; attr.path = 3; }
+:print s // {attr.new = 3;} # no recursive merging -> removes attr.path
+:print s    # unchanged
+
+# Numeric comparisons:
+1 < 2               # less than
+2 > 1               # greater than
+1 == 1.0            # equality; int equals its float version
+1 != 2              # inequality
+1 <= 1              # less or equal
+1 >= 1              # greater or equal
+# Strings, paths and lists can be compared to same type
+"/" < "0"           # seems it sorts according to ascii value
+"A" < "a"
+"a" < "b"
+"a" < "aa"
+"aa"< "b"
+./a < ./b
+"a" > ./A           # error: cannot compare path with string
+[ "a" "b" ] < [ "a" "c" ]
+[ "a" ] < [ "b" "a" ]
+
+# Logic operators (only work with booleans) -> return a boolean
+true && true        # AND
+false || true       # OR
+! false             # NOT
+# IMPLY: if first is true second must be too; aka: (! b1) || b2
+false -> true       # if first is false: no implication thus true!
+true -> false       # of all 4 possible combinations only this is false
+# keyword 'or' differs from operator || and is only valid after indexing
+{}.foo or "fallback"
+{}.foo || "fallback"    # error
+false or true           # error
+```
+
 Variable definitions are wrapped in a **"let" statement**, which defines
 the local scope for the subsequent expression. As nix is lazy, meaning
 it only computes values (including sub-members of sets) when they are
@@ -1904,102 +1997,6 @@ fields:
   ```
 
 # Appendix
-
-## Operators
-
-<https://nix.dev/manual/nix/2.18/language/operators> lists the operators
-in order of precedence; generally the mathematical precedence is
-followed. Note: While function application is listed with one of the
-strongest precedences, this does not have effect in list literals,
-because they generally disable evaluation of unparenthesized expressions
-(except indexing):
-```nix
-[ builtins.typeOf "a" + "Z" ]   # error: unexpected +
-[ builtins.typeOf "aZ" ]        # [ «primop typeOf» "aZ" ]
-[(builtins.typeOf "a" + "Z")]   # [ "stringZ" ]
-```
-
-Operators and their quirks:
-```nix
-1 + 2               # add
-"hi" + "!"          # concatenate strings
-[1 2] ++ [3 4]      # concatenate lists
-# literally append the string to the path (never ends in /); return path
-~/dir + "file.nix"  # /home/user/dirfile.nix
-~/dir + "/file.nix" # /home/user/dir/file.nix
-# concatenate paths; return path
-~/dir + ./file.nix  # /home/user/dir/home/user/notes-on-nix/file.nix
-~/dir + /file.nix   # /home/user/dir/file.nix
-# literally prepend to expanded path; path must exist; return string
-"~/dir" + /file.nix # error: path '/file.nix' does not exist
-"~/dir"+ ./file.nix # "~/dir/nix/store/mvnld3aq3siykz1r7r7z7rcynkn5biwl-file.nix"
-
-- 1                 # negate number
-1 - 2               # subtract
-
-2 * 3               # multiply
-
-1 / 2               # 0;    divide two integers -> returns integer!
-1 / 2.0             # 0.5;  divide with floating point result
-1.0 / 2             # 0.5;  divide with floating point result
-
-# mathematical precedence
-2 + 3 * 4           # 14
-    3 * 4 + 2       # 14
-(2+ 3)* 4           # 20
-
-# Operators for attribute sets:
-s = {attr.path = 1;}
-# Indexing -> returns the (fallback) value or throws error
-s.attr.path         # 1
-s . attr . path     # 1; space around operator allowed
-s."attr" . path     # 1; attribute path *elements* may be quoted
-s."attr.path"       # error: missing attribute "attr.path"
-s."attr.path" or 2  # 2; fallback value
-# Membership testing -> returns boolean
-s ? attr            # true
-s ? path            # false
-s ? attr.path       # true
-s ? attr."path"     # true; attribute path *elements* may be quoted
-s ? "attr.path"     # false
-# Update with values from right set; does not change original!
-:print s
-:print s // { new = 2; }
-:print s // { new = 2; attr.path = 3; }
-:print s // {attr.new = 3;} # no recursive merging -> removes attr.path
-:print s    # unchanged
-
-# Numeric comparisons:
-1 < 2               # less than
-2 > 1               # greater than
-1 == 1.0            # equality; int equals its float version
-1 != 2              # inequality
-1 <= 1              # less or equal
-1 >= 1              # greater or equal
-# Strings, paths and lists can be compared to same type:
-"/" < "0"           # seems it sorts according to ascii value
-"A" < "a"
-"a" < "b"
-"a" < "aa"
-"aa"< "b"
-./a < ./b
-"a" > ./A           # error: cannot compare path with string
-[ "a" "b" ] < [ "a" "c" ]
-[ "a" ] < [ "b" "a" ]
-
-# Logic operators (only work with booleans) -> return a boolean
-true && true        # AND
-false || true       # OR
-! false             # NOT
-let # (! b1) || b2
-    isFalse = false;
-    elseThis = false;
-in isFalse -> elseThis
-# keyword 'or' is not equivalent to || and only valid after indexing
-{}.foo or "fallback"
-{}.foo || "fallback"    # error
-false or true           # error
-```
 
 ## Dependencies
 
