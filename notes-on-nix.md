@@ -160,7 +160,7 @@ same configuration always produces the same result. Moreover, there is
 no standardized way of making the contents of a repo with nix code
 discoverable (Does it provide a package, a module, etc?). To fix these
 problems nix introduced **flakes** which are officially still
-experimental but already used by most of the community. A flake is a
+experimental but are already used by most of the community. A flake is a
 repo with a `./flake.nix` file which has a certain structure and defines
 build outputs, dependencies, etc; a `./flake.lock` file pins the
 dependencies to a specific version.
