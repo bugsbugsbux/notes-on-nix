@@ -379,9 +379,14 @@ in a
 other if the set is preceded by the keyword `rec` or by indexing the set
 itself.
 
-Attribute-names must be strings and are accessed with
-`setName.attributeName`. If necessary *attributes* may be quoted
-(`setName."attribute name"`) but *such names should be avoided*!
+Since attribute-names must be strings, they may be written without
+quotes. Attribute-names which have to be quoted to be recognized as
+such should be avoided! When indexing a set (`setName.attributeName`),
+attributes may be quoted (`setName."attribute name"`), however, the set
+to be indexed itself must be recognized as a set and therefore cannot be
+quoted. This reinforces the need to avoid attribute-names which have to
+be quoted, since nested sets are not always indexed from the outermost
+one.
 
 ```nix
 let s1 = {
