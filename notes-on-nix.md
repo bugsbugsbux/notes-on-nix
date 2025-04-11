@@ -243,9 +243,9 @@ string:
   ```
 - **"path"**: Careful: Using paths copies it to the nix-store location!
 
-  Paths are unquoted, do not contain "://" which would make it a URI,
-  that is a string, and have at least one "/" which is not the last
-  char:
+  Paths are unquoted, do not contain "://" (which would make it a URI,
+  that is: a string), and have at least one "/" which must not be in the
+  last position:
   ```nix
   ./relative-path               # relative to the file it is used in
   ../path-in-parent/folder      # must not end in /
@@ -256,7 +256,7 @@ string:
   ```
 
   Names in angles (`<name>`) are matched against files and folders
-  listed in environment variable "NIX_PATH". This should be avoided as
+  listed in environment variable "NIX\_PATH". This should be avoided as
   it is impure (not reproducible).
 - **"list"**: `[1 "two" 3 4]`
 - (attribute-)"set": `{ foo = "bar"; }` What other languages call
