@@ -178,10 +178,11 @@ however _it does overwrite_ the relevant configuration files in HOME.
 It will not be covered in this document and is not relevant to
 understanding nix.
 
-Nix comes with a simple but not very secure way of running virtual NixOS
-instances: **NixOS containers**. They share the host's nix store, which
-makes creating such containers efficient, but has the downside that the
-container's root can modify the host.
+Nix comes with a simple way of running virtual NixOS instances: **NixOS
+containers**. They share the host's nix store, which makes creating such
+containers efficient, but has the downside that the container's root can
+modify the host. As these are not intended for sandboxing applications
+for security purposes, this is ok, but should be kept in mind!
 
 # Nix language
 
