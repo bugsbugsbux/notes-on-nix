@@ -230,7 +230,7 @@ string:
   ''
       strings wrapped in *double* single quotes:
       escape every \ thus:
-        - tabs and newlines must be written literally	
+        - tabs and newlines must be written	literally	
         - string-interpolation cannot be disabled: \${"foo" + "bar"}
       ignore the starting line if it only consists of whitespace
         remove (only) the *common* *leading* whitespace from each line  
