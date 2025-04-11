@@ -166,12 +166,17 @@ build outputs, dependencies, etc; a `./flake.lock` file pins the
 dependencies to a specific version.
 
 As mentioned, the idea behind nix is not only to install packages in a
-declarative way, but also to configure them; this works well for global
-programs, but not so much for user-environments, which are configured in
-the home directory. The program "**home-manager**" allows to
-declaratively manage user-environments like one would manage the system
-environment with nix. Keep in mind that one must not edit the managed
-configurations manually, as home-manager overwrites these files!
+declarative way, but also to declaratively configure them. This works
+well if these programs are configured globally, but not so much for
+programs configured in the user's HOME folder, which nix (with a few
+exceptions) does not touch. Configuring a program in the HOME folder is
+still possible without any issues, however doing this manually is not in
+the spirit of a fully declarative system, which is why there is a
+solution by the nix community called "**home-manager**". Home-manager as
+a nix module integrates well with the rest of a NixOS configuration,
+however _it does overwrite_ the relevant configuration files in HOME.
+It will not be covered in this document and is not relevant to
+understanding nix.
 
 Nix comes with a simple but not very secure way of running virtual NixOS
 instances: **NixOS containers**. They share the host's nix store, which
