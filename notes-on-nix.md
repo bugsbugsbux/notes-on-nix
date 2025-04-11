@@ -212,7 +212,8 @@ string:
 - **"string"**:
   ```nix
 
-  asdf://example.com    # URI recognized as string: "asdf://example.com"
+  # URIs are recognized as strings; this is deprecated!
+  asdf://example.com    # equivalent to the string: "asdf://example.com"
 
   "
     strings are not single quoted (')
