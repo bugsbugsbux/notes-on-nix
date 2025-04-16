@@ -370,10 +370,10 @@ true -> false       # of all 4 possible combinations only this is false
 false or true           # error
 ```
 
-Variable definitions are wrapped in a **"let" statement**, which defines
+Variable definitions are wrapped in a **let expression**, which defines
 the local scope for the subsequent expression. As nix is lazy, meaning
 it only computes values (including sub-members of sets) when they are
-needed, the definitions of a "let" statement may be out of order!
+needed, the definitions of a "let" expression may be out of order!
 ```nix
 let b = a + 1 ;     # the order in this block is not significant
     a = 1 ;         # semicolons are required
@@ -388,7 +388,7 @@ in a
 ```
 
 **Set**s are wrapped in braces (`{}`) and define their attributes like a
-"let" statement defines its variables, but they can only refer to each
+"let" expression defines its variables, but they can only refer to each
 other if the set is preceded by the keyword `rec` or by indexing the set
 itself.
 
@@ -431,7 +431,7 @@ in [ (foo==bar) foo.a.b (foo.a.b.c.d or "missing") ]
 ```
 
 Instead of assigning named values to the same name in a set, the
-**"inherit(from)" statement** may be used.
+**"inherit(from)" expression** may be used.
 ```nix
 let foo = 1;
     bar = 2;
@@ -445,7 +445,7 @@ in {
 }
 ```
 
-The **"with" statement** adds the attributes of a set to the local
+The **"with" expression** adds the attributes of a set to the local
 scope, except when there would be a name collision:
 ```nix
 let bar = 1;
@@ -567,7 +567,7 @@ See: modules. Documentation at:
 <https://nixos.org/manual/nixpkgs/stable/#sec-functions-library>
 The documentation makes it look like the standard library only exposes
 other libraries, however, actually it also exposes functions *directly*!
-See the `inherit` statements at:
+See the `inherit` expression at:
 <https://github.com/NixOS/nixpkgs/blob/master/lib/default.nix>
 
 # Installation
