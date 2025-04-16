@@ -208,8 +208,15 @@ bar: `0`) while the following throws the error "undefined variable
 
 The nix language requires each file (nix files use the extension ".nix")
 to contain *only a single* "**nix-expression**", which is something that
-evaluates to a value. `builtins.typeOf` returns the type of a value as a
-string:
+results in a value.
+
+_The examples in this section represent the input of an interactive
+session -- not the contents of a nix file. Executing a file containing
+one of these examples throws an error if the example contains multiple
+nix-expressions or repl specific commands (`:print`) and syntax (global
+assignments)!_
+
+`builtins.typeOf` returns the type of a value as a string:
 
 - **"int"** (integer number): `1`
 - **"float"** (floating point number): `3.14`
@@ -469,9 +476,6 @@ specified "package closure" usually only means the runtime dependencies.
 See also: dependencies
 
 ```nix
-# You cannot put the following nix-expressions in the same file, as only
-# one expression is allowed per file!
-
 # Functions do not need parentheses to execute:
 with builtins; length                   # returns a function
 with builtins; length [1 2 3]           # returns the result 3
