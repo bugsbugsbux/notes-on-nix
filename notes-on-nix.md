@@ -67,17 +67,6 @@ without ever explaining them!
   evaluation makes the nix language exceptionally suitable for
   implementing fixpoints!
 
-## How to print a value?
-
-A value can be printed with the function `builtins.trace`, which takes
-two arguments, one to print and a second one to return. Make sure this
-part of the code evaluates (nix is lazy!), otherwise nothing happens...
-
-The *repl* provides the command `:print` to *recursively* evaluate and
-output the value of an expression. As all repl commands it cannot be
-used *within* an expression: It would throw a
-`syntax error, unexpected ':'`.
-
 # Overview
 
 The idea behind nix is to *declaratively* manage the state of the
@@ -190,6 +179,23 @@ for security purposes, this is ok, but should be kept in mind!
 
 *To experiment with the nix language use `nix repl` which starts an
 interactive session!*
+
+Nix is a **functional** language. Every function returns a value; there
+are generally no side-effects: `builtins.trace`, the function to display
+a value and only function which therefore could be considered to have a
+side-effect, takes an explicit second argument which is used as the
+return value.
+
+Nix is **lazily evaluated**, meaning it does not run parts of code whose
+value it does not currently need. For example, the contents of a list
+within another list will not be evaluated until accessing them. This
+means placing `builtins.trace` in the inner list, won't display the
+value it wraps, until the inner list evaluates due to being accessed.
+
+The interactive session, `nix repl`, provides a special command `:print`
+to recursively evaluate and display the following expression. Repl
+specific commands start with ":" and can be listed with `:help`; using
+them _within_ other nix code throws a `syntax error, unexpected ':'`.
 
 `#` **comments** the rest of the line, while `/*` starts a comment which
 ends with the next `*/`.
