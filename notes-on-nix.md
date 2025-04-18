@@ -361,7 +361,7 @@ in {
     # from specific set
     inherit (baz) foobar;   # same as foobar=baz.foobar;
     fizz = "buzz";
-}
+} # { foo = 1; bar = 2; foobar = 3; fizz = "buzz"; }
 ```
 
 The **"with" expression** adds the attributes of a set to the local
@@ -372,9 +372,9 @@ let bar = 1;
 in
     with foo;               # only one set allowed, semicolon required
         {
-            a = bar;
-            b = foo.bar;
-            c = baz;
+            a = bar;        # 1
+            b = foo.bar;    # 100
+            c = baz;        # 200
         }                   # no semicolon here
 ```
 
