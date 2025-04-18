@@ -318,7 +318,7 @@ because they generally disable evaluation of unparenthesized expressions
     3 * 4 + 2       # 14
 (2+ 3)* 4           # 20
 
-# Operators for attribute sets:
+# Operators for attribute sets; see also: comparison operators
 s = {attr.path = 1;} # equivalent to: s={attr={path=1;};}
 # Indexing -> returns the (fallback) value or throws error
 s.attr.path         # 1
@@ -339,23 +339,33 @@ s ? "attr.path"     # false
 :print s // {attr.new = 3;} # no recursive merging -> removes attr.path
 :print s    # unchanged
 
-# Numeric comparisons:
+# Comparison operators:
 1 < 2               # less than
 2 > 1               # greater than
 1 == 1.0            # equality; int equals its float version
 1 != 2              # inequality
 1 <= 1              # less or equal
 1 >= 1              # greater or equal
-# Strings, paths and lists can be compared to same type
-"/" < "0"           # seems it sorts according to ascii value
-"A" < "a"
-"a" < "b"
-"a" < "aa"
-"aa"< "b"
-./a < ./b
+# Strings and paths can be compared to same type; lexicographically
+# meaning item-wise according to ASCII value:
+"/" < "0"           # due to ASCII order
+"9" < ":"           # due to ASCII order
+"B" < "a"           # any uppercase before any lowercase
+"a" < "b"           # alphabetic order
+"a" < "aa"          # item-wise thus shorter wins over longer
+./a < ./b           # comparing paths works the same
 "a" > ./A           # error: cannot compare path with string
-[ "a" "b" ] < [ "a" "c" ]
-[ "a" ] < [ "b" "a" ]
+# Lists and Sets are recursively evaluated before comparison
+{ a.b=2; } == { a={b=(1+1);}; } # there is no order in sets
+[ 1 2.0 ] == [ 1 2 ]
+[ 1 2.0 3 ] != [ 1 2 ]
+# Sets only allow the in/equality operators; Lists allow to other
+# comparisons in lexicographical order but according to type
+ "2.0"  >  "2"  # true
+["2.0"] > ["2"] # true
+[ 2.0 ] > [ 2 ] # false because numbers are compared numerically
+["2.0"] > [ 2 ] # error: cannot compare string with integer
+[ 1 ] < [ 1 1 ] # true because lexicographical order (like "a"<"aa")
 
 # Logic operators (only work with booleans) -> return a boolean
 true && true        # AND
