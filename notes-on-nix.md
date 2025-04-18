@@ -595,6 +595,8 @@ See the `inherit` expression at:
 
 # Installation
 
+See also: Creating a custom NixOS installation medium
+
 ## Only installing the nix package manager
 
 The nix package manager can be installed
@@ -2188,3 +2190,25 @@ programs.nix-ld = {
     #libraries = with pkgs; [];
 };
 ```
+
+### Creating a custom NixOS installation medium
+
+Here is how to create a custom NixOS iso file to boot from:
+
+1. `git clone --depth=1 -b nixos-unstable git://github.com/NixOS/nixpkgs.git`
+2. `cd nixpkgs`
+3. `cd nixos`
+4. customize one of the templates in ./modules/installer/cd-dvd/ to your
+   liking; this basically works like a regular nixos config if you just
+   want to preinstall some basic programs to the iso: add them to
+   environment.systemPackages, enable their module or activate their
+   service. Obviously much more is possible, but this is not the
+   tutorial for that; read the docs and check out the templates!
+5. build; the resulting \*.iso file ends up in ./result/iso/
+   ```bash
+   # make sure to be in the nixos folder of the nixpkgs repo
+   nix-build \
+     -A config.system.build.isoImage \
+     -I nixos-config=modules/installer/cd-dvd/JUST_EDITED.nix \
+     ./default.nix`
+   ```
