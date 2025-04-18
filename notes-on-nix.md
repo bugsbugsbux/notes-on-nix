@@ -268,9 +268,15 @@ assignments)!_
   ~/.                           # home folder
   ```
 
-  Names in angles (`<name>`) are matched against files and folders
-  listed in environment variable "NIX\_PATH". This should be avoided as
-  it is impure (not reproducible).
+  **Lookup paths** are also paths, but denoted in a shorthand notation:
+  `<name>`. It works similar to the shell's lookup of commands in the
+  PATH environment variable, but uses the NIX\_PATH variable instead
+  which may contain entries prefixed with "name=" which then are not
+  searched recursively but are the exact result to return when queried
+  for "name". Note: If a previous entry already matched the given name
+  (and exists) or the named entry does not exist, the named entry is not
+  the one returned! Lookup paths should be avoided as they are impure
+  (=not reproducible because they depend on the value of NIX\_PATH).
 - **"list"**: `[1 "two" 3 4]`
 - (attribute-)"set": `{ foo = "bar"; }` What other languages call
   "(hash-)map", "dictionary" or "table". See below.
