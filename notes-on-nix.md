@@ -611,7 +611,12 @@ The nix package manager can be installed
 
 ## Installing NixOS from an .iso
 
-Like most other systems, nix may be installed from an iso image:
+Like most other systems, nix may be installed from an iso image. The iso
+needs to be burned to a CD or a flash drive to boot from. Make sure the
+bootloader of the target machine does not have Secure Boot enabled and
+does not prioritize another boot option over the one you chose (for
+example it might prefer the internal disk over the CD you burned the iso
+to).
 
 - There are ones with a **graphical installer**: one just has to
   follow its instructions.
