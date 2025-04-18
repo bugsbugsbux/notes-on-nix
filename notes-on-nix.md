@@ -393,10 +393,14 @@ in a + b            # no semicolon here (would be error)
 ```
 
 Recursive definitions are allowed. This means an expression has access
-to its own name. See also: fixpoint
+to its own name, which is useful in sets to refer to siblings or for
+recursive functions like:
+`factorial = arg : if arg <= 1 then 1 else arg * factorial (arg - 1);`
+See also: fixpoint
 ```nix
-let a = a + 1;      # "infinite recursion"- not "unknown variable"-error
-in a
+let
+    a = a + 1;      # "infinite recursion"- not "unknown variable"-error
+in a                # only once used -> evaluated -> error
 ```
 
 **Set**s are wrapped in braces (`{}`) and define their attributes like a
