@@ -388,11 +388,11 @@ function, which takes the last argument and is returned by another
 function which takes the second to last argument, and so on; this is
 called "currying".
 
-The term **closure** is also used by nix in reference to all the
+_Note: The term **closure** is also used by nix in reference to all the
 packages a package depends on (as well as the packages they depend on,
 etc). Build-dependencies and runtime-dependencies may differ; if not
 specified "package closure" usually only means the runtime dependencies.
-See also: dependencies
+See also: dependencies_
 
 ```nix
 # Functions do not need parentheses to execute:
