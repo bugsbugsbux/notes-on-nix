@@ -435,10 +435,10 @@ in mustNotBeQuoted
 ```
 
 In nix, one cannot reassign a name, thus it is clear that assigning to
-the same set again extends the set's current value. Moreover, missing
-sets are auto-created, when being assigned to, but accessing a missing
-set throws an error which can be be suppressed by providing a fallback
-value with keyword `or`:
+the same set again shall extend the set's current value. Moreover,
+missing sets are auto-created, when being assigned to, but accessing a
+missing set throws an error which can be be suppressed by providing a
+fallback value with keyword `or`:
 ```nix
 let foo.a.b = 1;                    # creates missing sets foo and foo.a
     foo = { c = 3; };               # extends foo
