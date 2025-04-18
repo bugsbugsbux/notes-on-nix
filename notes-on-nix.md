@@ -409,30 +409,29 @@ other if the set is preceded by the keyword `rec` or by indexing the set
 itself. Once again: the order of the members is irrelevant even when
 referencing each other.
 
-Since attribute-names must be strings, they may be written without
-quotes. Attribute-names which have to be quoted to be recognized as
-such should be avoided! When indexing a set (`setName.attributeName`),
-attributes may be quoted (`setName."attribute name"`), however, the set
-to be indexed itself must be recognized as a set and therefore cannot be
-quoted. This reinforces the need to avoid attribute-names which have to
-be quoted, since nested sets are not always indexed from the outermost
-one.
+Attribute-names must be strings; however, the quotes for identifier-like
+ones may be omitted. When indexing sets, attribute-names, but not the
+indexed set itself, may be quoted if necessary:
+`mustNotBeQuoted."quotes required".noQuotesNecessary`. This means, using
+the `rec` keyword to be able to refer to sibling attributes without
+having to index the ancestor itself, is useless if the siblings do
+not have identifier-like names:
 
 ```nix
-let s1 = {
-        b = s1.a + 1;
-        a = 1;
+:print let
+    mustNotBeQuoted = rec {
+        "quotes required" = rec {
+            # referring to later defined member is ok:
+            foo = noQuotesNecessary + 1;    # accessing sibling directly
+            noQuotesNecessary = 1;
+        };
+        # cannot index a string
+        error = "quotes required".noQuotesNecessary + 1;
+        just_a_string = "quotes required";
+        # despite using rec, due to the name we must index from parent:
+        ok = mustNotBeQuoted."quotes required".noQuotesNecessary + 1;
     };
-    s2 = rec {
-        d = c + 1;
-        c = 100;
-    };
-    "inconvenient name" = rec {
-        "this attr" = "no easy access to this from sibling attributes";
-        # x = "this attr"           # a string not value of "this attr"
-        # x = "inconvenient name"."this attr"   # does not work either!
-    };
-in s1 // s2             # update set: orig_values // new_values
+in mustNotBeQuoted
 ```
 
 In nix, one cannot reassign a name, thus it is clear that assigning to
