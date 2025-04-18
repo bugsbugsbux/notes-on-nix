@@ -349,6 +349,37 @@ let foo.a.b = 1;                    # creates missing sets foo and foo.a
 in [ (foo==bar) foo.a.b (foo.a.b.c.d or "missing") ]
 ```
 
+Nix **does not have loops**, instead, use one of the builtin functions,
+for example `builtins.map` and `builtins.mapAttrs`, which iterate over
+list and set elements respectively.
+
+**Conditionals** (`if`, `then`, `else`) must have an else-block!
+String-interpolation works in attribute names which can be used to
+conditionally add items by returning `null` if it should be omitted. It
+also works in attribute paths for individual segments: `s.${"foo.bar"}`
+is `s."foo.bar"`, not `s.foo.bar`!
+```nix
+{
+    # conditional value
+    foo =
+        if 3 > 3 then
+            "greater"
+        else if 3 < 3 then  # combine 2 conditionals to get else-if
+            "smaller"
+        else                # every conditional MUST have an else clause
+            "equal"
+    ;
+
+    # string-interpolation in attribute name must return string ...
+    ${"a"+"b"} = "ab";
+
+    # ... or null which omits the item:
+    ${if false then "add key" else null} = "not added";
+
+# string-interpolation in attribute paths:
+}.${if true then "foo" else "ab"}
+```
+
 Instead of assigning named values to the same name in a set, the
 **"inherit(from)" expression** may be used.
 ```nix
@@ -427,37 +458,6 @@ let inc = given@{x, y?1, ...}: with builtins; length(attrNames(given));
 # equivalent:
 let inc = {x, y?1, ...}@given: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
-```
-
-Nix **does not have loops**, instead, use one of the builtin functions,
-for example `builtins.map` and `builtins.mapAttrs`, which iterate over
-list and set elements respectively.
-
-**Conditionals** (`if`, `then`, `else`) must have an else-block!
-String-interpolation works in attribute names which can be used to
-conditionally add items by returning `null` if it should be omitted. It
-also works in attribute paths for individual segments: `s.${"foo.bar"}`
-is `s."foo.bar"`, not `s.foo.bar`!
-```nix
-{
-    # conditional value
-    foo =
-        if 3 > 3 then
-            "greater"
-        else if 3 < 3 then  # combine 2 conditionals to get else-if
-            "smaller"
-        else                # every conditional MUST have an else clause
-            "equal"
-    ;
-
-    # string-interpolation in attribute name must return string ...
-    ${"a"+"b"} = "ab";
-
-    # ... or null which omits the item:
-    ${if false then "add key" else null} = "not added";
-
-# string-interpolation in attribute paths:
-}.${if true then "foo" else "ab"}
 ```
 
 **Callable sets** are sets which can be invoked like functions. They
