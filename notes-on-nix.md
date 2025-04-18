@@ -402,7 +402,8 @@ with builtins; length [1 2 3]           # returns the result 3
 with builtins; [ length [1 2 3] ]       # contains function and list
 with builtins; [ (length [1 2 3]) ]     # contains integer
 
-# Define a function with 1 argument:
+# Define a function with 1 argument; function bodies are are always a
+# single expression which produces the return value:
 arg : arg + 1                           # increment argument by 1
 # Invoke unnamed function:
 (arg: arg + 1) 100
