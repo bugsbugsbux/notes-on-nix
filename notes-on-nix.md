@@ -385,7 +385,7 @@ Closure means a function knows about variables in its parent scopes from
 the time it was defined. This lets one implement multi-argument
 functions by nesting functions: The body goes into the innermost
 function, which takes the last argument and is returned by another
-function with takes the second to last argument, and so on; this is
+function which takes the second to last argument, and so on; this is
 called "currying".
 
 The term **closure** is also used by nix in reference to all the
