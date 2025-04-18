@@ -349,15 +349,15 @@ let foo.a.b = 1;                    # creates missing sets foo and foo.a
 in [ (foo==bar) foo.a.b (foo.a.b.c.d or "missing") ]
 ```
 
-Nix **does not have loops**, instead, use one of the builtin functions,
+Nix wants everything to return a value, thus it
+**does not have loops**; instead, use one of the builtin functions,
 for example `builtins.map` and `builtins.mapAttrs`, which iterate over
-list and set elements respectively.
+list- and set-elements respectively and produce a concrete result.
 
-**Conditionals** (`if`, `then`, `else`) must have an else-block!
-String-interpolation works in attribute names which can be used to
-conditionally add items by returning `null` if it should be omitted. It
-also works in attribute paths for individual segments: `s.${"foo.bar"}`
-is `s."foo.bar"`, not `s.foo.bar`!
+For the same reason **conditionals** must have an else-block!
+String-interpolation works in attribute names as well as attribute paths
+(`s.${"foo.bar"}` is `s."foo.bar"`, not `s.foo.bar`); which can be used
+to conditionally add items by returning `null` if it should be omitted:
 ```nix
 {
     # conditional value
