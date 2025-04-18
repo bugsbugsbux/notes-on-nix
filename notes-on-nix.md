@@ -370,10 +370,12 @@ true -> false       # of all 4 possible combinations only this is false
 false or true           # error
 ```
 
-Variable definitions are wrapped in a **let expression**, which defines
-the local scope for the subsequent expression. As nix is lazy, meaning
-it only computes values (including sub-members of sets) when they are
-needed, the definitions of a "let" expression may be out of order!
+Nix does not have global assignments, however, they are allowed in the
+repl for convenience. Instead, variable definitions are wrapped in a
+**let expression**, which defines the local scope for the subsequent
+expression. As nix is lazy, meaning it only computes values (including
+sub-members of sets) when they are needed, the definitions of a "let"
+expression may be out of order!
 ```nix
 let b = a + 1 ;     # the order in this block is not significant
     a = 1 ;         # semicolons are required
