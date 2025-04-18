@@ -277,7 +277,7 @@ assignments)!_
   (and exists) or the named entry does not exist, the named entry is not
   the one returned! Lookup paths should be avoided as they are impure
   (=not reproducible because they depend on the value of NIX\_PATH).
-- **"list"**: `[1 "two" 3 4]`
+- **"list"**: `[1 "two" 3 4]` No comma between elements!
 - (attribute-)"set": `{ foo = "bar"; }` What other languages call
   "(hash-)map", "dictionary" or "table". See below.
 - "lambda" (function): `arg : arg + 1` Indeed, functions may be used as
