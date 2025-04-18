@@ -406,7 +406,8 @@ in a                # only once used -> evaluated -> error
 **Set**s are wrapped in braces (`{}`) and define their attributes like a
 "let" expression defines its variables, but they can only refer to each
 other if the set is preceded by the keyword `rec` or by indexing the set
-itself.
+itself. Once again: the order of the members is irrelevant even when
+referencing each other.
 
 Since attribute-names must be strings, they may be written without
 quotes. Attribute-names which have to be quoted to be recognized as
