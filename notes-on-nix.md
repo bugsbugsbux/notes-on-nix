@@ -660,8 +660,8 @@ to).
   mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
   ```
 
-  Configure the generated config (using `nano` or `vim`). Important
-  points:
+  Modify the generated config file `/mnt/etc/nixos/configuration.nix`
+  (using `nano` or `vim`). Important points:
   ```bash {.summary}
   nixos-generate-config --root /mnt
   cd /mnt/etc/nixos
@@ -671,7 +671,7 @@ to).
   * Keep the `system.stateVersion` value unchanged.
   * Mounting should have been configured by `nixos-generate-config`
     and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
-    sure it is included by `/mnt/etc/nixos/configuration.nix`:
+    sure it is loaded:
     ```nix
     imports = [ ./hardware-configuration.nix ];
     ```
