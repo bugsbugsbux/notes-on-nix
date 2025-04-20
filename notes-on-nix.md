@@ -624,7 +624,7 @@ to).
 - The "minimal" iso file is for **manual installations**: Manually
   installing NixOS starts like any other manual install: setup the
   keyboard (with `loadkeys`) and networking (with `wpa_cli` from
-  wpa_supplicant); then create partitions (available tools: `parted`,
+  wpa\_supplicant); then create partitions (available tools: `parted`,
   `fdisk`, `gdisk`, `cfdisk`, `cgdisk`) with appropriate labels (which
   depends on BIOS or UEFI setup and preference) and format them
   accordingly (with "mkfs.\*" and "mkswap"). Mount root partition on
@@ -765,7 +765,7 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   copy them to the target computer and run `./kexec-boot` there.
 
 - **Converting an existing linux installation** (other distro) into a
-  NixOS system: There is an installation variant called "NIXOS_LUSTRATE"
+  NixOS system: There is an installation variant called "NIXOS\_LUSTRATE"
   which permanently converts a running linux system into a NixOS system.
   There are scripts like "nixos-infect" or "nix-in-place" which
   automate this. Note: This might, in some scripts *by design*, destroy
@@ -1328,7 +1328,7 @@ useful to understand what arguments it works with:
 `derivation` *requires* the following arguments:
 - `name`: A string which will be used in the names of files created in
   the nix-store.
-- `system`: A string such as "x86_64-linux" which specifies for which
+- `system`: A string such as "x86\_64-linux" which specifies for which
   system to build the derivation. Building locally only works if
   `builtins.currentSystem` matches this string.
 - `builder`: A path (or its string representation) to the executable to
@@ -1390,9 +1390,9 @@ useful to understand what arguments it works with:
   true;`.
 - `__structuredAttrs`: Boolean; if true all arguments (except this) of
   `derivation` are written to a json file and the path is exported in
-  environment variable "NIX_ATTRS_JSON_FILE". Moreover, puts path to
+  environment variable "NIX\_ATTRS\_JSON\_FILE". Moreover, puts path to
   bash script which exports all bash-representable values as environment
-  variables into variable "NIX_ATTRS_SH_FILE".
+  variables into variable "NIX\_ATTRS\_SH\_FILE".
 - `outputChecks`: Set of output names to sets which specify how to check
   the respective output. Available attributes are: `allowedReferences`,
   `allowedRequisites`, `disallowedReferences`, `disallowedRequisites`,
@@ -1429,7 +1429,7 @@ having security issues, not targeting the current platform, or not
 having a free license (see: unfree packages). This is already checked
 when evaluating the config and can be overruled temporarily by setting
 environment variables
-NIXPKGS_ALLOW_{BROKEN,INSECURE,UNSUPPORTED_SYSTEM,UNFREE} to 1. There
+NIXPKGS\_ALLOW\_{BROKEN,INSECURE,UNSUPPORTED\_SYSTEM,UNFREE} to 1. There
 are also options to make this permanent, which also allow more granular
 control over which insecure, or unfree packages or licenses may be
 installed.
@@ -1609,7 +1609,7 @@ builtin setup-hooks (and the hooks of the bintools and cc wrappers, see:
   creates a link to it in `./lib64`.
 - **move-systemd-user-units.sh**: moves systemd-user-units from `./lib`
   to `./share` and creates a link to it in `./lib`.
-- **set-source-date-epoch-to-latest.sh**: sets SOURCE_DATE_EPOCH to most
+- **set-source-date-epoch-to-latest.sh**: sets SOURCE\_DATE\_EPOCH to most
   recently modified file.
 
 Check out this list of packages using setup-hooks:
@@ -2184,8 +2184,8 @@ Unpatched linux binaries which are dynamically linked don't work on
 NixOS since they cannot find the dynamic linker. `nix-ld` allows these
 binaries to find it and necessary libraries by putting a shim in the
 usual places. Where exactly the shim redirects to can be configured
-using various environment variables such as NIX_LD and
-NIX_LD_LIBRARY_PATH. Necessary libraries can be figured out using `ldd`
+using various environment variables such as NIX\_LD and
+NIX\_LD\_LIBRARY\_PATH. Necessary libraries can be figured out using `ldd`
 on the binary.
 
 ```nix
