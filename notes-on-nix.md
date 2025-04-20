@@ -725,13 +725,18 @@ to).
     console.keyMap = "de-latin1";
     ```
 
-  * Install some essential packages, like `git` and an editor:
+  * Install some packages, like `git` and an editor:
     ```nix
     environment.systemPackages = with pkgs; [
       git
       neovim
     ];
     ```
+
+  * To enable services or configure a service or program, use
+    `services.NAME = { enable = true; }; ` or
+    `programs.NAME = { enable = true; };`; this automatically adds the
+    relevant packages to `environment.systemPackages`.
 
   * A user may be added like so:
     ```nix
