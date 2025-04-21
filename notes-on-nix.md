@@ -669,7 +669,12 @@ to).
   ```
 
   Important points:
-  * Keep the `system.stateVersion` value unchanged.
+
+  * Keep the `system.stateVersion` value unchanged. This value does not
+    specify which version of NixOS is currently used, but which was the
+    first version used on this machine! It is used to set default
+    versions of some packages which write application data and cannot
+    handle upgrading it after being updated to newer versions.
   * Mounting should have been configured by `nixos-generate-config`
     and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
     sure it is loaded:
