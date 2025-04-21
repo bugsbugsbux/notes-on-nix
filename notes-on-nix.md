@@ -743,10 +743,30 @@ to).
     ];
     ```
 
-  * To enable services or configure a service or program, use
-    `services.NAME = { enable = true; }; ` or
-    `programs.NAME = { enable = true; };`; this automatically adds the
-    relevant packages to `environment.systemPackages`.
+  * To enable services or configure something about a service or program
+    apart from the package's build options, use
+    `services.NAME = { enable = true; }; ` and
+    `programs.NAME = { enable = true; };` instead. Not every package has
+    such configuration options. These options automatically add the
+    relevant packages to `environment.systemPackages`. For example, to
+    find out about the available options for the avahi service and the
+    vim text editor, go to <https://search.nixos.org/options> and search
+    for "avahi" and "vim"; you will see that there are options
+    "services.avahi" and "programs.vim"; now search for these terms and
+    you will see all their available configuration fields. This example
+    uses some of them:
+
+    ```nix
+    programs.vim = { # a text editor
+        enable = true;
+        defaultEditor = true; # sets environment variable EDITOR=vim
+    };
+
+    services.avahi = { # discover devices like printers on your network
+        enable = true;
+        openFirewall = true; # opens UDP port 5353
+    };
+    ```
 
   * A user may be added like so:
     ```nix
