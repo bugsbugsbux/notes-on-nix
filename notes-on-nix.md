@@ -699,7 +699,7 @@ This section provides important notes for the most fundamental aspects
 of your NixOS config. Using a graphical installer, you will not interact
 with the config files until after the installation, at which point the
 files we are talking about will be located in `/etc/nixos` not
-`/mnt/etc/nixos`; and need to be activated differently: see Declarative
+`/mnt/etc/nixos` and need to be activated differently: see Declarative
 configuration
 
   * Keep the `system.stateVersion` value unchanged. This value does not
