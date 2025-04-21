@@ -687,14 +687,15 @@ to).
 
   * Configure boot loader:
     ```nix
-    # EITHER: BIOS -> grub
+    # EITHER: your machine uses BIOS -> then use grub:
         boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
         boot.loader.grub.useOSProber = true;
 
-    # OR: UEFI
+    # OR: your machine uses UEFI
         # defaults to /boot
         boot.loader.efi.efiSysMountPoint = "/YOUR_BOOT_PARTITION";
 
+        # -> you have the choice between grub and systemd-boot:
         # EITHER: systemd-boot
             boot.loader.systemd-boot.enable = true;
 
