@@ -1655,8 +1655,6 @@ steps until it can be replaced by `lib.extends`, which applies overlays,
 changes which are able to refer to the final and the previous state of
 the fixpoint:
 ```nix
-# This is the input for a repl session; it cannot be in the same file!
-
 setup = {
     mystate = { a=1; b=10; };
     mychange = self: { a=5; c = self.a + self.b; };
