@@ -661,13 +661,14 @@ to).
   ```
 
   Modify the generated config file `/mnt/etc/nixos/configuration.nix`
-  (using `nano` or `vim`). Important points:
+  (using `nano` or `vim`).
   ```bash {.summary}
   nixos-generate-config --root /mnt
   cd /mnt/etc/nixos
   nano configuration.nix
   ```
 
+  Important points:
   * Keep the `system.stateVersion` value unchanged.
   * Mounting should have been configured by `nixos-generate-config`
     and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
