@@ -738,7 +738,8 @@ to).
     ```nix
     environment.systemPackages = with pkgs; [
       git
-      neovim
+      # to play DRM content chromium needs to be built with WideVine:
+      (chromium.override { enableWideVine = true; } ) # a web browser
     ];
     ```
 
