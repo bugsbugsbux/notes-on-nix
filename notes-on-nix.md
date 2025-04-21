@@ -595,7 +595,7 @@ See the `inherit` expression at:
 
 # Installation
 
-See also: Creating a custom NixOS installation medium
+Optionally see also: Creating a custom NixOS installation medium
 
 ## Only installing the nix package manager
 
@@ -2203,7 +2203,14 @@ programs.nix-ld = {
 
 ### Creating a custom NixOS installation medium
 
-Here is how to create a custom NixOS iso file to boot from:
+_Note: When installing NixOS somewhere you first boot into the iso file
+and then install NixOS to the target computer. Afterwards you boot into
+the new system, not the iso anymore. Since you can change your new
+system any way you like, there is generally no need to have a custom
+iso. However, if you just want to customize the system on the iso, for
+example to pre-install some programs to be able to use it as a rescue
+live-system (which one does not install but just uses from a usb), here
+is how to do it:_
 
 1. `git clone --depth=1 -b nixos-unstable git://github.com/NixOS/nixpkgs.git`
 2. `cd nixpkgs`
