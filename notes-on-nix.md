@@ -732,7 +732,9 @@ to).
     console.keyMap = "de-latin1"; # german keyboard
     ```
 
-  * Install some packages, like `git` and an editor:
+  * Install some packages. The easiest way to look for packages is
+    <https://search.nixos.org>, which also links to the package source,
+    that reveals additional build options. See below: Packages
     ```nix
     environment.systemPackages = with pkgs; [
       git
