@@ -24,7 +24,7 @@ overview of before. In this attempt it differs from the official docs,
 which even (at least in 2024) refer to mathematical topics (fixpoints)
 without ever explaining them!
 
-## How to read the official documentation?
+## How to read the official documentation and get help?
 
 0. You might want to start by reading these notes. It's an attempt to
    distill the information from all the different documentation sources
@@ -35,13 +35,18 @@ without ever explaining them!
    folder of this repo, which contains the code example from the series
    in its different versions.
 2. Read the NixOS manual, to understand how NixOS does things and learn
-   about the module system.
+   about the module system. It contains many examples how to set up
+   specific stuff, which you can skip if you don't need it; come back to
+   it later, once you do need it.
    <https://nixos.org/manual/nixos/stable/>
 3. Read the nixpkgs manual to understand how to create your own packages
    using stdenv and trivial builders, and how to modify packages.
    <https://nixos.org/manual/nixpkgs/stable/>
 4. Read about flakes at:
    <https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html>
+5. For help, first look up the examples in the NixOS manual, then see if
+   there is an article on the wiki <https://wiki.nixos.org>, and finally
+   you can ask for help on <https://discourse.nixos.org>
 
 ## What are some drawbacks of nix/NixOS?
 
