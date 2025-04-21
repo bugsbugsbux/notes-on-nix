@@ -660,13 +660,18 @@ to).
   mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
   ```
 
-  Modify the generated config file `/mnt/etc/nixos/configuration.nix`
-  (using `nano` or `vim`).
+  After generating a config file `/mnt/etc/nixos/configuration.nix`,
+  modify it to your liking using `nano` or `vim`.
   ```bash {.summary}
   nixos-generate-config --root /mnt
   cd /mnt/etc/nixos
   nano configuration.nix
   ```
+
+
+  Afterwards, install with `nixos-install`, then `reboot` if it worked.
+  If it failed, fix the config and rerun `nixos-install`. It will prompt
+  for a root password.
 
   Important points:
 
@@ -782,10 +787,6 @@ to).
     To disable root, set `users.users.root.hashedPassword="!";` and make
     very sure that a user has `sudo` access and an `initialPassword`,
     and that the `console.keyMap` is set correctly.
-
-  Now, install with `nixos-install`, then `reboot` if it worked. If it
-  failed, fix the config and rerun `nixos-install`. It will prompt for
-  a root password.
 
 ## Installing NixOS over the internet
 
