@@ -702,118 +702,118 @@ files we are talking about will be located in `/etc/nixos` not
 `/mnt/etc/nixos` and need to be activated differently: see Declarative
 configuration
 
-  * Keep the `system.stateVersion` value unchanged. This value does not
-    specify which version of NixOS is currently used, but which was the
-    first version used on this machine! It is used to set default
-    versions of some packages which write application data and cannot
-    handle upgrading it after being updated to newer versions.
-  * Mounting should have been configured by `nixos-generate-config`
-    and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
-    sure it is loaded:
-    ```nix
-    imports = [ ./hardware-configuration.nix ];
-    ```
-    Also make sure the appropriate kernel modules are enabled in
-    the `boot.initrd.kernelModules` option to be able to mount
-    certain special file systems!
+* Keep the `system.stateVersion` value unchanged. This value does not
+  specify which version of NixOS is currently used, but which was the
+  first version used on this machine! It is used to set default
+  versions of some packages which write application data and cannot
+  handle upgrading it after being updated to newer versions.
+* Mounting should have been configured by `nixos-generate-config`
+  and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
+  sure it is loaded:
+  ```nix
+  imports = [ ./hardware-configuration.nix ];
+  ```
+  Also make sure the appropriate kernel modules are enabled in
+  the `boot.initrd.kernelModules` option to be able to mount
+  certain special file systems!
 
-  * Configure boot loader:
-    ```nix
-    # EITHER: your machine uses BIOS -> then use grub:
-        boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
-        boot.loader.grub.useOSProber = true;
+* Configure boot loader:
+  ```nix
+  # EITHER: your machine uses BIOS -> then use grub:
+      boot.loader.grub.device = "/dev/DISK_TO_INSTALL_GRUB_TO";
+      boot.loader.grub.useOSProber = true;
 
-    # OR: your machine uses UEFI
-        # defaults to /boot
-        boot.loader.efi.efiSysMountPoint = "/YOUR_BOOT_PARTITION";
+  # OR: your machine uses UEFI
+      # defaults to /boot
+      boot.loader.efi.efiSysMountPoint = "/YOUR_BOOT_PARTITION";
 
-        # -> you have the choice between grub and systemd-boot:
-        # EITHER: systemd-boot
-            boot.loader.systemd-boot.enable = true;
+      # -> you have the choice between grub and systemd-boot:
+      # EITHER: systemd-boot
+          boot.loader.systemd-boot.enable = true;
 
-        # OR: grub (cannot be used to dual-boot *linux* distros)
-            boot.loader.grub.device = "nodev"; # this is a special value
-            boot.loader.grub.efiSupport = true;
-            boot.loader.grub.useOSProber = true;
-    ```
+      # OR: grub (cannot be used to dual-boot *linux* distros)
+          boot.loader.grub.device = "nodev"; # this is a special value
+          boot.loader.grub.efiSupport = true;
+          boot.loader.grub.useOSProber = true;
+  ```
 
-  * Configure network:
-    ```nix
-    networking = {
-        hostName = "YOUR_MACHINE";
-        networkmanager.enable = true;
-        # Note: when defining users, make sure to add "networkmanager"
-        # to their extraGroups attribute
+* Configure network:
+  ```nix
+  networking = {
+      hostName = "YOUR_MACHINE";
+      networkmanager.enable = true;
+      # Note: when defining users, make sure to add "networkmanager"
+      # to their extraGroups attribute
 
-        firewall.enable = true;
-        # firewall.allowedTCPPorts = [];
-        # firewall.allowedUDPPorts = [];
+      firewall.enable = true;
+      # firewall.allowedTCPPorts = [];
+      # firewall.allowedUDPPorts = [];
 
-        # runs the provided shell script after network setup:
-        #localCommands = ''
-        #    get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
-        #    systemctl restart wpa_supplicant.service
-        #'';
-    };
+      # runs the provided shell script after network setup:
+      #localCommands = ''
+      #    get_my_wpa_config_with_passwords > /etc/wpa_supplicant.conf
+      #    systemctl restart wpa_supplicant.service
+      #'';
+  };
 
-    ```
+  ```
 
-  * Set the console keymap correctly, otherwise the password is hard (or
-    even impossible) to enter correctly!
-    ```nix
-    console.keyMap = "de-latin1"; # german keyboard
-    ```
+* Set the console keymap correctly, otherwise the password is hard (or
+  even impossible) to enter correctly!
+  ```nix
+  console.keyMap = "de-latin1"; # german keyboard
+  ```
 
-  * Install some packages. The easiest way to look for packages is
-    <https://search.nixos.org>, which also links to the package source,
-    that reveals additional build options. See below: Packages
-    ```nix
-    environment.systemPackages = with pkgs; [
-      git
-      # to play DRM content chromium needs to be built with WideVine:
-      (chromium.override { enableWideVine = true; } ) # a web browser
-    ];
-    ```
+* Install some packages. The easiest way to look for packages is
+  <https://search.nixos.org>, which also links to the package source,
+  that reveals additional build options. See below: Packages
+  ```nix
+  environment.systemPackages = with pkgs; [
+    git
+    # to play DRM content chromium needs to be built with WideVine:
+    (chromium.override { enableWideVine = true; } ) # a web browser
+  ];
+  ```
 
-  * To enable services or configure something about a service or program
-    apart from the package's build options, use
-    `services.NAME = { enable = true; }; ` and
-    `programs.NAME = { enable = true; };` instead. Not every package has
-    such configuration options. These options automatically add the
-    relevant packages to `environment.systemPackages`. For example, to
-    find out about the available options for the avahi service and the
-    vim text editor, go to <https://search.nixos.org/options> and search
-    for "avahi" and "vim"; you will see that there are options
-    "services.avahi" and "programs.vim"; now search for these terms and
-    you will see all their available configuration fields. This example
-    uses some of them:
+* To enable services or configure something about a service or program
+  apart from the package's build options, use
+  `services.NAME = { enable = true; }; ` and
+  `programs.NAME = { enable = true; };` instead. Not every package has
+  such configuration options. These options automatically add the
+  relevant packages to `environment.systemPackages`. For example, to
+  find out about the available options for the avahi service and the
+  vim text editor, go to <https://search.nixos.org/options> and search
+  for "avahi" and "vim"; you will see that there are options
+  "services.avahi" and "programs.vim"; now search for these terms and
+  you will see all their available configuration fields. This example
+  uses some of them:
 
-    ```nix
-    programs.vim = { # a text editor
-        enable = true;
-        defaultEditor = true; # sets environment variable EDITOR=vim
-    };
+  ```nix
+  programs.vim = { # a text editor
+      enable = true;
+      defaultEditor = true; # sets environment variable EDITOR=vim
+  };
 
-    services.avahi = { # discover devices like printers on your network
-        enable = true;
-        openFirewall = true; # opens UDP port 5353
-    };
-    ```
+  services.avahi = { # discover devices like printers on your network
+      enable = true;
+      openFirewall = true; # opens UDP port 5353
+  };
+  ```
 
-  * A user may be added like so:
-    ```nix
-    users.users.YOURUSER = {    # yes, twice the plural
-        initialPassword = "change_me_with_passwd"; # world readable!
-        isNormalUser = true;
-        extraGroups = [
-            "wheel"             # allows using sudo
-            "networkmanager"    # allows configuring networkmanager
-        ];
-    };
-    ```
-    To disable root, set `users.users.root.hashedPassword="!";` and make
-    very sure that a user has `sudo` access and an `initialPassword`,
-    and that the `console.keyMap` is set correctly.
+* A user may be added like so:
+  ```nix
+  users.users.YOURUSER = {    # yes, twice the plural
+      initialPassword = "change_me_with_passwd"; # world readable!
+      isNormalUser = true;
+      extraGroups = [
+          "wheel"             # allows using sudo
+          "networkmanager"    # allows configuring networkmanager
+      ];
+  };
+  ```
+  To disable root, set `users.users.root.hashedPassword="!";` and make
+  very sure that a user has `sudo` access and an `initialPassword`,
+  and that the `console.keyMap` is set correctly.
 
 # Imperative configuration
 
