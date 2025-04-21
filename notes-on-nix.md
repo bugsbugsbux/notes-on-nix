@@ -729,7 +729,7 @@ to).
   * Set the console keymap correctly, otherwise the password is hard (or
     even impossible) to enter correctly!
     ```nix
-    console.keyMap = "de-latin1";
+    console.keyMap = "de-latin1"; # german keyboard
     ```
 
   * Install some packages, like `git` and an editor:
