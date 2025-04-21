@@ -668,12 +668,39 @@ to).
   nano configuration.nix
   ```
 
+  See: NixOS Configuration -- Important Notes
 
   Afterwards, install with `nixos-install`, then `reboot` if it worked.
   If it failed, fix the config and rerun `nixos-install`. It will prompt
   for a root password.
 
-  Important points:
+## Installing NixOS over the internet
+
+NixOS can be **booted over the internet** with PXE or iPXE. See:
+<https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
+
+## Installing NixOS on a running system
+
+- **Temporarily convert some running linux distro into NixOS**: Create
+  the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
+  `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'`,
+  copy them to the target computer and run `./kexec-boot` there.
+
+- **Converting an existing linux installation** (other distro) into a
+  NixOS system: There is an installation variant called "NIXOS\_LUSTRATE"
+  which permanently converts a running linux system into a NixOS system.
+  There are scripts like "nixos-infect" or "nix-in-place" which
+  automate this. Note: This might, in some scripts *by design*, destroy
+  all data on the machine -- back it up beforehand!
+
+# NixOS Configuration -- Important Notes
+
+This section provides important notes for the most fundamental aspects
+of your NixOS config. Using a graphical installer, you will not interact
+with the config files until after the installation, at which point the
+files we are talking about will be located in `/etc/nixos` not
+`/mnt/etc/nixos`; and need to be activated differently: see Declarative
+configuration
 
   * Keep the `system.stateVersion` value unchanged. This value does not
     specify which version of NixOS is currently used, but which was the
@@ -787,25 +814,6 @@ to).
     To disable root, set `users.users.root.hashedPassword="!";` and make
     very sure that a user has `sudo` access and an `initialPassword`,
     and that the `console.keyMap` is set correctly.
-
-## Installing NixOS over the internet
-
-NixOS can be **booted over the internet** with PXE or iPXE. See:
-<https://nixos.org/manual/nixos/stable/#sec-booting-from-pxe>
-
-## Installing NixOS on a running system
-
-- **Temporarily convert some running linux distro into NixOS**: Create
-  the 3 needed files `./bzImage`, `./initrd` and `./kexec-boot` with
-  `nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'`,
-  copy them to the target computer and run `./kexec-boot` there.
-
-- **Converting an existing linux installation** (other distro) into a
-  NixOS system: There is an installation variant called "NIXOS\_LUSTRATE"
-  which permanently converts a running linux system into a NixOS system.
-  There are scripts like "nixos-infect" or "nix-in-place" which
-  automate this. Note: This might, in some scripts *by design*, destroy
-  all data on the machine -- back it up beforehand!
 
 # Imperative configuration
 
