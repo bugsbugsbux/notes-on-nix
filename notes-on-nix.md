@@ -48,6 +48,12 @@ without ever explaining them!
    there is an article on the wiki <https://wiki.nixos.org>, and finally
    you can ask for help on <https://discourse.nixos.org>
 
+## Where do I find packages and options?
+
+You can search for packages on <https://search.nixos.org/packages> and
+for options on <https://search.nixos.org/options>. The results give a
+description, examples and link to the source in the nixpkgs repo.
+
 ## What are some drawbacks of nix/NixOS?
 
 - It does not comply with the FHS (Filesystem Hierarchy Standard). While
