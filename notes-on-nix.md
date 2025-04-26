@@ -191,11 +191,11 @@ for security purposes, this is ok, but should be kept in mind!
 *To experiment with the nix language use `nix repl` which starts an
 interactive session!*
 
-Nix is a **functional** language. Every function returns a value; there
-are generally no side-effects: `builtins.trace`, the function to display
-a value and only function which therefore could be considered to have a
-side-effect, takes an explicit second argument which is used as the
-return value.
+Nix is a **pure, functional** language. Functions are values and every
+function returns a value. There are generally no side-effects:
+`builtins.trace`, the function to display a value and only function
+which therefore could be considered to have a side-effect, takes an
+explicit second argument which is used as the return value.
 
 Nix is **lazily evaluated**, meaning it does not run parts of code whose
 value it does not currently need. For example, the contents of a list
