@@ -838,9 +838,12 @@ manager may also be invoked like a traditional package manager from the
 commandline, but one should keep in mind that it still acts differently
 (see: generations, garbage-collection, profile)!
 
-The following commands are used to manage the current user's profile.
-Thus running them as root influences root's profile -- which is the
-global one, whose installed programs are available to all users.
+Managing the current user's profile does not require elevated
+privileges. The examples use the command `nix-env`, because its
+successor `nix profile` is still experimental; do _not_ invoke `nix
+profile` unless you read its documentation and want to switch to using
+it instead: after using it your `nix-env` installed packages will not be
+available and you cannot use `nix-env` anymore.
 
 ```sh
 # create new generation including the specified packages
