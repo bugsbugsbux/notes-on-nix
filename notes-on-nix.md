@@ -834,9 +834,9 @@ configuration
 
 NixOS is managed via a configuration file, in which one can define,
 among other things, which packages shall be installed. The nix package
-manager may also be invoked like a traditional package manager, but one
-should keep in mind that it still acts differently (see: generations,
-garbage-collection, profile)!
+manager may also be invoked like a traditional package manager from the
+commandline, but one should keep in mind that it still acts differently
+(see: generations, garbage-collection, profile)!
 
 The following commands are used to manage the current user's profile.
 Thus running them as root influences root's profile -- which is the
