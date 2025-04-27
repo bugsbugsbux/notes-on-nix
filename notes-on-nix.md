@@ -154,6 +154,7 @@ which there are:
   means these channels receive updates faster, however pulling updates
   from them may take longer since more packages have to be built
   locally!
+See: Channels
 
 Since channels change over time there is no guarantee that building the
 same configuration always produces the same result. Moreover, there is
@@ -829,6 +830,8 @@ configuration
 # Imperative configuration
 
 ## Channels
+
+See also above: channels
 
 As described above, nixpkgs, the default package source, is organized
 into release branches, called channels. **Setting channels must be done
