@@ -1012,6 +1012,10 @@ options are put into their own module
 `/etc/nixos/hardware-configuration.nix`, which allows to use the same
 main configuration file on different machines.
 
+_Which configuration options and packages are available depends on
+root's "nixos" channel which can only be changed imperatively! See:
+Channels_
+
 If a file `/etc/nixos/flake.nix` exists, it takes precedence over
 `/etc/nixos/configuration.nix`, which allows to turn the configuration
 into a flake (see below).
