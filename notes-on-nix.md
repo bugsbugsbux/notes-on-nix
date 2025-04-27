@@ -845,66 +845,47 @@ profile` unless you read its documentation and want to switch to using
 it instead: after using it your `nix-env` installed packages will not be
 available and you cannot use `nix-env` anymore.
 
-```sh
-# create new generation including the specified packages
-nix-env --install   regex1 regex2-version regex3
-nix-env -i          regex1 regex2-version regex3
+```bash
+# --query or -q lets you list installed packages and find new ones
+nix-env --query             # lists all packages installed with nix-env
+nix-env --query --available REGEX   # short flags: -qa
+# if packages are listed multiple times, they might differ in the
+# version or are available from different channels (see below)
 
-# Using --install as shown above matches the regex against all nixpkgs
-# and installs the latest matching one. This is slow and might not
-# install the intended package. Instead add the --attr or -A option to
-# interpret the arguments as attribute paths selecting from the default
-# nix-expression (see:
-# nixos.org/manual/nix/stable/command-ref/files/default-nix-expression)
-# or the result of the expression in the file given with -f or --file .
-# This is faster due to nix's lazy evaluation ignoring all parts of the
-# set which were not indexed. That this also applies to --upgrade .
-nix-env --install --attr    nixos.pkgname1     # on NixOS
-nix-env -iA                 nixpkgs.pkgname1   # on other systems
-nix-env -iA -f '<nixpkgs>'  pkgname1    # instead of default nix-expr
+nix-env --list-generations  # a generation is basically a snapshot
 
-# create new generation without the specified packages
-nix-env --uninstall regex1 regex2
-nix-env -e          regex1 regex2
-# create new generation with updated versions of all or given packages
-nix-env --upgrade   regex1 regex2
-nix-env --upgrade
-nix-env -u
-nix-env -uA nixos.pkgname1  # or nixpkgs.pkgname1 on other systems
-# modify current generation to only contain the specified derivation
-nix-env --set regex1 # --profile profilename
+# --install or -i installs new packages by creating a new generation
+nix-env --install REGEX     # or with a specific version: REGEX-1.2.3
 
-# modify metadata
-# for example pin package to current version by setting "keep" to "true"
-nix-env --set-flag "keep" "true" regex1
+nix-env --list-generations  # you should see new generation was created
 
-# listing packages
-nix-env --query --installed         # list all or specified if installed
-nix-env --query                     # same as with --installed
-nix-env --query --available regex1  # include non-installed packages
-# Adding --status puts a 3 letter string next to a package indicating
-# whether or not (-) it is:
-# available in the current generation (I),
-# available elsewhere on the system (P),
-# available as substitute for building it locally (S).
-nix-env -q -a --status regex1       # -q is --query, -a is --available
-nix-env -q    --compare-versions    # compare installed to available
-nix-env -q -a --compare-versions    # compare available to installed
+# to avoid regex matching all package names, use -A/--attr on a
+# specific package set's alias (channel name); by default available:
+# on nixos: "nixos", on other systems: "nixpkgs"
+nix-env -i -A CHANNELNAME.PKGNAME
 
-# activate a specific profile (link to a generation)
-nix-env --switch-profile profilepath
-nix-env -S               profilepath
+# --uninstall or -e creates a new generation without the given packages
+nix-env --uninstall REGEX
 
-# list generations of current profile (current marked with "(current)")
-nix-env --list-generations
-# activate previous (highest number lower than current) generation
-nix-env --rollback
-# activate specified generation
-nix-env --switch-generation 123 # or any other generation
-nix-env -G                  123
-# delete specified generations
-nix-env --delete-generations 1 2 3 # or any other generations
-nix-env --delete-generations "old" # ALL except current generation
+# the removed package is still available in the previous generation:
+nix-env --rollback  # activate generation with highest id < current_id
+# it is also possible to go to a specific id, which is listed by running
+nix-env --list-generations    # first column is the id
+nix-env --switch-generation 2 # activates generation with id 2
+
+# delete specified generations or all except current by specifying "old"
+nix-env --delete-generations 1 3
+nix-env --delete-generations "old" # incl newer than current generations
+# NOTE: still nothing is actually removed! now run: nix-collect-garbage
+
+# --upgrade or -u creates a new generation replacing all or the
+# specified packages with newer ones
+nix-env --upgrade PKGNAME
+
+# --upgrade does not respect which channel a package came from, thus if
+# another channel provides a newer version it is installed; however
+# using the command to set metadata, --set-flag, a package can be pinned
+nix-env --set-flag keep true PKGNAME # prevents upgrade
 ```
 
 ### Upgrading channels
