@@ -828,6 +828,50 @@ configuration
 
 # Imperative configuration
 
+## Channels
+
+As described above, nixpkgs, the default package source, is organized
+into release branches, called channels. **Setting channels must be done
+imperatively; there is no config option to do so declaratively!**
+
+Root's "nixos" channel is automatically refreshed when passing
+`--upgrade` to `nixos-rebuild switch`; passing `--upgrade-all` also
+refreshes _root_'s other channels, but not _user_ channels which are
+refreshed with `nix-channel --update`. Refreshing a channel just means
+to download a new version of its package and option definitions.
+
+On NixOS change the "nixos" channel of the root user to affect which
+channel your config uses!
+
+```bash
+# A user imperatively installs a package from a specific channel
+nix-env -iA nixos.neovim
+
+# Why did it work despite the user's channels not showing a "nixos" one?
+nix-channel --list      # probably no channels configured yet
+# because root has a channel of this name which was used as fallback:
+sudo nix-channel --list
+
+# To upgrade NixOS to a new release, or even become rolling release,
+# change root's "nixos" channel and rebuild the system
+sudo nix-channel --add https://nixos.org/channels/nixos-25.05 "nixos"
+sudo nix-channel --update "nixos"   # downloads/refreshes this channel
+sudo nixos-rebuild switch
+
+# Instead of making your NixOS installation rolling release, which means
+# your config breaks every time an option you used changes upstream, I
+# recommend giving your local user the unstable channel and manually
+# installing packages whose newer version you really need from there:
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable "nixpkgs"
+nix-channel --update "nixpkgs"  # downloads/refreshes channel
+nix-channel --list              # shows the new channel "nixpkgs"
+nix-env -iA nixpkgs.neovim      # uses our new channel
+nix-env -iA nixos.neovim        # still falls back to root's channel
+
+# Let's remove the current user's channel called "nixpkgs"
+nix-channel --remove "nixpkgs"
+```
+
 ## Profile management
 
 *See also: unfree packages.*
@@ -887,23 +931,6 @@ nix-env --upgrade PKGNAME
 # using the command to set metadata, --set-flag, a package can be pinned
 nix-env --set-flag keep true PKGNAME # prevents upgrade
 ```
-
-### Upgrading channels
-
-As described above, nixpkgs, the default package source, is organized
-into release branches, called channels. **Setting channels must be done
-imperatively; there is no config option to do so declaratively!**
-
-- `nix-channel --list` lists the current user's currently active
-  channels.
-- `nix-channel --remove nixos` removes the current user's channel named
-  "nixos".
-- `nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-  nixpkgs` adds or overrides the current user's channel named "nixpkgs".
-  Thus to upgrade from NixOS 23.11 to 24.05 one would override the
-  global channel "nixos" with `sudo nix-channel --add
-  https://nixos.org/channels/nixos-24.05 nixos` and then rebuild the
-  system with `sudo nixos-rebuild switch --upgrade`.
 
 ## Temporary shell environments
 
