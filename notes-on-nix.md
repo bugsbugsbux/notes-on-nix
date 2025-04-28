@@ -995,17 +995,23 @@ To run the script, just make it executable as usual with
 
 ## Temporary shell environments
 
-Creating temporary shell environment as described in above is tedious,
-instead one may want to configure such environments declaratively, on a
-per directory basis: This is what `./shell.nix` is for. Simply run
-`nix-shell` without any arguments in the same directory to activate the
-environment.
+Instead of typing out the command to activate a temporary environment,
+one can define the environment in a nix file and simply activate it with
+just `nix-shell`, which expects a file `./shell.nix` (or as a fallback
+`./default.nix`), or `nix develop` if you want to write it as a
+`./flake.nix`.
+
+The important helper here is `pkgs.mkShellNoCC` (or `pkgs.mkShell` which
+comes with a C compiler as default dependency). See:
+<https://nixos.org/manual/nixpkgs/stable/#sec-pkgs-mkShell>
 
 ```nix
+# put this into ./shell.nix; then run `nix-shell`
 let
-  nixpkgs =             # get a specific release
-    fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-23.11";
-  pkgs = import nixpkgs {};
+  pkgs = import <nixpkgs> {};
+  # for more reporducibility be more specific:
+  # nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-23.11";
+  # pkgs = import nixpkgs {};
 in pkgs.mkShellNoCC {   # creates a shell without c compiler toolchain
     # packages to install, no need to specify bash:
     packages = with pkgs; [ cowsay ];
@@ -1019,6 +1025,12 @@ in pkgs.mkShellNoCC {   # creates a shell without c compiler toolchain
     MYVAR = "Welcome in your temporary bash environment!";
 }
 ```
+
+In a project with a nix package definition `./default.nix`, you do not
+even have to write a `shell.nix`: if your package builds with
+`nix-build` then you can simply run `nix-shell` instead and will be
+dropped into the build environment of your package; now you can invoke
+its build steps manually.
 
 ## Profile management
 
