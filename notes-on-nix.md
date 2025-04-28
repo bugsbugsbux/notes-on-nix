@@ -960,16 +960,22 @@ second time should be much faster, than the first time!
 
 ### Nix scripts
 
-Instead of shell scripts where the user needs to install the needed
-programs in the required versions himself, there are nix scripts:
+Instead of requiring the user to install needed dependencies before
+running a shell script, there are nix scripts, which only require the
+user to have nix installed and use `nix-shell` to pull the needed
+dependencies themselves!
 
-Replace shebang lines like `#!/bin/bash` with `#!/usr/bin/env
-nix-shell`. The following lines starting with `#! nix-shell` are merged
-into a single call to `nix-shell` and define the environment; `--pure`
-isolates it from the system; the interpreter to use is specified with
-`-i`; `--packages` installs the given dependencies. For even more
-reproducibility use `-I nixpkgs=` to specify a certain release of
-nixpkgs.
+To write such a script replace shebang lines like `#!/bin/bash` with
+`#!/usr/bin/env nix-shell`. The following lines starting with
+`#! nix-shell` are merged into a single call to `nix-shell` and define
+the environment;
+* `--pure` unsets most environment variables and sets PATH to only
+  contain the packages for this environment and some ones available in
+  all nix build environments
+* the interpreter to use is specified with `-i`;
+* `--packages` installs the given dependencies.
+* For even more reproducibility use `-I nixpkgs=` to specify a certain
+  release of nixpkgs.
 
 ```bash
 #!/usr/bin/env nix-shell
@@ -977,8 +983,13 @@ nixpkgs.
 #! nix-shell --packages bash cowsay
 #! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/0672315759b3e15e2121365f067c1c8c56bb4722.tar.gz
 
-echo hello world | cowsay
+{ echo "Due to '--pure' PATH only contains:"
+  echo -e "${PATH//:/'\n'}"
+} | cowsay -W 100
 ```
+
+To run the script, just make it executable as usual with
+`chmod u+x ./myscript` and invoke it: `./myscript`
 
 # Declarative configuration
 
