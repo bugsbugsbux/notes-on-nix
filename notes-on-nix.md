@@ -937,17 +937,20 @@ nix-env --set-flag keep true PKGNAME # prevents upgrade
 
 ## Temporary shell environments
 
-Nix also allows to install packages into a temporary environment with
-`nix-shell`:
+`nix-shell` starts a subshell which has the specified packages from
+nixpkgs available:
+
 ```sh
-# interactive shell
-cowsay                          # error: command not found
-nix-shell --packages cowsay     # interpreted as attributes of nixpkgs
-> echo hello world | cowsay     # ok
+echo hi | cowsay | lolcat           # 2x error: command not found
+nix-shell --packages cowsay lolcat  # or -p; correct names not regex
+# now in the subshell: (> is prompt)
+> echo hi | cowsay | lolcat         # ok
 > exit
-cowsay                          # error: command not found
-# only run given command and exit
-nix-shell -p cowsay --run "echo hello world | cowsay"
+# after exiting the subshell:
+echo hi | cowsay | lolcat           # commands not available anymore
+
+# To avoid an interactive subshell use:
+nix-shell -p cowsay lolcat --run "echo hi | cowsay | lolcat"
 ```
 
 After exiting the temporary environment the installed packages are not
