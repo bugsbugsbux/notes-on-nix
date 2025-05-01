@@ -1045,6 +1045,19 @@ options are put into their own module
 `/etc/nixos/hardware-configuration.nix`, which allows to use the same
 main configuration file on different machines.
 
+`/etc/nixos/configuration.nix` is written as a module (see: Modules),
+however typically is just looks like a function returning a set whose
+attributes are the option names and their values are how you want to
+configure the option. For option examples see: NixOS Configuration --
+Important Notes
+```nix
+{ pkgs, ... }:
+{ imports = [ ./path/to/some/module.nix ];
+  optionName = optionValue;
+  environment.systemPackages = [ pkgs.PKGNAME ];
+}
+```
+
 _Which configuration options and packages are available depends on
 root's "nixos" channel which can only be changed imperatively! See:
 Channels_
