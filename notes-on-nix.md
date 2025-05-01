@@ -1214,7 +1214,7 @@ final definition or its declaration, this attribute path is used to
 index the module's `config` or `options` argument.
 
 Depending on whether an option has a default value, **not defining it**
-may be an error nor not.
+may be an error or not.
 
 Depending on the type, **defining an option multiple times** may be an
 error or merged in some way. For available types, how to customize
