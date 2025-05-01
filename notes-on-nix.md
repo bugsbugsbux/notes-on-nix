@@ -34,6 +34,10 @@ without ever explaining them!
    manager and the ideas it is based upon. Check out the `./pills-demos`
    folder of this repo, which contains the code example from the series
    in its different versions.
+   The series also contains an article on the basics of the nix
+   language; after deciding on learning nix definitely check out the
+   full language documentation at
+   <https://nixos.org/manual/nix/stable/language/index.html>
 2. Read the NixOS manual, to understand how NixOS does things and learn
    about the module system. It contains many examples how to set up
    specific stuff, which you can skip if you don't need it; come back to
