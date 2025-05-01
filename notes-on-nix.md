@@ -1081,12 +1081,12 @@ The following *options* are useful:
   system even when the configuration did not change, because it first
   updates the channel, and thus package definitions might have changed.
 
-Note: Installation of **unfree packages** needs to be enabled on a per
-user basis: For the global user this is done with option
-`nixpkgs.config.allowUnfree = true;`. However, other users' access to
-unfree packages cannot be enabled from the NixOS config; instead they
-need to set attribute `allowUnfree = true;` in their
-`~/.config/nixpkgs/config.nix`.
+Note: Installation of **unfree packages** cannot be enabled globally:
+For the config (and the root user) it is done with option
+`nixpkgs.config = { allowUnfree = true; };`. Other users must put this
+set into file `~/.config/nixpkgs/config.nix` to enable unfree packages
+for all their actions or set environment variable
+`NIXPKGS_ALLOW_UNFREE=1` to enable them for a specific action.
 
 ## Modules
 
