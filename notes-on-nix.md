@@ -1298,6 +1298,10 @@ other declarations.
 }
 ```
 
+To obtain information about a given option, like its active value, where
+it was declared and defined, etc, one can use the `nixos-option`
+command.
+
 # Packages
 
 The above definitions differentiated between "package" and "derivation",
