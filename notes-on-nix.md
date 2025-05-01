@@ -1081,11 +1081,6 @@ The following *options* are useful:
   system even when the configuration did not change, because it first
   updates the channel, and thus package definitions might have changed.
 
-Global packages are to be added to the configuration option (see below)
-`environment.systemPackages` (a list value), while user specific
-packages shall be added to `users.users.USERNAME.packages` except when
-using home-manager.
-
 Note: Installation of **unfree packages** needs to be enabled on a per
 user basis: For the global user this is done with option
 `nixpkgs.config.allowUnfree = true;`. However, other users' access to
