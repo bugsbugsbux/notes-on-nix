@@ -1047,7 +1047,7 @@ Channels_
 
 If a file `/etc/nixos/flake.nix` exists, it takes precedence over
 `/etc/nixos/configuration.nix`, which allows to turn the configuration
-into a flake (see below).
+into a flake (see: Flakes).
 
 After changing the config, the system needs to be rebuilt with the
 command `sudo nixos-rebuild`. It takes an *argument* to specify *when*
