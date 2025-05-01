@@ -1159,8 +1159,9 @@ also possible to use the path to the directory instead.
 (`imports = [ ./directory ];` instead of
 `imports = [ ./directory/default.nix ];`)
 
-When a module is a function, it is called by the module system
-with a set containing the following items:
+When a module is a function, like the typical configuration.nix whose
+structure is shown above, the module system provides the following named
+arguments:
 
 - `pkgs`: This provides access to nixpkgs.
 - `lib`: This provides access to the **nixpkgs standard library** in a
@@ -1196,26 +1197,6 @@ with a set containing the following items:
   ```
 - `options`: Similar to the `config` argument but for
   option-declarations.
-
-Here is an example module which is a function and returns a set using
-the simplified module structure (meaning no "options" field and does not
-put the option-definitions into a "config" field):
-```nix
-{ pkgs, ... }: # specify which arguments you intend to use
-{
-    imports = [ ./hardware-configuration.nix ];
-    networking.hostName = "MY_HOST_NAME";
-    environment.systemPackages = with pkgs; [
-        git
-        #...
-    ];
-    users.users.USERNAME.packages = with pkgs; [
-        chromium
-        #...
-    ];
-    #...
-}
-```
 
 Moreover, the module system injects some **utility functions** into the
 namespace of each module; see: options,
