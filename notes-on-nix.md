@@ -1213,6 +1213,10 @@ package it comes from, and specific name. When accessing an option's
 final definition or its declaration, this attribute path is used to
 index the module's `config` or `options` argument.
 
+For details how to create options see:
+<https://nixos.org/manual/nixos/stable/#sec-writing-modules>, the
+following is an abstract:
+
 Depending on whether an option has a default value, **not defining it**
 may be an error or not.
 
