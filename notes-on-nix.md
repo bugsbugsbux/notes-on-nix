@@ -1254,9 +1254,9 @@ other declarations.
 
         # Use lib.mkOption ...
         category.some-package.optionName = lib.mkOption {
-            default = [];
             type = lib.types.listOf lib.types.singleLineStr;
             description = "Markdown description of *this* option";
+            default = [];
         };
 
         # ... or a wrapper simplifying creating certain option types:
