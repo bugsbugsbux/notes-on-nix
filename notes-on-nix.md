@@ -224,7 +224,21 @@ bar: `0`) while the following throws the error "undefined variable
 
 The nix language requires each file (nix files use the extension ".nix")
 to contain *only a single* "**nix-expression**", which is something that
-results in a value.
+results in a value. This value is returned when loading a file with
+function `import`.
+
+In the common code snippet
+`let pkgs = import <nixpkgs> {}; in # some expression`
+- the shorthand (see below) `<nixpkgs>` represents the path to the local
+  copy of nixpkgs and is therefore a directory
+- `import <nixpkgs>` works despite the path being a directory because it
+  contains a file `./default.nix` which is loaded instead. It returns a
+  function which returns the nixpkgs package set.
+- `{}` is a set (see below) and the argument to the function returning
+  the nixpkgs package set. It could be used to customize the returned
+  package set, but in this case is not.
+- The returned package set is assigned to the name `pkgs` to be used in
+  the following expression. See below: let expression
 
 _Many codeblocks in this document represent the input of an interactive
 session -- not the contents of a nix file. Executing a file containing
