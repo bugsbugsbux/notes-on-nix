@@ -1015,7 +1015,7 @@ let
 in pkgs.mkShellNoCC {   # creates a shell without c compiler toolchain
     # packages to install, no need to specify bash:
     packages = with pkgs; [ cowsay ];
-    # commands to execute on startup:
+    # commands to execute upon activating the environment:
     shellHook = ''
         echo "$MYVAR" | cowsay
         # set variables which cannot be set as nix set-attributes:
