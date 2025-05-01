@@ -1090,12 +1090,22 @@ packages for all their actions or set environment variable
 
 ## Modules
 
-The module system is not a feature of the nix language but NixOS and
-allows to split the configuration into multiple files called modules,
-which return a set with certain attributes or a function which returns
-such a set.
+The module system is not a feature of the nix language but how NixOS
+implements its configuration: It handles declaring (=creating) new
+options and defining (=using) them, as well as splitting the
+configuration into into multiple files.
 
-The set a module (or its function) returns looks like this:
+Most modules are in the nixpkgs repo under `nixos/modules/` ("in-tree"),
+then you have your NixOS configuration in `/etc/nixos/configuration.nix`
+and if you want to load other out-of-tree modules like
+`/etc/nixos/hardware-configuration.nix` you have to let the module
+system handle this: Don't use the nix language's `import` function, but
+just add the path to the loading module's "imports" field!
+
+Modules are attribute sets with a certain structure or functions
+returning such.
+
+The structure is as follows:
 ```nix
 {
     options = { /* option-declarations */ };
