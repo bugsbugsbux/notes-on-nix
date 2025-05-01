@@ -1239,6 +1239,11 @@ of its wrappers `mkBefore` (is `mkOrder 500`) and `mkAfter` (is `mkOrder
 To clarify the difference between order and priority: A definition which
 loses in priority is ignored, thus its order value is irrelevant.
 
+The following example shows 3 modules, one which creates 2 options
+(category.some-package.optionName and category.some-package.enable), one
+which uses these options normally and another one which overrules the
+other declarations.
+
 ```nix
 # This is ./some-module.nix
 
