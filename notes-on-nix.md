@@ -1269,7 +1269,7 @@ other declarations.
 }
 ```
 ```nix
-# A module which does not use the simplified structure:
+# this module doesn't use the optional simplified structure
 { ... }:
 {
     imports = [ ./some-module.nix ];
@@ -1280,7 +1280,7 @@ other declarations.
 }
 ```
 ```nix
-# A module which uses the simplified structure:
+# this module does use the optional simplified structure
 { lib, ... }:
 {
     imports = [ ./some-module.nix ];
