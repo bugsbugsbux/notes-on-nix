@@ -1104,17 +1104,21 @@ packages for all their actions or set environment variable
 
 ## Modules
 
-The module system is not a feature of the nix language but how NixOS
-implements its configuration: It handles declaring (=creating) new
-options and defining (=using) them, as well as splitting the
-configuration into into multiple files.
+The NixOS modules system allows to use many different files to declare
+(=create) and define (=use) so called options (see below) while still
+keeping a unified state. To make this work, loading the different
+modules (=configuration parts) must be handled by the modules system and
+cannot simply be done using `import` function.
 
-Most modules are in the nixpkgs repo under `nixos/modules/` ("in-tree"),
-then you have your NixOS configuration in `/etc/nixos/configuration.nix`
-and if you want to load other out-of-tree modules like
-`/etc/nixos/hardware-configuration.nix` you have to let the module
-system handle this: Don't use the nix language's `import` function, but
-just add the path to the loading module's "imports" field!
+Instead, the module system automatically loads most of the "in-tree"
+modules located in the **modules directory** `<nixpkgs/nixos/modules>`
+because they are listed in `<nixpkgs/nixos/modules/module-list.nix>`
+and "out-of-tree" modules are either loaded because they are the root of
+the configuration (for example `/etc/nixos/configuration.nix`) or, for
+example when including `/etc/nixos/hardware-configuration.nix`,
+because their path was listed in the loading module's "imports" field
+(see below). As with the `import` function, it is allowed to just
+specify the directory name for files called `default.nix`.
 
 Modules are attribute sets with a certain structure or functions
 returning such.
@@ -1153,15 +1157,9 @@ the returned set may be structured like this instead:
 }
 ```
 
-The module system handles loading the modules whose path is specified in
-the "import" field. If a module is called "directory/default.nix" it is
-also possible to use the path to the directory instead.
-(`imports = [ ./directory ];` instead of
-`imports = [ ./directory/default.nix ];`)
-
 When a module is a function, like the typical configuration.nix whose
-structure is shown above, the module system provides the following named
-arguments:
+structure is shown above, the module system invokes it with the
+following named arguments:
 
 - `pkgs`: This provides access to nixpkgs.
 - `lib`: This provides access to the **nixpkgs standard library** in a
@@ -1204,17 +1202,8 @@ namespace of each module; see: options,
 
 ### Options
 
-NixOS exposes **options** via the module system for the user to define
-the intended system state. These options are "declared" (meaning
-created) in some module, and may be "defined" (meaning modified) in some
-other module.
-
-Most options come from a module in the **modules directory**
-`<nixpkgs/nixos/modules>`. To be able to use an option, the path of the
-module which declared it needs to be specified in the "imports" field,
-except when it is listed in `<nixpkgs/nixos/modules/module-list.nix>`
-(which most non-user-created modules are). This is not to be confused
-with using the `import` keyword to load a file!
+Options can only be used when the module that declared them was loaded
+(see above).
 
 An option is called by the name used when it was declared in a module's
 "options" field. Often this is an attribute path consisting of
