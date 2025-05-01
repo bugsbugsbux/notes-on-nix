@@ -1070,7 +1070,7 @@ The following *options* are useful:
 
 Global packages are to be added to the configuration option (see below)
 `environment.systemPackages` (a list value), while user specific
-packages shall be added to `users.user.USERNAME.packages` except when
+packages shall be added to `users.users.USERNAME.packages` except when
 using home-manager.
 
 Note: Installation of **unfree packages** needs to be enabled on a per
