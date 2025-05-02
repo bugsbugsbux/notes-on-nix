@@ -1395,7 +1395,7 @@ describing it), it can be added in two ways:
    add the derivation to it and use this local version. (`nixos-rebuild
    switch -I nixpkgs=./nixpkgs`)
 2. **Out-of-tree**: Instead of adding the derivation to a local copy of
-   nixpkgs, it is specified in a nix configuration file.
+   nixpkgs, it is specified in-place when used:
    ```nix
    # /etc/nixos/configuration.nix
    { pkgs, ... }: {
@@ -1417,9 +1417,9 @@ describing it), it can be added in two ways:
    }
    ```
 
-   The nixpkgs version as defined in the NixOS configuration is not
-   available outside of the config. Instead, users may specify their own
-   modifications to nixpkgs in `~/.config/nixpkgs/config.nix`; *these*
+   The nixpkgs version as modified in the NixOS configuration is not
+   available outside of the config. Instead, users may put their
+   overrides to nixpkgs into `~/.config/nixpkgs/config.nix`; *these*
    are available for use in commands such as `nix-env -i some-package`:
    ```nix
    # ~/.config/nixpkgs/config.nix
