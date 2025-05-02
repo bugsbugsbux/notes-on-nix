@@ -1488,8 +1488,18 @@ useful to understand what arguments it works with:
   create so called **fixed-output derivations (FODs)**, which are
   derivations whose output hash is known in advance and who are
   therefore allowed some impure operations like fetching from the
-  network. `outputHashAlgo` may currently be "sha1", "sha256" or
-  "sha512". `outputHashMode` specifies from what to compute the hash:
+  network.
+
+  The program `nix-prefetch` is very helpful to determine the hash to
+  use when calling a fetcher: Invoke it on your (broken because hashes
+  are missing) source file and it will run the fetchers (download the
+  files and put the into the nix store), compute the hashes and tell you
+  how to fix your code.
+
+  `outputHashAlgo` may currently be "sha1", "sha256" or
+  "sha512".
+
+  `outputHashMode` specifies from what to compute the hash:
   "flat" (which is the default) means from the output, which must be a
   regular, non-executable file; "recursive" means from the **nix-archive
   (NAR**; they only preserve the information relevant to nix) dump of
