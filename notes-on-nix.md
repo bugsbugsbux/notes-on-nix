@@ -1364,7 +1364,7 @@ let defaultPkgs = import <nixpkgs> {};
         let pkgfn = import pkgfn_file;
         in with builtins;
             pkgfn (
-                # Take those items from second arg which have same name
+                # takes those items from second arg which have same name
                 # as an item from first arg (functionArgs returns set):
                 (intersectAttrs (functionArgs pkgfn) pkgs)
                 // args # update with user supplied args
