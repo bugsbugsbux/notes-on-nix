@@ -2256,12 +2256,11 @@ changed, and can use cache servers, instead of the actual target site.
 
 #### `nix-prefetch`
 
-  The program `nix-prefetch` is very helpful to determine the hash to
-  use when calling a fetcher: Invoke it on your (broken because hashes
-  are missing) source file and it will run the fetchers (download the
-  files and put the into the nix store), compute the hashes and tell you
-  how to fix your code.
-
+The program `nix-prefetch` is very helpful to determine the hash to
+use when calling a fetcher: Invoke it on your (broken because hashes
+are missing) source file and it will run the fetchers (download the
+files and put them into the nix store), compute the hashes and tell you
+how to fix your code.
 
 ### Writers (Trivial builders)
 
