@@ -1450,7 +1450,9 @@ returns a derivation object, which is a set with the attribute
 sometimes has certain properties to modify it (see: modifying packages).
 
 Despite the `derivation` function rarely being used directly it is
-useful to understand what arguments it works with:
+useful to understand what arguments it works with since many wrappers
+take, in addition to some arguments specific to them, the same arguments
+and simply pass them on.
 
 `derivation` *requires* the following arguments:
 - `name`: A string which will be used in the names of files created in
