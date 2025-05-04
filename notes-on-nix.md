@@ -1586,11 +1586,12 @@ The `builder` runs with `args` in an isolated build-directory in TMPDIR,
 with environment variables cleared and set according to the given
 derivation arguments, invalidating the HOME and PATH variables, and the
 nix environment set according to the derivation arguments. The network
-cannot be accessed during the build (there are exceptions). The combined
-stdout and stderr are written to `/nix/var/log/nix`. The build is
-considered successful, if the builder exits with code 0. If inputs are
-referenced by outputs, they are registered as runtime dependencies. The
-time-stamp of the outputs is always unix-epoch 1.
+cannot be accessed during the build (there are exceptions, see: FOD,
+Fetchers). The combined stdout and stderr are written to
+`/nix/var/log/nix`. The build is considered successful, if the builder
+exits with code 0. If inputs are referenced by outputs, they are
+registered as runtime dependencies. The time-stamp of the outputs is
+always unix-epoch 1.
 
 When manually building a derivation, a symlink `./result` is then placed
 in the current directory and points to the build output in the store. As
