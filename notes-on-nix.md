@@ -487,6 +487,16 @@ let inc = {x, y?1, ...}@given: with builtins; length(attrNames(given));
     in [ ( inc{x=1;y=2;} ) ( inc{x=1;y=2;z=3;} ) ( inc{x=1;z=3;} ) ]
 ```
 
+Default arguments may refer to other arguments; this is often used
+when writing packages invokable with `nix-build`:
+```nix
+# nix-build invokable packages must provide default arguments:
+{ pkgs ? import <nixpkgs> { system = builtins.currentSystem; }
+, stdenv ? pkgs.stdenv # indexes whichever value pkgs ultimately has
+}:
+stdenv.mkDerivation {/*...*/}
+```
+
 **Callable sets** are sets which can be invoked like functions. They
 have an attribute `__functor` which has to be callable and take at least
 two arguments of which the auto-supplied first one is the set itself.
