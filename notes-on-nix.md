@@ -1418,6 +1418,7 @@ describing it), it can be added in two ways:
 
        # This effects these packages from nixpkgs, config-wide.
        # The argument prev is just pkgs before applying these overrides.
+       # see: overlay-like functions
        nixpkgs.config.packageOverrides = prev: {
            some-package = prev.some-package.override { /*...*/ };
        };
@@ -1926,7 +1927,7 @@ which is available in specific states within the function because these
 states are passed as arguments to it. A classic overlay function takes
 the final state of the value as first argument (usually called `final`
 or, in older code, `self`) and the old state as second argument (usually
-called `prev`, or, in older code, `super`). Sometimes overlay-like
+called `prev`, or, in older code, `super`). Sometimes **overlay-like**
 functions take the old state as only argument; this is not called
 "overlay" but, conceptionally, does the same.
 
