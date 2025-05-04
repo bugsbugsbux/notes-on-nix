@@ -1538,8 +1538,9 @@ useful to understand what arguments it works with:
   dis/allowed references/requisites).
 - `unsafeDiscardReferences`: Set of output names to booleans, whether
   to disable scanning the respective output for runtime dependencies.
-- `requiredSystemFeatures`: List of strings such as "kvm" which name
-  features which have to be available for this to build.
+- `requiredSystemFeatures`: List of strings which features have to be
+  available to build this derivation. See:
+  <https://nixos.org/manual/nix/latest/command-ref/conf-file.html#conf-system-features>
 
 ### Building
 
