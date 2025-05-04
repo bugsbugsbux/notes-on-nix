@@ -744,6 +744,7 @@ configuration
   first version used on this machine! It is used to set default
   versions of some packages which write application data and cannot
   handle upgrading it after being updated to newer versions.
+  To change (upgrade) your current NixOS version see: Channels
 * Mounting should have been configured by `nixos-generate-config`
   and written to `/mnt/etc/nixos/hardware-configuration.nix`. Make
   sure it is loaded:
