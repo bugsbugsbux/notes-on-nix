@@ -1494,9 +1494,9 @@ and simply pass them on.
   following (therefore even) element in this list.
 - `impureEnvVars`: List of names of environment variables which should
   *not* be cleared when calling the `builder`. This only works for
-  fixed-output derivations (FODs).
+  fixed-output derivations (FOD, see below).
 - `outputHash`, `outputHashAlgo`, `outputHashMode`: These are used to
-  create so called **fixed-output derivations (FODs)**, which are
+  create so called **fixed-output derivations (FOD)**, which are
   derivations whose output hash is known in advance and who are
   therefore allowed some impure operations like fetching from the
   network. See also: Fetchers; nix-prefetch
