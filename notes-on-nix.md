@@ -1499,13 +1499,7 @@ and simply pass them on.
   create so called **fixed-output derivations (FODs)**, which are
   derivations whose output hash is known in advance and who are
   therefore allowed some impure operations like fetching from the
-  network.
-
-  The program `nix-prefetch` is very helpful to determine the hash to
-  use when calling a fetcher: Invoke it on your (broken because hashes
-  are missing) source file and it will run the fetchers (download the
-  files and put the into the nix store), compute the hashes and tell you
-  how to fix your code.
+  network. See also: Fetchers; nix-prefetch
 
   `outputHashAlgo` may currently be "sha1", "sha256" or
   "sha512".
@@ -2259,6 +2253,15 @@ changed, and can use cache servers, instead of the actual target site.
   download the file himself and guides him how to put it into the
   nix-store.
 - etc
+
+#### `nix-prefetch`
+
+  The program `nix-prefetch` is very helpful to determine the hash to
+  use when calling a fetcher: Invoke it on your (broken because hashes
+  are missing) source file and it will run the fetchers (download the
+  files and put the into the nix store), compute the hashes and tell you
+  how to fix your code.
+
 
 ### Writers (Trivial builders)
 
