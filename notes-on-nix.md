@@ -1575,9 +1575,12 @@ installed.
 When evaluating an expression which reads from the filesystem, the
 evaluation stops, the respective store object is realised (built), and
 only then evaluation continues. This is called **Import from Derivation
-(IFD)**. Setting `allow-import-from-derivation = false;` allows to
-finish evaluation and creating a build plan before starting to realise
-store objects; thus more store objects may be realised in parallel.
+(IFD)**. Setting `allow-import-from-derivation = false` in your
+`nix.conf` file (which you configure on NixOS via option `nix.settings`)
+throws an error if the derivation cannot be evaluated completely before
+realising store objects; this allows to create a build plan before
+starting to realise store objects and thus more store objects can be
+realised in parallel which improves performance.
 
 The `builder` runs with `args` in an isolated build-directory in TMPDIR,
 with environment variables cleared and set according to the given
