@@ -1414,8 +1414,8 @@ describing it), it can be added in two ways:
            new-package = pkgs.stdenv.mkDerivation { /*...*/ };
            another-new-pkg = pkgs.callPackage ./another-new-pkg.nix {};
            # modify some package
-           some-package = pkgs.some-package.override { /*...*/ };
-       in [ new-package another-new-pkg some-package ];
+           modified-package = pkgs.some-package.override { /*...*/ };
+       in [ new-package another-new-pkg modified-package ];
 
        # This effects these packages from nixpkgs, config-wide.
        # The argument prev is just pkgs before applying these overrides.
