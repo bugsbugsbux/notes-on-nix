@@ -853,6 +853,28 @@ configuration
   very sure that a user has `sudo` access and an `initialPassword`,
   and that the `console.keyMap` is set correctly.
 
+# Profiles
+
+The terms "profile" and "environment" (see above) are often used loosely
+to describe the concept of an environment with versions; in reality
+profiles are just links, and environments only know about themselves and
+not other versions.
+
+Some commonly used profiles are:
+- `/nix/var/nix/profiles/system`: the global profile used by the NixOS
+  configuration, for example for packages installed via option
+  `environment.systemPackages`. This profile is different from:
+- the root user's profile: `/nix/var/nix/profiles/per-user/root`
+- `/etc/profiles/per-user/USERNAME` is the user specific profile used
+  by the NixOS configuration, for example for package installed with
+  the option `users.users.USERNAME.packages`. This profile is different
+  from:
+- `~/.nix-profile`: the user specific profile used when installing
+  packages imperatively with `nix-env` and (usually links to
+  `~/.local/state/nix/profiles/profile`)
+
+See also: Imperatively installing packages
+
 # Channels
 
 See also above: channels
