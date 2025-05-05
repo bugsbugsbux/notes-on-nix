@@ -1231,6 +1231,9 @@ namespace of each module; see: options,
 
 ### Options
 
+Use `nixos-option name.of.option` to query an option's currently active
+value, where it was declared and where it was defined.
+
 Options can only be used when the module that declared them was loaded
 (see above).
 
@@ -1326,10 +1329,6 @@ other declarations.
     # Thus the final option value is: [ "a" "c" "b" ]
 }
 ```
-
-To obtain information about a given option, like its active value, where
-it was declared and defined, etc, one can use the `nixos-option`
-command.
 
 # Packages
 
