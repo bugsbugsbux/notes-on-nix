@@ -730,7 +730,7 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
 
-# NixOS Configuration -- Important Notes
+# Basic NixOS Configuration
 
 This section provides important notes for the most fundamental aspects
 of your NixOS config. Using a graphical installer, you will not interact
@@ -853,9 +853,7 @@ configuration
   very sure that a user has `sudo` access and an `initialPassword`,
   and that the `console.keyMap` is set correctly.
 
-# Imperative configuration
-
-## Channels
+# Channels
 
 See also above: channels
 
@@ -901,7 +899,7 @@ nix-env -iA nixos.neovim        # still falls back to root's channel
 nix-channel --remove "nixpkgs"
 ```
 
-## Profile management
+# Imperatively installing packages
 
 *See also: unfree packages.*
 
@@ -961,7 +959,7 @@ nix-env --upgrade PKGNAME
 nix-env --set-flag keep true PKGNAME # prevents upgrade
 ```
 
-## Temporary shell environments
+## Installing packages temporarily
 
 `nix-shell` starts a subshell which has the specified packages from
 nixpkgs available:
@@ -984,7 +982,7 @@ available anymore, however, they are still in the store until the next
 time garbage-collection runs, so running the same `nix-shell` command a
 second time should be much faster, than the first time!
 
-### Nix scripts
+## Nix scripts
 
 Instead of requiring the user to install needed dependencies before
 running a shell script, there are nix scripts, which only require the
@@ -1017,9 +1015,7 @@ the environment;
 To run the script, just make it executable as usual with
 `chmod u+x ./myscript` and invoke it: `./myscript`
 
-# Declarative configuration
-
-## Temporary shell environments
+# Ephemeral environments
 
 Instead of typing out the command to activate a temporary environment,
 one can define the environment in a nix file and simply activate it with
@@ -1058,7 +1054,7 @@ even have to write a `shell.nix`: if your package builds with
 dropped into the build environment of your package; now you can invoke
 its build steps manually.
 
-## Profile management
+# NixOS configuration
 
 The main configuration file (itself a module, see below) is
 `/etc/nixos/configuration.nix` and usually (for example when generating
@@ -2344,7 +2340,7 @@ programs.nix-ld = {
 };
 ```
 
-### Creating a custom NixOS installation medium
+## Creating a custom NixOS installation medium
 
 _Note: When installing NixOS somewhere you first boot into the iso file
 and then install NixOS to the target computer. Afterwards you boot into
