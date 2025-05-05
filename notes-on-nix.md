@@ -1078,6 +1078,9 @@ its build steps manually.
 
 # NixOS configuration
 
+This section explains how configuring NixOS works -- not which options
+to set. See: Basic NixOS Configuration; for some examples.
+
 The main configuration file (itself a module, see below) is
 `/etc/nixos/configuration.nix` and usually (for example when generating
 a new configuration with `nixos-generate-config`) hardware-specific
