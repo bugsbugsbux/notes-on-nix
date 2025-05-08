@@ -450,7 +450,7 @@ _Note: The term **closure** is also used by nix in reference to all the
 packages a package depends on (as well as the packages they depend on,
 etc). Build-dependencies and runtime-dependencies may differ; if not
 specified "package closure" usually only means the runtime dependencies.
-See also: dependencies_
+See also: Dependencies_
 
 ```nix
 # Functions do not need parentheses to execute:
@@ -556,7 +556,7 @@ because they generally disable evaluation of unparenthesized expressions
     3 * 4 + 2       # 14
 (2+ 3)* 4           # 20
 
-# Operators for attribute sets; see also: comparison operators
+# Operators for attribute sets; see also: Comparison operators
 s = {attr.path = 1;} # equivalent to: s={attr={path=1;};}
 # Indexing -> returns the (fallback) value or throws error
 s.attr.path         # 1
@@ -623,7 +623,7 @@ the global namespace and have to be accessed via the set `builtins`.
 Documentation at: <https://nix.dev/manual/nix/2.18/language/builtins>
 
 Another common set of functions is the standard library from nixpkgs.
-See: modules. Documentation at:
+Documentation at:
 <https://nixos.org/manual/nixpkgs/stable/#sec-functions-library>
 The documentation makes it look like the standard library only exposes
 other libraries, however, actually it also exposes functions *directly*!
@@ -705,7 +705,7 @@ to).
   nano configuration.nix
   ```
 
-  See: NixOS Configuration -- Important Notes
+  See: Essential NixOS Configuration Snippets
 
   Afterwards, install with `nixos-install`, then `reboot` if it worked.
   If it failed, fix the config and rerun `nixos-install`. It will prompt
@@ -738,7 +738,7 @@ of your NixOS config.
 Using a graphical installer, you will not interact
 with the config files until after the installation, at which point the
 files we are talking about will be located in `/etc/nixos` not
-`/mnt/etc/nixos` and need to be activated differently: see Declarative
+`/mnt/etc/nixos` and need to be activated differently: see NixOS
 configuration
 
 * Keep the `system.stateVersion` value unchanged. This value does not
@@ -1081,20 +1081,19 @@ its build steps manually.
 # NixOS configuration
 
 This section explains how configuring NixOS works -- not which options
-to set. See: Basic NixOS Configuration; for some examples.
+to set. See: Essential NixOS Configuration Snippets; for some examples.
 
-The main configuration file (itself a module, see below) is
+The main configuration file (itself a module, see: Modules) is
 `/etc/nixos/configuration.nix` and usually (for example when generating
 a new configuration with `nixos-generate-config`) hardware-specific
 options are put into their own module
 `/etc/nixos/hardware-configuration.nix`, which allows to use the same
 main configuration file on different machines.
 
-`/etc/nixos/configuration.nix` is written as a module (see: Modules),
-however typically is just looks like a function returning a set whose
+While `/etc/nixos/configuration.nix` is written as a module,
+typically it just looks like a function returning a set whose
 attributes are the option names and their values are how you want to
-configure the option. For option examples see: NixOS Configuration --
-Important Notes
+configure the option:
 ```nix
 { pkgs, ... }:
 { imports = [ ./path/to/some/module.nix ];
@@ -1199,7 +1198,7 @@ following named arguments:
 - `modulesPath`: The location of the modules directory (see above).
 - `config`: All option-definitions; including the options set by the
   module itself, which works (as long as no option references itself)
-  because nix is lazily evaluated. (see: options)
+  because nix is lazily evaluated. (see: Options)
 
   Note: This means option-definitions may depend on each other, however,
   this dependency must not be used to create the "config" value itself,
@@ -1228,7 +1227,7 @@ following named arguments:
   option-declarations.
 
 Moreover, the module system injects some **utility functions** into the
-namespace of each module; see: options,
+namespace of each module; see: Options,
 <https://github.com/NixOS/nixpkgs/blob/c45e6f9dacbe6c67c58a8791162cbd7e376692fa/lib/modules.nix#L1396>.
 
 ### Options
@@ -1359,8 +1358,7 @@ NixOS option like so:
 `environment.pathsToLink = ["/share/foot/themes"];`; this would make the
 themes for the foot terminal shipped with the package `foot.themes`
 available under `/run/current-system/sw/share/foot/themes` regardless of
-the actual nix-store location.* See also: Filesystem Hierarchy Standard
-compatible "sandboxes"
+the actual nix-store location.* See also: FHS compatible "sandboxes"
 
 However, while packages and derivations are essentially equivalent,
 there are some semantic differences in how they are used: To describe
@@ -1416,8 +1414,8 @@ in callPackage ./my-package.nix { mydependency = someOtherVersion; }
 ```
 
 Nixpkgs comes with a more robust `lib.callPackageWith`, whose result is
-overridable (see: below), and a top level `callPackage` which uses
-nixpkgs as the default package set.
+overridable (see: Modifying packages), and a top level `callPackage`
+which uses nixpkgs as the default package set.
 
 If nixpkgs does not have a package (because there is no derivation
 describing it), it can be added in two ways:
@@ -1469,7 +1467,7 @@ nix-store, which contains the actual build instructions used when
 building ("realising") the derivation with `nix-build`. Moreover, it
 returns a derivation object, which is a set with the attribute
 `type="derivation";` that can be used to reference the derivation and
-sometimes has certain properties to modify it (see: modifying packages).
+sometimes has certain properties to modify it (see: Modifying packages).
 
 Despite the `derivation` function rarely being used directly it is
 useful to understand what arguments it works with since many wrappers
@@ -2257,7 +2255,7 @@ result is up-to-date.
 
 The nixpkgs fetchers, on the other hand, run at build time, during which
 they are granted network access because they return *fixed-output*
-derivations (see above), meaning it is known beforehand what the result
+derivations (see: FOD), meaning it is known beforehand what the result
 will be. They only try to download their target if the mentioned hash
 changed, and can use cache servers, instead of the actual target site.
 
