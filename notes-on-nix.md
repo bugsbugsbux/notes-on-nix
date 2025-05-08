@@ -733,7 +733,9 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
 # Essential NixOS Configuration Snippets
 
 This section provides important notes for the most fundamental aspects
-of your NixOS config. Using a graphical installer, you will not interact
+of your NixOS config.
+
+Using a graphical installer, you will not interact
 with the config files until after the installation, at which point the
 files we are talking about will be located in `/etc/nixos` not
 `/mnt/etc/nixos` and need to be activated differently: see Declarative
