@@ -1138,7 +1138,7 @@ The NixOS modules system allows to use many different files to declare
 (=create) and define (=use) so called options (see below) while still
 keeping a unified state. To make this work, loading the different
 modules (=configuration parts) must be handled by the modules system and
-cannot simply be done using `import` function.
+cannot simply be done using the builtin `import` function.
 
 Instead, the module system automatically loads most of the "in-tree"
 modules located in the **modules directory** `<nixpkgs/nixos/modules>`
