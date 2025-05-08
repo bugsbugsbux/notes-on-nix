@@ -1127,7 +1127,7 @@ The following *options* are useful:
 
 Note: Installation of **unfree packages** cannot be enabled globally:
 For the config (and the root user) it is done with option
-`nixpkgs.config = { allowUnfree = true; };`. **Other users** must put
+`nixpkgs.config = { allowUnfree = true; };`. _Other users_ must put
 this set into file `~/.config/nixpkgs/config.nix` to enable unfree
 packages for all their actions or set environment variable
 `NIXPKGS_ALLOW_UNFREE=1` to enable them for a specific action.
