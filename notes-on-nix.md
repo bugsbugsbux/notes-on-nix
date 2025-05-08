@@ -730,7 +730,7 @@ NixOS can be **booted over the internet** with PXE or iPXE. See:
   automate this. Note: This might, in some scripts *by design*, destroy
   all data on the machine -- back it up beforehand!
 
-# Basic NixOS Configuration
+# Essential NixOS Configuration Snippets
 
 This section provides important notes for the most fundamental aspects
 of your NixOS config. Using a graphical installer, you will not interact
