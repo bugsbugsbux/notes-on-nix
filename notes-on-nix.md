@@ -1430,12 +1430,10 @@ describing it), it can be added in two ways:
 
        # this only effects this expression
        environment.systemPackages = let
-           # create new packages
-           new-package = pkgs.stdenv.mkDerivation { /*...*/ };
-           another-new-pkg = pkgs.callPackage ./another-new-pkg.nix {};
-           # modify some package
+           in-place-created = pkgs.stdenv.mkDerivation { /*...*/ };
+           using-pkgfn = pkgs.callPackage ./my-pkg.nix {};
            modified-package = pkgs.some-package.override { /*...*/ };
-       in [ new-package another-new-pkg modified-package ];
+       in [ in-place-created using-pkgfn modified-package ];
 
        # This effects these packages from nixpkgs, config-wide.
        # The argument prev is just pkgs before applying these overrides.
