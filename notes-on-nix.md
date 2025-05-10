@@ -1557,6 +1557,8 @@ and simply pass them on.
   available to build this derivation. See:
   <https://nixos.org/manual/nix/latest/command-ref/conf-file.html#conf-system-features>
 
+See also the most common wrapper, the: Standard (Build) Environment
+
 ### Building
 
 Building, also called realising, is the execution of the standardized
@@ -1936,7 +1938,8 @@ in with setup;
 For convenience, sets can be made extensible with `lib.makeExtensible`.
 This means instead of having to call `lib.fix lib.extends myoverlay
 myset`, an overlay can be applied by passing it as argument to a value's
-attribute `extend`. Do not confuse this with `lib.makeOverridable`!
+attribute `extend`. Do not confuse this with `lib.makeOverridable` (see:
+Modifying packages)!
 ```nix
 let
     fixpointfn = self: { a=1; b=10; c = self.a + self.b; };
