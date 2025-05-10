@@ -1574,6 +1574,9 @@ package.
   derivation) with `nix-instantiate ./myderivation.nix`
 - or even just to evaluate it (no instantiation) with `nix-instantiate
   --eval ./myderivation.nix`.
+- Using `nix-shell ./myderivation.nix` just drops you into the build
+  environment and allows to manually build the package; this is useful
+  for debugging purposes.
 The filename may be omitted if it is `./default.nix`.
 
 A builder will *not run* if neither the derivation nor its dependencies
@@ -1613,7 +1616,7 @@ exits with code 0. If inputs are referenced by outputs, they are
 registered as runtime dependencies. The time-stamp of the outputs is
 always unix-epoch 1.
 
-When manually building a derivation, a symlink `./result` is then placed
+After building a derivation, a symlink `./result` is then placed
 in the current directory and points to the build output in the store. As
 long as this link is unchanged (not removed, renamed or modified) the
 build result is considered a **garbage-collector root**, meaning the GC
