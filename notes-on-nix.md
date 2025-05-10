@@ -1738,14 +1738,14 @@ phase names):
 ### Setup-Hooks
 
 *Setup-hooks are a powerful way to inject code into other packages'
-build processes and should be used with care if not entirely avoided!
+build processes and should be used with care or better entirely avoided!
 They disturb the ideas that dependencies can be added effect-free and
 that of modularity, because setup-hooks might interfere with each
 other.*
 
-Hooks are code to be injected somewhere, for example into phases, as
-described above. Setup-hooks allow dependencies to inject code into the
-build environment of packages that depend on them:
+As mentioned above (see: Standard (Build) Environment), hooks inject
+code somewhere, usually phases. Setup-hooks allow dependencies to inject
+code into the build environment of packages that depend on them:
 
 Every package can create a so called setup-hook as the file
 `${pkg}/nix-support/setup-hook`. One of the first things
