@@ -1576,7 +1576,18 @@ package.
   --eval ./myderivation.nix`.
 - Using `nix-shell ./myderivation.nix` just drops you into the build
   environment and allows to manually build the package; this is useful
-  for debugging purposes.
+  for debugging purposes. To manually build stdenv (see: Standard
+  (Build) Environment) packages the process usually looks like this:
+  ```bash
+  # start nix-shell
+  nix-shell '<nixpkgs>' -A some-package
+
+  # get a writable output directory
+  export out="$(pwd)/out"
+  # invoke some build phase via genericBuild
+  phases="somePhase" genericBuild
+  # if the phase fails edit it and try again; otherwise run next phase
+  ```
 The filename may be omitted if it is `./default.nix`.
 
 A builder will *not run* if neither the derivation nor its dependencies
