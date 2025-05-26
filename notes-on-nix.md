@@ -1570,12 +1570,12 @@ package.
   obviously its dependencies) and installs it for the current user.
 - A single file evaluating to a derivation or a package function with
   default arguments, can be built with `nix-build ./myderivation.nix`,
-- however, it is also possible to just instantiate it (create the store
+- however, it is also possible to **just instantiate** it (create the store
   derivation) with `nix-instantiate ./myderivation.nix`
-- or even just to evaluate it (no instantiation) with `nix-instantiate
-  --eval ./myderivation.nix`.
+- or even **just to evaluate** it (no instantiation) with
+  `nix-instantiate --eval ./myderivation.nix`.
 - Using `nix-shell ./myderivation.nix` just drops you into the build
-  environment and allows to manually build the package; this is useful
+  environment and allows to **manually build** the package; this is useful
   for debugging purposes. To manually build stdenv (see: Standard
   (Build) Environment) packages the process usually looks like this:
   ```bash
