@@ -1368,7 +1368,7 @@ derivations, the focus is more on their buildability, for which the
 needed dependences have to be available. It is not sufficient for a
 powerful package manager to make all packages use the same globally
 available version of a dependency, thus the nix convention is to wrap
-the derivation describing a package in a function, called
+the derivation describing a package in a function, called a
 **package-function**, whose arguments are the needed dependencies.
 ```nix
 # ./my-package.nix
