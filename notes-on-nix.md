@@ -1566,8 +1566,8 @@ form (a "\*.drv" file in the store) of a derivation, the recipe for a
 package.
 - Calling `nixos-rebuild` in its various forms builds the necessary
   packages as specified in the NixOS config;
-- `nix-env --install some-package` builds the specified package and its
-  dependencies.
+- `nix-env --install some-package` builds the specified package (and
+  obviously its dependencies) and installs it for the current user.
 - A single file evaluating to a derivation or a package function with
   default arguments, can be built with `nix-build ./myderivation.nix`,
 - however, it is also possible to just instantiate it (create the store
