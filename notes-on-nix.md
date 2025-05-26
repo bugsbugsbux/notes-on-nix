@@ -1592,9 +1592,9 @@ The filename may be omitted if it is `./default.nix`.
 
 A builder will *not run* if neither the derivation nor its dependencies
 changed; instead it simply returns the old result. Here is an example of
-a derivation where nix cannot determine from the derivation itself
-whether to rebuild:
-`pkgs.runCommand "DRV_NAME" {} "${pkgs.coreutils}/bin/date > $out"`
+a derivation to avoid because here nix cannot determine from the
+derivation itself whether to rebuild: `pkgs.runCommand "DRV_NAME" {}
+"${pkgs.coreutils}/bin/date > $out"`
 
 Moreover, a package won't build if, for example, it is marked as broken,
 having security issues, not targeting the current platform, or not
