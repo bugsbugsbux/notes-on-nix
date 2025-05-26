@@ -1417,6 +1417,15 @@ Nixpkgs comes with a more robust `lib.callPackageWith`, whose result is
 overridable (see: Modifying packages), and a top level `callPackage`
 which uses nixpkgs as the default package set.
 
+As the example for `nix-build` invokable packages showed, not all
+arguments of a package-function have to specify a certain dependency.
+Another example for this is the previously mentioned chromium package
+whose package-function's argument specification contains `enableWideVine
+? false,` to configure whether to build with support for playing DRM
+protected content. <https://search.nixos.org/packages> does not show
+these configuration options, but one can follow the link to the package
+source to discover them.
+
 If nixpkgs does not have a package (because there is no derivation
 describing it), it can be added in two ways:
 1. **In-tree**: This means to create a local copy of the nixpkgs repo,
