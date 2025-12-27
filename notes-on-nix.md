@@ -891,8 +891,8 @@ refreshes _root_'s other channels, but not _user_ channels which are
 refreshed with `nix-channel --update`. Refreshing a channel just means
 to download a new version of its package and option definitions.
 
-On NixOS change the "nixos" channel of the root user to affect which
-channel your config uses!
+**On NixOS change the "nixos" channel of the root user to affect which
+channel your config uses!**
 
 ```bash
 # A user imperatively installs a package from a specific channel
