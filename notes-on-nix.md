@@ -2307,6 +2307,7 @@ changed, and can use cache servers, instead of the actual target site.
 - etc
 
 To determine the needed hashes, there are multiple options:
+
 0. Often the hash is mentioned on the download-site.
 1. You can also just compute the hash yourself: `sha256sum
    /path/to/file`.
