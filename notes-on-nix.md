@@ -2306,6 +2306,29 @@ changed, and can use cache servers, instead of the actual target site.
   nix-store.
 - etc
 
+To determine the needed hashes, there are multiple options:
+0. Often the hash is mentioned on the download-site.
+1. You can also just compute the hash yourself: `sha256sum
+   /path/to/file`.
+2. **Recommended:** Use an empty string or `lib.fakeHash` (or
+   `lib.fakeSha256` or `lib.fakeSha512`) instead of the hash and build
+   the derivation; the error message will reveal the correct hash to
+   use.
+3. It used to be common to use an external tool. See: nix-prefetch
+
+Hashes should be specified with the `hash` argument of the fetchers, not
+with the deprecated `outputHash` & `outputHashAlgo`, `sha512`, `sha256`,
+or `sha1` arguments.
+
+The format of the string passed as argument `hash` is described at
+<https://www.w3.org/TR/CSP3/#framework-directive-source-list>, but is
+effectively, like in `hash =
+"sha256-WpqZbcKSzCTc9BHO6H6S9qrluNE72caBm0x6nc4IGKs=";`
+- the name of the used hash-algorithm
+- followed by `-`
+- followed by the computed hash and
+- finally a `=`
+
 #### `nix-prefetch`
 
 The program `nix-prefetch` is very helpful to determine the hash to
