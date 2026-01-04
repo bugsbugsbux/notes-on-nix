@@ -1660,7 +1660,7 @@ install`), which uses the bash utility functions (such as
 Packages created with the standard build environment do not call
 `derivation` themselves, but rather its wrapper
 **`stdenv.mkDerivation`**, which takes at least arguments `name` (which,
-like the argument to `derivation`, consists of `"${name}-{version}"`,
+like the argument to `derivation`, consists of `"${name}-${version}"`,
 but may be replaced by the separate arguments `pname` and `version` to
 simplify reusing them in other arguments) and `src` (or if several:
 `srcs`).
