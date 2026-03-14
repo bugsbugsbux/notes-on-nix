@@ -1,0 +1,50 @@
+[ ] pills are not a static set of articles, so fix this assumption or
+    just throw them out
+[ ] https://wiki.nixos.org/wiki/Storage_optimization
+    [ ] note on store optimisation
+        - manually
+        - in /etc/nixos/configuration.nix
+[ ] Note where to find profiles
+    [ ] How to manage system profile, e.g. listing or removing
+        generations and collecting garbage
+       `sudo nix-env -p /nix/var/nix/profiles/system --list-generations`
+[x] explain where profiles show up: `man nix-profiles`
+    - environment.systemPackages go into profile /nix/var/nix/profiles/system
+    - users.users.auser.packages go into profile /etc/profiles/per-user/auser
+    - imperatively installed packages by default go into
+      ${XDG_STATE_HOME:-~/.local/state}/nix/profiles/profile
+    - root's packages go into ${NIX_STATE_DIR:-/nix/var/nix}/profiles/per-user/root
+[ ] note in FAQ section that after removing system generations one has
+    to `nixos-rebuild switch` to remove them as boot entries from the
+    bootloader
+[ ] what is ~/.nix-defexpr
+[ ] list all nix config files, their syntax, and what they do
+    [ ] /etc/nix/nix.conf
+    [ ] /etc/nixos/configuration.nix
+    [ ] /var/lib/nixos-containers/NAME/etc/nixos/configuration.nix
+    [ ] /etc/nixos-containers/NAME.conf,
+        /etc/static/nixos-containers/NAME.conf
+[ ] note that in git repos untracked nix files do not work! -> at least
+    add them to the index to use them
+[ ] add section on nix-container
+[ ] use chromium widevine override as example
+[ ] <https://nixos.org/manual/nixos/unstable/index.html#sec-kernel-config>
+[x] introduce `nixos-option` to inspect current option value
+[ ] mention search.nixos.org and wiki.nixos.org
+[ ] do not use cfdisk in examples
+
+[ ] does users.users.myuser.packages use the specific user's "nixos"
+    channel if it is set?
+
+[x] explain how to write a ./default.nix package definition that is
+    invokable with nix-build as well as via pkgs.callPackage
+    <https://stackoverflow.com/questions/74658457/i-dont-understand-why-i-have-cannot-evaluate-a-function-that-has-an-argument>
+
+[ ] ~/.nix-profile is the user equivalent to /run/current-system/sw
+[ ] does everything in the "out" output always show up in
+    /run/current-system/sw or ~/.nix-profile/
+[x] move nix-prefetch section to fetchers and refer to this
+[ ] rewrite string section:
+    <https://nix.dev/manual/nix/2.28/language/string-literals.html>
+[ ] is time-stamp of outputs really always epoch 1? i believe to have
+    heard about a build helper to set it to the latest source file
